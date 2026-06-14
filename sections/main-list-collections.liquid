@@ -1,0 +1,121 @@
+<section class="collection-list-page section-spacing">
+  <div class="container">
+    <header class="collection-list-header">
+      <div>
+        {% if section.settings.eyebrow != blank %}
+          <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {% endif %}
+        <h1>{{ section.settings.heading | escape }}</h1>
+      </div>
+      {% if section.settings.subheading != blank %}
+        <p>{{ section.settings.subheading | escape }}</p>
+      {% endif %}
+    </header>
+
+    {% paginate collections by section.settings.collections_per_page %}
+      <div class="collection-list-grid">
+        {% for collection in collections %}
+          {% assign collection_image = collection.image %}
+          {% if collection_image == blank and collection.products.first.featured_image != blank %}
+            {% assign collection_image = collection.products.first.featured_image %}
+          {% endif %}
+
+          <article class="collection-list-card" data-reveal>
+            <a class="collection-list-card__media" href="{{ collection.url }}" aria-label="{{ collection.title | escape }}">
+              {% if collection_image != blank %}
+                {% assign collection_image_alt = collection_image.alt | default: collection.title %}
+                {{
+                  collection_image
+                  | image_url: width: 1400
+                  | image_tag:
+                    widths: '420, 640, 900, 1200, 1400',
+                    sizes: '(min-width: 990px) 33vw, (min-width: 701px) 50vw, 100vw',
+                    loading: 'lazy',
+                    alt: collection_image_alt
+                }}
+              {% else %}
+                <div class="collection-list-card__placeholder" aria-hidden="true">
+                  <span>TZCP</span>
+                </div>
+              {% endif %}
+            </a>
+
+            <div class="collection-list-card__content">
+              <div class="collection-list-card__heading">
+                <h2><a href="{{ collection.url }}">{{ collection.title | escape }}</a></h2>
+                <span>{{ collection.products_count }} {% if collection.products_count == 1 %}piece{% else %}pieces{% endif %}</span>
+              </div>
+
+              {% if section.settings.show_description and collection.description != blank %}
+                <p>{{ collection.description | strip_html | truncatewords: 22 }}</p>
+              {% endif %}
+
+              <a class="collection-list-card__link" href="{{ collection.url }}">
+                <span>Shop collection</span>
+                <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </article>
+        {% else %}
+          <div class="collection-list-empty">
+            <p>No collections are available yet.</p>
+          </div>
+        {% endfor %}
+      </div>
+
+      {% if paginate.pages > 1 %}
+        <nav class="pagination" aria-label="Collections pagination">
+          {% if paginate.previous %}
+            <a class="button button-outline-dark" href="{{ paginate.previous.url }}">Previous</a>
+          {% endif %}
+          <span>Page {{ paginate.current_page }} of {{ paginate.pages }}</span>
+          {% if paginate.next %}
+            <a class="button button-outline-dark" href="{{ paginate.next.url }}">Next</a>
+          {% endif %}
+        </nav>
+      {% endif %}
+    {% endpaginate %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collections list",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Shop / Collections"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Collections"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Explore the drops, essentials, and categories shaping The Zero Credit Project."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show collection descriptions",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "collections_per_page",
+      "label": "Collections per page",
+      "min": 6,
+      "max": 24,
+      "step": 3,
+      "default": 12
+    }
+  ]
+}
+{% endschema %}

@@ -1,4 +1,4 @@
-<section class="zc-hero" data-hero>
+<section class="zc-hero{% if section.settings.image == blank %} zc-hero--type-only{% endif %}" data-hero>
   <div class="container zc-hero__layout">
     <div class="zc-hero__copy">
       <p class="eyebrow" data-reveal>{{ section.settings.eyebrow | escape }}</p>
@@ -21,8 +21,8 @@
       </div>
     </div>
 
-    <div class="zc-hero__media" data-reveal="clip" data-delay="80">
-      {% if section.settings.image != blank %}
+    {% if section.settings.image != blank %}
+      <div class="zc-hero__media" data-reveal="clip" data-delay="80">
         {{
           section.settings.image
           | image_url: width: 1800
@@ -33,18 +33,8 @@
             fetchpriority: 'high',
             alt: section.settings.image.alt
         }}
-      {% else %}
-        <div class="zc-hero__logo-stage">
-          <img
-            src="{{ 'zero-credit-logo-white.png' | asset_url }}"
-            width="760"
-            height="760"
-            alt="The Zero Credit Project"
-            loading="eager"
-          >
-        </div>
-      {% endif %}
-    </div>
+      </div>
+    {% endif %}
   </div>
 </section>
 
