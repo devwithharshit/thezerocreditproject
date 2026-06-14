@@ -1,26 +1,63 @@
 {% assign card_variant = product.selected_or_first_available_variant %}
+{% assign secondary_image = product.images[1] %}
 
-<article class="product-card">
-  <a class="product-card-media" href="{{ product.url }}">
-    {% if product.featured_image %}
-      {{
-        product.featured_image
-        | image_url: width: 900
-        | image_tag:
-          widths: '360, 540, 720, 900',
-          sizes: '(min-width: 990px) 25vw, 50vw',
-          loading: 'lazy',
-          alt: product.featured_image.alt
-      }}
-    {% else %}
-      {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
-    {% endif %}
-    {% unless product.available %}
+<article class="product-card" data-reveal data-delay="{{ index | default: 1 | times: 60 }}">
+  <div class="product-card-media">
+    <a href="{{ product.url }}" aria-label="{{ product.title | escape }}">
+      {% if product.featured_image %}
+        {{
+          product.featured_image
+          | image_url: width: 1000
+          | image_tag:
+            class: 'product-card-image product-card-image--primary',
+            widths: '360, 540, 720, 1000',
+            sizes: '(min-width: 990px) 28vw, 72vw',
+            loading: 'lazy',
+            alt: product.featured_image.alt
+        }}
+        {% if secondary_image != blank %}
+          {{
+            secondary_image
+            | image_url: width: 1000
+            | image_tag:
+              class: 'product-card-image product-card-image--secondary',
+              widths: '360, 540, 720, 1000',
+              sizes: '(min-width: 990px) 28vw, 72vw',
+              loading: 'lazy',
+              alt: secondary_image.alt
+          }}
+        {% endif %}
+      {% else %}
+        {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      {% endif %}
+    </a>
+
+    <span class="product-card-index">0{{ index | default: 1 }}</span>
+
+    {% if card_variant.compare_at_price > card_variant.price %}
+      {% assign savings = card_variant.compare_at_price | minus: card_variant.price | times: 100 | divided_by: card_variant.compare_at_price %}
+      <span class="product-badge">{{ savings }}% off</span>
+    {% elsif product.available == false %}
       <span class="product-badge">Sold out</span>
-    {% endunless %}
-  </a>
+    {% endif %}
+
+    {% if product.available %}
+      {% form 'product', product, class: 'product-card-form' %}
+        <input type="hidden" name="id" value="{{ card_variant.id }}">
+        <input type="hidden" name="quantity" value="1">
+        <button class="product-card-action" type="submit" name="add">
+          <span>Quick add</span>
+          <span aria-hidden="true">+</span>
+        </button>
+      {% endform %}
+    {% endif %}
+  </div>
+
   <div class="product-card-details">
-    <h3><a href="{{ product.url }}">{{ product.title | escape }}</a></h3>
+    <div>
+      <p class="product-card-kicker">{{ product.type | default: 'The Zero Credit Project' | escape }}</p>
+      <h3><a href="{{ product.url }}">{{ product.title | escape }}</a></h3>
+    </div>
     <div class="product-card-price">
       <span>{{ card_variant.price | money }}</span>
       {% if card_variant.compare_at_price > card_variant.price %}

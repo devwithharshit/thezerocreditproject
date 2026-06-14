@@ -46,6 +46,9 @@
     </nav>
 
     <div class="header-actions">
+      <a class="icon-button" href="{{ routes.search_url }}" aria-label="Search">
+        {% render 'icon-search' %}
+      </a>
       {% if shop.customer_accounts_enabled %}
         <a class="icon-button account-link" href="{{ routes.account_url }}" aria-label="Account">
           {% render 'icon-account' %}

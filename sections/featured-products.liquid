@@ -1,10 +1,10 @@
 {% assign featured_collection = section.settings.collection %}
 
-<section class="section-spacing">
+<section class="section-spacing featured-rail">
   <div class="container">
-    <div class="section-heading">
+    <div class="section-heading" data-reveal>
       <div>
-        <p class="eyebrow">Selected pieces</p>
+        <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
         <h2>{{ section.settings.heading | escape }}</h2>
         {% if section.settings.subheading != blank %}
           <p>{{ section.settings.subheading | escape }}</p>
@@ -16,9 +16,9 @@
     </div>
 
     {% if featured_collection != blank %}
-      <div class="product-grid">
+      <div class="product-grid product-grid--rail" data-product-rail>
         {% for product in featured_collection.products limit: section.settings.products_to_show %}
-          {% render 'product-card', product: product %}
+          {% render 'product-card', product: product, index: forloop.index %}
         {% endfor %}
       </div>
     {% elsif request.design_mode %}
@@ -32,6 +32,12 @@
   "name": "Featured products",
   "tag": "section",
   "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Explore / Collection"
+    },
     {
       "type": "text",
       "id": "heading",

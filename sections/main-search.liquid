@@ -1,0 +1,64 @@
+<section class="section-spacing">
+  <div class="container">
+    <header class="collection-header">
+      <p class="eyebrow">Search / The project</p>
+      <h1>{{ section.settings.heading | escape }}</h1>
+    </header>
+
+    <form class="search-page-form" action="{{ routes.search_url }}" method="get" role="search">
+      <label class="visually-hidden" for="SearchPageInput-{{ section.id }}">Search</label>
+      <input
+        id="SearchPageInput-{{ section.id }}"
+        type="search"
+        name="q"
+        value="{{ search.terms | escape }}"
+        placeholder="Search products"
+        autocomplete="off"
+      >
+      <input type="hidden" name="type" value="product">
+      <button class="button button-dark" type="submit">Search</button>
+    </form>
+
+    {% if search.performed %}
+      <p class="search-page-count">{{ search.results_count }} results for "{{ search.terms | escape }}"</p>
+      {% paginate search.results by 24 %}
+        <div class="product-grid">
+          {% for item in search.results %}
+            {% if item.object_type == 'product' %}
+              {% render 'product-card', product: item, index: forloop.index %}
+            {% endif %}
+          {% else %}
+            <p>No products found.</p>
+          {% endfor %}
+        </div>
+
+        {% if paginate.pages > 1 %}
+          <nav class="pagination" aria-label="Search pagination">
+            {% if paginate.previous %}
+              <a class="button button-outline-dark" href="{{ paginate.previous.url }}">Previous</a>
+            {% endif %}
+            <span>Page {{ paginate.current_page }} of {{ paginate.pages }}</span>
+            {% if paginate.next %}
+              <a class="button button-outline-dark" href="{{ paginate.next.url }}">Next</a>
+            {% endif %}
+          </nav>
+        {% endif %}
+      {% endpaginate %}
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Main search",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Find Your Next Piece"
+    }
+  ]
+}
+{% endschema %}

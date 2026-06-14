@@ -3,7 +3,9 @@
     "hero": {
       "type": "hero-zero-credit",
       "settings": {
-        "heading": "The Zero Credit Project",
+        "background_text": "ZERO CREDIT",
+        "eyebrow": "Independent streetwear / India",
+        "heading": "Built From Zero",
         "subheading": "No credit. No shortcuts. Just the project.",
         "primary_label": "Shop the Drop",
         "primary_link": "/collections/all",
@@ -11,12 +13,78 @@
         "secondary_link": "/collections"
       }
     },
+    "marquee_top": {
+      "type": "marquee-zero-credit",
+      "settings": {
+        "text": "NO CREDIT / NO SHORTCUTS / JUST THE PROJECT",
+        "speed": 24,
+        "style": "light"
+      }
+    },
+    "categories": {
+      "type": "editorial-collections",
+      "blocks": {
+        "category_one": {
+          "type": "collection",
+          "settings": {
+            "kicker": "The uniform",
+            "heading": "Street Essentials",
+            "link": "/collections/all"
+          }
+        },
+        "category_two": {
+          "type": "collection",
+          "settings": {
+            "kicker": "Built to last",
+            "heading": "Heavyweight Layers",
+            "link": "/collections/all"
+          }
+        },
+        "category_three": {
+          "type": "collection",
+          "settings": {
+            "kicker": "Small batch",
+            "heading": "Limited Objects",
+            "link": "/collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "category_one",
+        "category_two",
+        "category_three"
+      ],
+      "settings": {
+        "eyebrow": "Explore / Category",
+        "heading": "Choose Your Uniform",
+        "link_label": "View all",
+        "link": "/collections"
+      }
+    },
     "featured": {
       "type": "featured-products",
       "settings": {
+        "eyebrow": "Explore / Collection",
         "heading": "Current Drop",
         "subheading": "Built for people starting from zero.",
-        "products_to_show": 4
+        "products_to_show": 8
+      }
+    },
+    "manifesto": {
+      "type": "manifesto-zero-credit",
+      "settings": {
+        "eyebrow": "The project / 001",
+        "heading": "Nothing Was Handed To Us",
+        "text": "The Zero Credit Project is for people building identity, momentum and culture from the ground up. Every piece starts with intent.",
+        "button_label": "Read our story"
+      }
+    },
+    "marquee_bottom": {
+      "type": "marquee-zero-credit",
+      "settings": {
+        "text": "LIMITED PIECES / MADE WITH INTENT / BUILT FROM ZERO",
+        "speed": 30,
+        "style": "dark"
       }
     },
     "newsletter": {
@@ -29,7 +97,11 @@
   },
   "order": [
     "hero",
+    "marquee_top",
+    "categories",
     "featured",
+    "manifesto",
+    "marquee_bottom",
     "newsletter"
   ]
 }

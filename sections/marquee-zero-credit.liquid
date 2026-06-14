@@ -1,0 +1,56 @@
+<section
+  class="zc-marquee zc-marquee--{{ section.settings.style }}"
+  style="--marquee-speed: {{ section.settings.speed }}s;"
+  aria-label="{{ section.settings.text | escape }}"
+>
+  <div class="zc-marquee__track">
+    {% for repeat in (1..8) %}
+      <div class="zc-marquee__item" aria-hidden="{% if repeat == 1 %}false{% else %}true{% endif %}">
+        <span>{{ section.settings.text | escape }}</span>
+        <span class="zc-marquee__mark">
+          <img src="{{ 'zero-credit-logo-black.png' | asset_url }}" width="60" height="60" alt="" loading="lazy">
+        </span>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Moving statement",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "NO CREDIT / NO SHORTCUTS / JUST THE PROJECT"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Speed",
+      "min": 12,
+      "max": 50,
+      "step": 2,
+      "unit": "s",
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [
+        { "value": "light", "label": "Light" },
+        { "value": "dark", "label": "Dark" }
+      ],
+      "default": "light"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Moving statement"
+    }
+  ]
+}
+{% endschema %}
