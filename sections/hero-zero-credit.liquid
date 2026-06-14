@@ -1,49 +1,70 @@
-{% comment %}
-Hero Section — full-screen brand statement with CTA buttons.
-Settings: heading, subheading, background image/video, CTA text/links, alignment.
-{% endcomment %}
-<section class="hero hero--{{ section.settings.alignment }}" data-hero aria-labelledby="hero-heading">
-  {% if section.settings.background_image != blank %}
-    <div class="hero__media" aria-hidden="true">
-      {{ section.settings.background_image | image_tag: width: 1920, height: 1080, class: 'hero__image', loading: 'eager', fetchpriority: 
-'high', sizes: '100vw', alt: '' }}
+<section class="hero{% if section.settings.image != blank %} hero-with-image{% endif %}">
+  {% if section.settings.image != blank %}
+    <div class="hero-media">
+      {{
+        section.settings.image
+        | image_url: width: 2400
+        | image_tag:
+          widths: '750, 1100, 1500, 2000, 2400',
+          sizes: '100vw',
+          loading: 'eager',
+          fetchpriority: 'high',
+          alt: section.settings.image.alt
+      }}
     </div>
-  {% else %}
-    <div class="hero__placeholder" aria-hidden="true"></div>
   {% endif %}
 
-  <div class="hero__overlay"></div>
-
-  <div class="hero__content container reveal">
-    <h1 id="hero-heading" class="hero__title">{{ section.settings.heading | escape }}</h1>
-    {% if section.settings.subheading != blank %}
-      <p class="hero__subtitle">{{ section.settings.subheading | escape }}</p>
+  <div class="container hero-inner">
+    {% if section.settings.show_logo %}
+      <img
+        class="hero-logo"
+        src="{{ 'zero-credit-logo-white.png' | asset_url }}"
+        width="360"
+        height="360"
+        alt="The Zero Credit Project"
+        loading="eager"
+      >
     {% endif %}
-
-    <div class="hero__actions flex flex-wrap gap-4 mt-8">
-      {% if section.settings.cta_primary_text != blank and section.settings.cta_primary_link != blank %}
-        <a href="{{ section.settings.cta_primary_link }}" class="btn btn--primary">{{ section.settings.cta_primary_text | escape }}</a>
+    <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+    <h1>{{ section.settings.heading | escape }}</h1>
+    <p class="hero-copy">{{ section.settings.subheading | escape }}</p>
+    <div class="button-row">
+      {% if section.settings.primary_label != blank %}
+        <a class="button button-light" href="{{ section.settings.primary_link | default: routes.all_products_collection_url }}">
+          {{ section.settings.primary_label | escape }}
+        </a>
       {% endif %}
-      {% if section.settings.cta_secondary_text != blank and section.settings.cta_secondary_link != blank %}
-        <a href="{{ section.settings.cta_secondary_link }}" class="btn btn--outline">{{ section.settings.cta_secondary_text | escape }}</a>
+      {% if section.settings.secondary_label != blank %}
+        <a class="button button-outline-light" href="{{ section.settings.secondary_link | default: '/collections' }}">
+          {{ section.settings.secondary_label | escape }}
+        </a>
       {% endif %}
     </div>
-
-    {% if section.settings.show_scroll_hint %}
-      <div class="hero__scroll-hint reveal" style="transition-delay: 400ms">
-        {% render 'icon-chevron-down', class: 'hero__scroll-icon' %}
-        <span>Scroll</span>
-      </div>
-    {% endif %}
   </div>
 </section>
 
 {% schema %}
 {
-  "name": "Hero - Zero Credit",
+  "name": "Zero Credit hero",
   "tag": "section",
-  "class": "hero-section",
   "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_logo",
+      "label": "Show brand logo",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Premium streetwear / India"
+    },
     {
       "type": "text",
       "id": "heading",
@@ -57,52 +78,32 @@ Settings: heading, subheading, background image/video, CTA text/links, alignment
       "default": "No credit. No shortcuts. Just the project."
     },
     {
-      "type": "image_picker",
-      "id": "background_image",
-      "label": "Background image (optional)"
-    },
-    {
-      "type": "select",
-      "id": "alignment",
-      "label": "Content alignment",
-      "options": [
-        { "value": "center", "label": "Center" },
-        { "value": "left", "label": "Left" },
-        { "value": "right", "label": "Right" }
-      ],
-      "default": "center"
-    },
-    {
       "type": "text",
-      "id": "cta_primary_text",
-      "label": "Primary CTA text",
+      "id": "primary_label",
+      "label": "Primary button label",
       "default": "Shop the Drop"
     },
     {
       "type": "url",
-      "id": "cta_primary_link",
-      "label": "Primary CTA link",
-      "default": "/collections/all"
+      "id": "primary_link",
+      "label": "Primary button link"
     },
     {
       "type": "text",
-      "id": "cta_secondary_text",
-      "label": "Secondary CTA text",
-      "default": "Explore the Project"
+      "id": "secondary_label",
+      "label": "Secondary button label",
+      "default": "Explore Collections"
     },
     {
       "type": "url",
-      "id": "cta_secondary_link",
-      "label": "Secondary CTA link",
-      "default": "/collections"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_scroll_hint",
-      "label": "Show scroll indicator",
-      "default": true
+      "id": "secondary_link",
+      "label": "Secondary button link"
     }
   ],
-  "presets": [{ "name": "Hero - Zero Credit" }]
+  "presets": [
+    {
+      "name": "Zero Credit hero"
+    }
+  ]
 }
 {% endschema %}

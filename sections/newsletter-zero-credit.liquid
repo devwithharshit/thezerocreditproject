@@ -1,54 +1,43 @@
-{% comment %}
-Newsletter Section — email capture with brand voice.
-Settings: heading, subheading, placeholder, button text, background.
-{% endcomment %}
-<section class="newsletter newsletter--{{ section.settings.style }}" data-newsletter aria-labelledby="newsletter-heading">
-  <div class="container">
-    <div class="newsletter__inner reveal">
-      <div class="newsletter__content">
-        <h2 id="newsletter-heading" class="newsletter__title">{{ section.settings.heading | escape }}</h2>
-        {% if section.settings.subheading != blank %}
-          <p class="newsletter__subtitle">{{ section.settings.subheading | escape }}</p>
-        {% endif %}
-      </div>
-
-      <form action="{{ routes.contact_post_url }}" method="post" class="newsletter__form" novalidate>
-        <input type="hidden" name="form_type" value="customer">
-        <input type="hidden" name="utf8" value="✓">
-        <input type="hidden" name="contact[tags]" value="newsletter">
-
-        <div class="newsletter__input-wrapper">
-          <label for="newsletter-email" class="visually-hidden">{{ section.settings.placeholder | escape }}</label>
-          <input type="email" id="newsletter-email" name="contact[email]" placeholder="{{ section.settings.placeholder | escape }}" 
-class="newsletter__input" required autocomplete="email" aria-describedby="newsletter-status">
-          <button type="submit" class="btn btn--primary newsletter__submit" aria-label="Subscribe">
-            {{ section.settings.button_text | escape }}
-          </button>
-        </div>
-
-        <p id="newsletter-status" class="newsletter__status visually-hidden" aria-live="polite"></p>
-      </form>
+<section class="newsletter-section">
+  <div class="container newsletter-inner">
+    <div>
+      <p class="eyebrow">No spam. Just the project.</p>
+      <h2>{{ section.settings.heading | escape }}</h2>
+      <p>{{ section.settings.subheading | escape }}</p>
     </div>
+
+    {% form 'customer', class: 'newsletter-form' %}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      <label class="visually-hidden" for="NewsletterEmail-{{ section.id }}">Email address</label>
+      <div class="newsletter-fields">
+        <input
+          id="NewsletterEmail-{{ section.id }}"
+          type="email"
+          name="contact[email]"
+          value="{{ form.email }}"
+          placeholder="Email address"
+          autocorrect="off"
+          autocapitalize="off"
+          autocomplete="email"
+          required
+        >
+        <button class="button button-light" type="submit">Join</button>
+      </div>
+      {% if form.posted_successfully? %}
+        <p class="form-message" tabindex="-1">Thanks for joining the project.</p>
+      {% endif %}
+      {% if form.errors %}
+        <div class="form-message">{{ form.errors | default_errors }}</div>
+      {% endif %}
+    {% endform %}
   </div>
 </section>
 
 {% schema %}
 {
-  "name": "Newsletter - Zero Credit",
+  "name": "Zero Credit newsletter",
   "tag": "section",
-  "class": "newsletter-section",
   "settings": [
-    {
-      "type": "select",
-      "id": "style",
-      "label": "Style",
-      "options": [
-        { "value": "minimal", "label": "Minimal (white bg)" },
-        { "value": "dark", "label": "Dark (black bg)" },
-        { "value": "bordered", "label": "Bordered" }
-      ],
-      "default": "dark"
-    },
     {
       "type": "text",
       "id": "heading",
@@ -60,20 +49,12 @@ class="newsletter__input" required autocomplete="email" aria-describedby="newsle
       "id": "subheading",
       "label": "Subheading",
       "default": "Be the first to know about new collections and special offers."
-    },
-    {
-      "type": "text",
-      "id": "placeholder",
-      "label": "Email placeholder",
-      "default": "Email address"
-    },
-    {
-      "type": "text",
-      "id": "button_text",
-      "label": "Button text",
-      "default": "Subscribe"
     }
   ],
-  "presets": [{ "name": "Newsletter - Zero Credit" }]
+  "presets": [
+    {
+      "name": "Zero Credit newsletter"
+    }
+  ]
 }
 {% endschema %}

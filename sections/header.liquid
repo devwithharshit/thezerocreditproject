@@ -1,129 +1,99 @@
-{% comment %}
-Sticky Header — centered logo, left nav, right icons (search, account, cart).
-Settings: logo, menu, transparent on home, compact on scroll.
-{% endcomment %}
-<header class="header header--{{ section.settings.logo_position }}" data-header data-sticky>
-  <div class="header__container container">
-    {% comment %} Left: Navigation {% endcomment %}
-    <nav class="header__nav header__nav--left" aria-label="Main navigation" role="navigation">
-      {% if section.settings.menu != blank %}
-        <ul class="header__menu list-unstyled flex gap-8" role="menubar">
-          {% for link in section.settings.menu.links %}
-            <li role="none">
-              <a href="{{ link.url }}" class="header__menu-link {% if link.active %}header__menu-link--active{% endif %}" role="menuitem" {% 
-if link.links.size > 0 %}aria-haspopup="true" aria-expanded="false"{% endif %}>
-                {{ link.title }}
-                {% if link.links.size > 0 %}{% render 'icon-chevron-down', class: 'header__menu-icon' %}{% endif %}
-              </a>
-              {% if link.links.size > 0 %}
-                <ul class="header__submenu list-unstyled" role="menu">
-                  {% for sublink in link.links %}
-                    <li role="none"><a href="{{ sublink.url }}" class="header__submenu-link" role="menuitem">{{ sublink.title }}</a></li>
-                  {% endfor %}
-                </ul>
-              {% endif %}
-            </li>
-          {% endfor %}
-        </ul>
+<header class="site-header">
+  <div class="container header-inner">
+    <button
+      class="icon-button mobile-menu-button"
+      type="button"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="MobileMenu"
+      data-menu-toggle
+    >
+      {% render 'icon-menu' %}
+    </button>
+
+    <a class="brand" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }} home">
+      {% if section.settings.logo != blank %}
+        {{
+          section.settings.logo
+          | image_url: width: section.settings.logo_width
+          | image_tag:
+            class: 'brand-logo',
+            widths: '120, 180, 240, 320',
+            width: section.settings.logo_width,
+            loading: 'eager',
+            alt: shop.name
+        }}
+      {% else %}
+        <img
+          class="brand-logo"
+          src="{{ 'zero-credit-logo-black.png' | asset_url }}"
+          width="{{ section.settings.logo_width }}"
+          height="{{ section.settings.logo_width }}"
+          alt="{{ shop.name | escape }}"
+          loading="eager"
+        >
       {% endif %}
+    </a>
+
+    <nav class="desktop-nav" aria-label="Primary navigation">
+      <ul>
+        {% for link in section.settings.menu.links %}
+          <li>
+            <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+          </li>
+        {% endfor %}
+      </ul>
     </nav>
 
-    {% comment %} Center: Logo {% endcomment %}
-    <div class="header__logo-wrapper" aria-label="Home">
-      <a href="{{ routes.root_url }}" class="header__logo-link" aria-label="{{ shop.name }} — Home">
-        {% if section.settings.logo_image != blank %}
-          {{ section.settings.logo_image | image_tag: width: section.settings.logo_width, height: section.settings.logo_height, class: 
-'header__logo-image', loading: 'eager', fetchpriority: 'high', alt: shop.name }}
-        {% else %}
-          <span class="header__logo-text">{{ shop.name }}</span>
-        {% endif %}
-      </a>
-    </div>
-
-    {% comment %} Right: Icons {% endcomment %}
-    <div class="header__actions flex items-center gap-6" role="navigation" aria-label="User actions">
-      <button class="header__icon-btn" aria-label="Search" data-search-open>
-        {% render 'icon-search' %}
-      </button>
-
-      {% if customer_accounts_enabled %}
-        <a href="{{ routes.account_url }}" class="header__icon-btn" aria-label="Account">
+    <div class="header-actions">
+      {% if shop.customer_accounts_enabled %}
+        <a class="icon-button account-link" href="{{ routes.account_url }}" aria-label="Account">
           {% render 'icon-account' %}
         </a>
       {% endif %}
-
-      <button class="header__icon-btn header__icon-btn--cart" aria-label="Cart ({{ cart.item_count }} items)" data-cart-open>
+      <a class="icon-button cart-button" href="{{ routes.cart_url }}" aria-label="Open cart" data-cart-open>
         {% render 'icon-cart' %}
-        {% if cart.item_count > 0 %}
-          <span class="header__cart-count" aria-live="polite" aria-atomic="true">{{ cart.item_count }}</span>
-        {% endif %}
-      </button>
-
-      <button class="header__mobile-menu-btn" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu" data-mobile-menu-open>
-        {% render 'icon-menu' %}
-      </button>
+        <span class="cart-count">{{ cart.item_count }}</span>
+      </a>
     </div>
   </div>
+
+  <nav id="MobileMenu" class="mobile-menu" aria-label="Mobile navigation" hidden data-mobile-menu>
+    <ul>
+      {% for link in section.settings.menu.links %}
+        <li>
+          <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </nav>
 </header>
 
 {% schema %}
 {
   "name": "Header",
-  "tag": "header",
-  "class": "header-section",
   "settings": [
     {
       "type": "image_picker",
-      "id": "logo_image",
-      "label": "Logo image"
+      "id": "logo",
+      "label": "Logo"
     },
     {
       "type": "range",
       "id": "logo_width",
-      "label": "Logo width (px)",
-      "min": 80,
-      "max": 300,
-      "step": 10,
-      "default": 140
-    },
-    {
-      "type": "range",
-      "id": "logo_height",
-      "label": "Logo height (px)",
-      "min": 30,
-      "max": 150,
-      "step": 5,
-      "default": 40
-    },
-    {
-      "type": "select",
-      "id": "logo_position",
-      "label": "Logo position",
-      "options": [
-        { "value": "center", "label": "Centered" },
-        { "value": "left", "label": "Left" }
-      ],
-      "default": "center"
+      "label": "Logo width",
+      "min": 56,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 88
     },
     {
       "type": "link_list",
       "id": "menu",
-      "label": "Main menu",
+      "label": "Menu",
       "default": "main-menu"
-    },
-    {
-      "type": "checkbox",
-      "id": "transparent_home",
-      "label": "Transparent on homepage",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "compact_scroll",
-      "label": "Compact on scroll",
-      "default": true
     }
-  ],
-  "presets": [{ "name": "Header" }]
+  ]
 }
 {% endschema %}

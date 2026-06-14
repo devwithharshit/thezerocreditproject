@@ -1,1 +1,33 @@
-[]
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Zero Credit",
+    "theme_author": "The Zero Credit Project",
+    "theme_version": "1.0.0",
+    "theme_documentation_url": "https://github.com/devwithharshit/thezerocreditproject",
+    "theme_support_url": "https://github.com/devwithharshit/thezerocreditproject/issues"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Background",
+        "default": "#f5f3ee"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Text",
+        "default": "#111111"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Accent",
+        "default": "#111111"
+      }
+    ]
+  }
+]

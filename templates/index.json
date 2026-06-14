@@ -1,38 +1,35 @@
 {
   "sections": {
-    "announcement": {
-      "type": "announcement-bar"
-    },
-    "header": {
-      "type": "header"
-    },
     "hero": {
-      "type": "hero-zero-credit"
+      "type": "hero-zero-credit",
+      "settings": {
+        "heading": "The Zero Credit Project",
+        "subheading": "No credit. No shortcuts. Just the project.",
+        "primary_label": "Shop the Drop",
+        "primary_link": "/collections/all",
+        "secondary_label": "Explore Collections",
+        "secondary_link": "/collections"
+      }
     },
     "featured": {
-      "type": "featured-products"
-    },
-    "story": {
-      "type": "editorial-story"
-    },
-    "marquee": {
-      "type": "brand-marquee"
+      "type": "featured-products",
+      "settings": {
+        "heading": "Current Drop",
+        "subheading": "Built for people starting from zero.",
+        "products_to_show": 4
+      }
     },
     "newsletter": {
-      "type": "newsletter-zero-credit"
-    },
-    "footer": {
-      "type": "footer"
+      "type": "newsletter-zero-credit",
+      "settings": {
+        "heading": "Join The Zero Credit Project",
+        "subheading": "Be the first to know about new collections and special offers."
+      }
     }
   },
   "order": [
-    "announcement",
-    "header",
     "hero",
     "featured",
-    "story",
-    "marquee",
-    "newsletter",
-    "footer"
+    "newsletter"
   ]
 }

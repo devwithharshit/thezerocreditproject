@@ -1,0 +1,35 @@
+<section class="section-spacing not-found">
+  <div class="container narrow">
+    <p class="eyebrow">404</p>
+    <h1>{{ section.settings.heading | escape }}</h1>
+    <p>{{ section.settings.text | escape }}</p>
+    <a class="button button-dark" href="{{ routes.root_url }}">{{ section.settings.button_label | escape }}</a>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "404 page",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "This page is off the grid."
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "The page you requested does not exist."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Back to home"
+    }
+  ]
+}
+{% endschema %}

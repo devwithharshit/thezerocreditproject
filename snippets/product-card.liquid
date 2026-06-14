@@ -1,91 +1,31 @@
-{% comment %}
-Product Card — used everywhere. Handles image swap, badges, quick add, price, color swatches.
-Context variables: product, show_vendor, show_badges, quick_add.
-{% endcomment %}
-{% liquid
-  assign card_product = product
-  assign show_vendor = show_vendor | default: false
-  assign show_badges = show_badges | default: true
-  assign enable_quick_add = quick_add | default: true
-  assign first_media = card_product.featured_media
-  assign first_variant = card_product.selected_or_first_available_variant
-%}
+{% assign card_variant = product.selected_or_first_available_variant %}
 
-<article class="product-card reveal" itemscope itemtype="https://schema.org/Product" data-product-id="{{ card_product.id }}" role="listitem">
-  <div class="product-card__media-wrapper">
-    <a href="{{ card_product.url }}" class="product-card__link" aria-label="{{ card_product.title | escape }}">
-      {% if first_media %}
-        {{ first_media | media_tag: image_size: '530x', class: 'product-card__image product-card__image--primary', loading: 'lazy', alt: 
-first_media.alt | default: card_product.title | escape, width: 530, height: 530 }}
-      {% endif %}
-      {% if card_product.media.size > 1 %}
-        {% assign second_media = card_product.media[1] %}
-        {{ second_media | media_tag: image_size: '530x', class: 'product-card__image product-card__image--secondary', loading: 'lazy', alt: 
-second_media.alt | default: card_product.title | escape, width: 530, height: 530 }}
-      {% endif %}
-    </a>
-
-    {% if show_badges %}
-      <div class="product-card__badges flex flex-col gap-2">
-        {% if card_product.tags contains 'made-to-order' %}
-          <span class="badge badge--mto">Made to order</span>
-        {% endif %}
-        {% if card_product.tags contains 'new' %}
-          <span class="badge badge--new">New</span>
-        {% endif %}
-        {% unless first_variant.available %}
-          <span class="badge badge--sold">Sold out</span>
-        {% endunless %}
-      </div>
+<article class="product-card">
+  <a class="product-card-media" href="{{ product.url }}">
+    {% if product.featured_image %}
+      {{
+        product.featured_image
+        | image_url: width: 900
+        | image_tag:
+          widths: '360, 540, 720, 900',
+          sizes: '(min-width: 990px) 25vw, 50vw',
+          loading: 'lazy',
+          alt: product.featured_image.alt
+      }}
+    {% else %}
+      {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
     {% endif %}
-
-    {% if enable_quick_add and first_variant.available %}
-      <form class="product-card__quick-add" action="{{ routes.cart_add_url }}" method="post" data-quick-add>
-        <input type="hidden" name="id" value="{{ first_variant.id }}">
-        <input type="hidden" name="quantity" value="1">
-        <input type="hidden" name="sections" value="cart-drawer">
-        <button type="submit" class="btn btn--primary btn--sm product-card__quick-add-btn" aria-label="Quick add {{ card_product.title | 
-escape }} to cart">
-          <span class="btn__text">Quick add</span>
-          <span class="btn__loader visually-hidden" aria-hidden="true">{% render 'icon-spinner' %}</span>
-        </button>
-      </form>
-    {% endif %}
-  </div>
-
-  <div class="product-card__info">
-    {% if show_vendor and card_product.vendor != blank %}
-      <p class="product-card__vendor">{{ card_product.vendor | escape }}</p>
-    {% endif %}
-    <h3 class="product-card__title">
-      <a href="{{ card_product.url }}" itemprop="url">{{ card_product.title | escape }}</a>
-    </h3>
-
-    <div class="product-card__price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-      <span class="price price--regular" itemprop="price" content="{{ first_variant.price | divided_by: 100.0 }}">
-        {{ first_variant.price | money }}
-      </span>
-      {% if first_variant.compare_at_price > first_variant.price %}
-        <span class="price price--compare" aria-hidden="true">{{ first_variant.compare_at_price | money }}</span>
+    {% unless product.available %}
+      <span class="product-badge">Sold out</span>
+    {% endunless %}
+  </a>
+  <div class="product-card-details">
+    <h3><a href="{{ product.url }}">{{ product.title | escape }}</a></h3>
+    <div class="product-card-price">
+      <span>{{ card_variant.price | money }}</span>
+      {% if card_variant.compare_at_price > card_variant.price %}
+        <s>{{ card_variant.compare_at_price | money }}</s>
       {% endif %}
-      <meta itemprop="priceCurrency" content="{{ cart.currency.iso_code }}">
-      <link itemprop="availability" href="https://schema.org/{% if first_variant.available %}InStock{% else %}OutOfStock{% endif %}">
     </div>
-
-    {% comment %} Color Swatches (first 4 option values for 'Color'/'Colour') {% endcomment %}
-    {% assign color_option = card_product.options_with_values | where: 'name', 'Color' | first | default: card_product.options_with_values | 
-where: 'name', 'Colour' | first %}
-    {% if color_option and color_option.values.size > 1 %}
-      <div class="product-card__swatches flex gap-2 mt-3" role="group" aria-label="Color options">
-        {% for value in color_option.values limit: 4 %}
-          {% assign swatch_handle = value | handleize %}
-          <button type="button" class="product-card__swatch" aria-label="{{ value }}" style="--swatch-bg: {{ swatch_handle }};" 
-data-swatch-value="{{ value | escape }}"></button>
-        {% endfor %}
-        {% if color_option.values.size > 4 %}
-          <span class="product-card__swatch-more">+{{ color_option.values.size | minus: 4 }}</span>
-        {% endif %}
-      </div>
-    {% endif %}
   </div>
 </article>

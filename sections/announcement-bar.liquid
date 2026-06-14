@@ -1,89 +1,50 @@
-{% comment %}
-Announcement Bar — slim top bar with marquee rotation.
-Settings: messages (text list), rotation speed, text color, bg color, show close.
-{% endcomment %}
-{% if section.settings.messages.size > 0 or section.blocks.size > 0 %}
-  <div class="announcement-bar" role="region" aria-label="Announcements" data-announcement-bar style="--announcement-bg: {{ 
-section.settings.bg_color }}; --announcement-text: {{ section.settings.text_color }}; --announcement-speed: {{ section.settings.rotation_speed 
-}}ms;">
-    <div class="announcement-bar__track" aria-live="polite" aria-atomic="true">
-      {% liquid
-        assign all_messages = ''
-        for block in section.blocks
-          assign all_messages = all_messages | append: block.settings.text | append: ' • '
-        endfor
-        for msg in section.settings.messages
-          assign all_messages = all_messages | append: msg | append: ' • '
-        endfor
-      %}
-      <div class="announcement-bar__content">{{ all_messages }}</div>
-      <div class="announcement-bar__content" aria-hidden="true">{{ all_messages }}</div>
-    </div>
-    {% if section.settings.show_close %}
-      <button class="announcement-bar__close" aria-label="Dismiss announcement" data-announcement-close>
-        {% render 'icon-close' %}
-      </button>
+{% if section.settings.show_announcement and section.settings.text != blank %}
+  <aside
+    class="announcement-bar"
+    aria-label="Announcement"
+    style="--announcement-background: {{ section.settings.background }}; --announcement-text: {{ section.settings.text_color }};"
+  >
+    {% if section.settings.link != blank %}
+      <a href="{{ section.settings.link }}">{{ section.settings.text | escape }}</a>
+    {% else %}
+      <p>{{ section.settings.text | escape }}</p>
     {% endif %}
-  </div>
+  </aside>
 {% endif %}
 
 {% schema %}
 {
-  "name": "Announcement Bar",
-  "tag": "",
-  "class": "announcement-bar-section",
+  "name": "Announcement bar",
   "settings": [
     {
-      "type": "textarea",
-      "id": "messages",
-      "label": "Messages (one per line)",
-      "default": "Made to order. Built from zero.\nNew drops coming soon.\nFollow the project. Own the process.\nLimited pieces. No 
-shortcuts.\nBuilt for people starting from zero."
+      "type": "checkbox",
+      "id": "show_announcement",
+      "label": "Show announcement",
+      "default": true
     },
     {
-      "type": "range",
-      "id": "rotation_speed",
-      "label": "Rotation speed (ms)",
-      "min": 2000,
-      "max": 15000,
-      "step": 500,
-      "default": 6000
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "Made to order. Built from zero."
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
     },
     {
       "type": "color",
-      "id": "bg_color",
-      "label": "Background color",
+      "id": "background",
+      "label": "Background",
       "default": "#111111"
     },
     {
       "type": "color",
       "id": "text_color",
-      "label": "Text color",
-      "default": "#FFFFFF"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_close",
-      "label": "Show dismiss button",
-      "default": true
+      "label": "Text",
+      "default": "#ffffff"
     }
-  ],
-  "blocks": [
-    {
-      "type": "message",
-      "name": "Custom Message",
-      "settings": [
-        {
-          "type": "text",
-          "id": "text",
-          "label": "Message text",
-          "default": "Custom announcement"
-        }
-      ]
-    }
-  ],
-  "presets": [
-    { "name": "Announcement Bar" }
   ]
 }
 {% endschema %}

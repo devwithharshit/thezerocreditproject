@@ -1,204 +1,105 @@
-{% comment %}
-Product Page — gallery, form, accordions, sticky ATB on mobile.
-Settings: gallery layout, enable sticky ATB, show dynamic checkout.
-{% endcomment %}
-{% assign product = section.product %}
 {% assign current_variant = product.selected_or_first_available_variant %}
+{% assign product_form_id = 'ProductForm-' | append: section.id %}
 
-<section class="product-page" data-product-page data-product-id="{{ product.id }}" itemscope itemtype="https://schema.org/Product">
-  <div class="container">
-    <div class="product-page__grid">
-      {% comment %} Gallery {% endcomment %}
-      <div class="product-page__gallery reveal" id="product-gallery">
-        <div class="product-gallery__main" role="region" aria-label="Product images">
-          {% for media in product.media %}
-            <div class="product-gallery__slide {% if forloop.first %}is-active{% endif %}" data-media-id="{{ media.id }}">
-              {{ media | media_tag: image_size: '1024x', class: 'product-gallery__image', loading: forloop.first ? 'eager' : 'lazy', alt: 
-media.alt | default: product.title | escape }}
-            </div>
-          {% endfor %}
-        </div>
-        {% if product.media.size > 1 %}
-          <div class="product-gallery__thumbs flex gap-3 mt-4" role="tablist" aria-label="Product thumbnails">
-            {% for media in product.media %}
-              <button class="product-gallery__thumb {% if forloop.first %}is-active{% endif %}" role="tab" aria-selected="{{ forloop.first }}" 
-aria-controls="panel-{{ media.id }}" data-thumb-target="{{ media.id }}">
-                {{ media | media_tag: image_size: '150x', class: 'product-gallery__thumb-image', alt: '' }}
-              </button>
-            {% endfor %}
+<section class="section-spacing product-page">
+  <div class="container product-layout">
+    <div class="product-gallery">
+      {% if product.media.size > 0 %}
+        {% for media in product.media %}
+          <div class="product-media">
+            {{
+              media.preview_image
+              | image_url: width: 1400
+              | image_tag:
+                widths: '500, 750, 1000, 1400',
+                sizes: '(min-width: 900px) 58vw, 100vw',
+                loading: 'lazy',
+                alt: media.alt
+            }}
           </div>
-        {% endif %}
-      </div>
-
-      {% comment %} Info & Form {% endcomment %}
-      <div class="product-page__info reveal">
-        <p class="product-page__category">{{ product.type | escape }}</p>
-        <h1 class="product-page__title" itemprop="name">{{ product.title | escape }}</h1>
-
-        <div class="product-page__price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-          <span class="price price--regular" id="price-{{ product.id }}">
-            <span class="visually-hidden">{{ 'products.product.regular_price' | t }}</span>
-            {{ current_variant.price | money }}
-          </span>
-          {% if current_variant.compare_at_price > current_variant.price %}
-            <span class="price price--compare" aria-hidden="true">{{ current_variant.compare_at_price | money }}</span>
-          {% endif %}
-          <meta itemprop="price" content="{{ current_variant.price | divided_by: 100.0 }}">
-          <meta itemprop="priceCurrency" content="{{ cart.currency.iso_code }}">
-          <link itemprop="availability" href="https://schema.org/{% if current_variant.available %}InStock{% else %}OutOfStock{% endif %}">
-        </div>
-
-        {% if section.settings.show_mto_note %}
-          <p class="product-page__mto">Made to order. Ships in 1–5 business days.</p>
-        {% endif %}
-
-        {% comment %} Variant Selectors {% endcomment %}
-        <form class="product-form" id="product-form-{{ product.id }}" action="{{ routes.cart_add_url }}" method="post" novalidate>
-          <input type="hidden" name="id" value="{{ current_variant.id }}" data-product-form-id>
-          <input type="hidden" name="quantity" value="1" data-quantity-input>
-
-          {% for option in product.options_with_values %}
-            <fieldset class="product-form__field" aria-labelledby="option-label-{{ option.name | handleize }}">
-              <legend id="option-label-{{ option.name | handleize }}" class="product-form__label">{{ option.name }}</legend>
-              <div class="product-form__values flex flex-wrap gap-3" role="radiogroup" aria-label="{{ option.name }}">
-                {% for value in option.values %}
-                  {% assign variant_for_value = product.variants | where: option.name, value | first %}
-                  <input type="radio" name="{{ option.name }}" value="{{ value | escape }}" id="{{ option.name | handleize }}-{{ value | 
-handleize }}" class="product-form__input visually-hidden" {% if forloop.first %}checked{% endif %} {% unless variant_for_value.available 
-%}disabled{% endunless %}>
-                  <label for="{{ option.name | handleize }}-{{ value | handleize }}" class="product-form__option {% unless 
-variant_for_value.available %}product-form__option--disabled{% endunless %}" aria-disabled="{{ variant_for_value.available | not }}">
-                    {{ value }}
-                  </label>
-                {% endfor %}
-              </div>
-            </fieldset>
-          {% endfor %}
-
-          {% comment %} Quantity {% endcomment %}
-          <div class="product-form__quantity" style="max-width: 120px;">
-            <label for="quantity-{{ product.id }}" class="product-form__label">Quantity</label>
-            <div class="quantity-selector flex items-center border" role="group" aria-label="Quantity">
-              <button type="button" class="quantity-selector__btn" data-quantity-decrement aria-label="Decrease quantity">{% render 
-'icon-minus' %}</button>
-              <input type="number" id="quantity-{{ product.id }}" name="quantity" value="1" min="1" max="99" class="quantity-selector__input" 
-data-quantity-input aria-label="Quantity">
-              <button type="button" class="quantity-selector__btn" data-quantity-increment aria-label="Increase quantity">{% render 
-'icon-plus' %}</button>
-            </div>
-          </div>
-
-          {% comment %} Add to Cart / Dynamic Checkout {% endcomment %}
-          <div class="product-form__actions flex flex-wrap gap-3 mt-6">
-            <button type="submit" name="add" class="btn btn--primary flex-1" {% unless current_variant.available %}disabled{% endunless %} 
-data-add-to-cart>
-              <span class="btn__text">{{ 'products.product.add_to_cart' | t }}</span>
-              <span class="btn__loader visually-hidden" aria-hidden="true">{% render 'icon-spinner' %}</span>
-            </button>
-            {% if section.settings.show_dynamic_checkout and current_variant.available %}
-              {{ form | payment_button }}
-            {% endif %}
-          </div>
-        </form>
-
-        {% comment %} Accordions {% endcomment %}
-        <div class="product-page__accordions mt-10" data-accordions>
-          {% render 'product-accordion', title: 'Product Details', content: section.settings.details_content, open: true %}
-          {% render 'product-accordion', title: 'Shipping', content: section.settings.shipping_content %}
-          {% render 'product-accordion', title: 'Returns & Exchanges', content: section.settings.returns_content %}
-          {% render 'product-accordion', title: 'Size Guide', content: section.settings.size_guide_content %}
-        </div>
-      </div>
+        {% endfor %}
+      {% else %}
+        {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      {% endif %}
     </div>
 
-    {% comment %} Sticky Mobile ATB {% endcomment %}
-    {% if section.settings.sticky_atb_mobile %}
-      <div class="product-page__sticky-atb" hidden data-sticky-atb>
-        <div class="product-page__sticky-price">{{ current_variant.price | money }}</div>
-        <button class="btn btn--primary w-100" data-sticky-atb-btn {% unless current_variant.available %}disabled{% endunless %}>
-          {{ 'products.product.add_to_cart' | t }}
-        </button>
+    <div class="product-info">
+      {% if product.vendor != blank %}
+        <p class="eyebrow">{{ product.vendor | escape }}</p>
+      {% endif %}
+      <h1>{{ product.title | escape }}</h1>
+
+      <div class="product-price">
+        <span>{{ current_variant.price | money }}</span>
+        {% if current_variant.compare_at_price > current_variant.price %}
+          <s>{{ current_variant.compare_at_price | money }}</s>
+        {% endif %}
       </div>
-    {% endif %}
+
+      {% form 'product', product, id: product_form_id, class: 'product-form' %}
+        {% unless product.has_only_default_variant %}
+          <label for="Variant-{{ section.id }}">Choose an option</label>
+          <select id="Variant-{{ section.id }}" name="id">
+            {% for variant in product.variants %}
+              <option
+                value="{{ variant.id }}"
+                {% if variant == current_variant %}selected="selected"{% endif %}
+                {% unless variant.available %}disabled="disabled"{% endunless %}
+              >
+                {{ variant.title | escape }} - {{ variant.price | money }}
+                {% unless variant.available %} - Sold out{% endunless %}
+              </option>
+            {% endfor %}
+          </select>
+        {% else %}
+          <input type="hidden" name="id" value="{{ current_variant.id }}">
+        {% endunless %}
+
+        <label for="Quantity-{{ section.id }}">Quantity</label>
+        <input id="Quantity-{{ section.id }}" class="quantity-input" type="number" name="quantity" value="1" min="1">
+
+        <button
+          class="button button-dark product-submit"
+          type="submit"
+          name="add"
+          {% unless current_variant.available %}disabled="disabled"{% endunless %}
+        >
+          {% if current_variant.available %}Add to cart{% else %}Sold out{% endif %}
+        </button>
+
+        {% if section.settings.show_dynamic_checkout and current_variant.available %}
+          {{ form | payment_button }}
+        {% endif %}
+      {% endform %}
+
+      {% if section.settings.shipping_note != blank %}
+        <p class="product-note">{{ section.settings.shipping_note | escape }}</p>
+      {% endif %}
+
+      {% if product.description != blank %}
+        <div class="rte product-description">{{ product.description }}</div>
+      {% endif %}
+    </div>
   </div>
 </section>
 
-{% comment %} Recommended Products (placeholder) {% endcomment %}
-{% if section.settings.show_recommendations and collections[section.settings.recommendations_collection] != blank %}
-  {% render 'featured-products', collection: collections[section.settings.recommendations_collection], title: 'You may also like', limit: 4 %}
-{% endif %}
-
 {% schema %}
 {
-  "name": "Product Page",
+  "name": "Main product",
   "tag": "section",
-  "class": "product-page-section",
   "settings": [
-    {
-      "type": "select",
-      "id": "gallery_layout",
-      "label": "Gallery layout",
-      "options": [{"value":"stacked","label":"Stacked (mobile) / Thumbnails (desktop)"},{"value":"slider","label":"Slider"}],
-      "default": "stacked"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_mto_note",
-      "label": "Show 'Made to order' note",
-      "default": true
-    },
     {
       "type": "checkbox",
       "id": "show_dynamic_checkout",
-      "label": "Show dynamic checkout button",
+      "label": "Show dynamic checkout",
       "default": true
     },
     {
-      "type": "checkbox",
-      "id": "sticky_atb_mobile",
-      "label": "Sticky Add to Cart on mobile",
-      "default": true
-    },
-    {
-      "type": "richtext",
-      "id": "details_content",
-      "label": "Product Details content",
-      "default": "<p>Each piece is made to order in small batches. Expect minor variations — they're not defects, they're 
-character.</p><ul><li>Heavyweight 280–320 GSM cotton</li><li>Pre-shrunk, garment-dyed</li><li>Screen printed with water-based inks</li></ul>"
-    },
-    {
-      "type": "richtext",
-      "id": "shipping_content",
-      "label": "Shipping content",
-      "default": "<p>Processing: 1–5 business days. India delivery: 4–10 business days. Tracking sent via email.</p>"
-    },
-    {
-      "type": "richtext",
-      "id": "returns_content",
-      "label": "Returns content",
-      "default": "<p>Made to order — no returns for change of mind. Eligible only if damaged, defective, or wrong item delivered. Contact 
-within 7 days with photos.</p>"
-    },
-    {
-      "type": "richtext",
-      "id": "size_guide_content",
-      "label": "Size Guide content",
-      "default": "<p>Measure a tee you love. Chest: measure under arms across fullest part. Length: from high point shoulder to 
-hem.</p><table><thead><tr><th>Size</th><th>Chest (cm)</th><th>Length 
-(cm)</th></tr></thead><tbody><tr><td>S</td><td>52</td><td>70</td></tr><tr><td>M</td><td>55</td><td>72</td></tr><tr><td>L</td><td>58</td><td>74<(cm)</th></tr></thead><tbody><tr><td>S</td><td>52</td><td>70</td></tr><tr>td>M</td><td>55</td><td>72</td></tr><tr><td>L</td><td>58</td><td>74</td></tr><tr><td>XL</td><td>61</td><td>76</td></tr></tbody></table>"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_recommendations",
-      "label": "Show recommended products",
-      "default": true
-    },
-    {
-      "type": "collection",
-      "id": "recommendations_collection",
-      "label": "Recommendations collection"
+      "type": "text",
+      "id": "shipping_note",
+      "label": "Shipping note",
+      "default": "Made to order. Processing typically takes 1-5 business days."
     }
-  ],
-  "presets": [{ "name": "Product Page" }]
+  ]
 }
 {% endschema %}
