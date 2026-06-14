@@ -1,4 +1,11 @@
 <section class="zc-hero{% if section.settings.image == blank %} zc-hero--type-only{% endif %}" data-hero>
+  {% if section.settings.show_background_motion and section.settings.background_text != blank %}
+    <div class="zc-hero__ambient" aria-hidden="true">
+      <span>{{ section.settings.background_text | escape }}</span>
+      <span>{{ section.settings.background_text | escape }}</span>
+    </div>
+  {% endif %}
+
   <div class="container zc-hero__layout">
     <div class="zc-hero__copy">
       <p class="eyebrow" data-reveal>{{ section.settings.eyebrow | escape }}</p>
@@ -47,6 +54,18 @@
       "type": "image_picker",
       "id": "image",
       "label": "Campaign image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_background_motion",
+      "label": "Show subtle background motion",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "background_text",
+      "label": "Background wordmark",
+      "default": "ZERO CREDIT"
     },
     {
       "type": "text",

@@ -2185,8 +2185,11 @@ h2 {
 }
 
 .zc-hero {
+  position: relative;
   min-height: min(760px, calc(100svh - var(--header-height) - var(--announcement-height)));
+  overflow: hidden;
   background: #111;
+  isolation: isolate;
 }
 
 .zc-hero::after {
@@ -2194,11 +2197,60 @@ h2 {
 }
 
 .zc-hero__layout {
+  position: relative;
+  z-index: 1;
   display: grid;
   min-height: inherit;
   grid-template-columns: minmax(300px, 0.82fr) minmax(0, 1.18fr);
   gap: clamp(40px, 7vw, 110px);
   align-items: center;
+}
+
+.zc-hero__ambient {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.045);
+  pointer-events: none;
+}
+
+.zc-hero__ambient span {
+  position: absolute;
+  left: -4vw;
+  width: max-content;
+  font-size: clamp(8rem, 18vw, 18rem);
+  font-weight: 900;
+  letter-spacing: -0.075em;
+  line-height: 0.8;
+  text-transform: uppercase;
+  white-space: nowrap;
+  animation: zc-ambient-drift 18s var(--ease-premium) infinite alternate;
+  will-change: transform;
+}
+
+.zc-hero__ambient span:first-child {
+  top: 7%;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.075);
+}
+
+.zc-hero__ambient span:last-child {
+  right: -3vw;
+  bottom: 2%;
+  left: auto;
+  animation-delay: -9s;
+  animation-direction: alternate-reverse;
+}
+
+@keyframes zc-ambient-drift {
+  from {
+    transform: translate3d(-1.5%, 0, 0);
+  }
+
+  to {
+    transform: translate3d(2.5%, -6px, 0);
+  }
 }
 
 .zc-hero__copy {
@@ -2696,6 +2748,26 @@ h2 {
     min-height: 390px;
   }
 
+  .zc-hero__ambient {
+    color: rgba(255, 255, 255, 0.035);
+  }
+
+  .zc-hero__ambient span {
+    left: -12vw;
+    font-size: clamp(6rem, 30vw, 10rem);
+    animation-duration: 22s;
+  }
+
+  .zc-hero__ambient span:first-child {
+    top: 12%;
+  }
+
+  .zc-hero__ambient span:last-child {
+    right: -16vw;
+    bottom: 8%;
+    left: auto;
+  }
+
   .editorial-grid {
     grid-template-columns: 1fr;
   }
@@ -2793,6 +2865,11 @@ h2 {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .zc-hero__ambient span {
+    animation: none;
+    will-change: auto;
+  }
+
   .zc-marquee__track.is-animated {
     width: 100%;
     animation: none;

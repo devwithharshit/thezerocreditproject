@@ -3,6 +3,8 @@
     "hero": {
       "type": "hero-zero-credit",
       "settings": {
+        "show_background_motion": true,
+        "background_text": "ZERO CREDIT",
         "eyebrow": "Independent streetwear / India",
         "heading": "The Zero Credit Project",
         "subheading": "No credit. No shortcuts. Just the project.",
