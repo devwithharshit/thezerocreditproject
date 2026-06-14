@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-collection-product-grid"
+    },
+    "footer": {
+      "type": "footer"
+    }
+  },
+  "order": [
+    "main",
+    "footer"
+  ]
+}

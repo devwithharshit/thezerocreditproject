@@ -1,0 +1,38 @@
+{
+  "sections": {
+    "announcement": {
+      "type": "announcement-bar"
+    },
+    "header": {
+      "type": "header"
+    },
+    "hero": {
+      "type": "hero-zero-credit"
+    },
+    "featured": {
+      "type": "featured-products"
+    },
+    "story": {
+      "type": "editorial-story"
+    },
+    "marquee": {
+      "type": "brand-marquee"
+    },
+    "newsletter": {
+      "type": "newsletter-zero-credit"
+    },
+    "footer": {
+      "type": "footer"
+    }
+  },
+  "order": [
+    "announcement",
+    "header",
+    "hero",
+    "featured",
+    "story",
+    "marquee",
+    "newsletter",
+    "footer"
+  ]
+}
