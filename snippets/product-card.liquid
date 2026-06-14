@@ -11,7 +11,7 @@
           | image_tag:
             class: 'product-card-image product-card-image--primary',
             widths: '360, 540, 720, 1000',
-            sizes: '(min-width: 990px) 28vw, 72vw',
+            sizes: '(min-width: 990px) 25vw, 50vw',
             loading: 'lazy',
             alt: product.featured_image.alt
         }}
@@ -22,7 +22,7 @@
             | image_tag:
               class: 'product-card-image product-card-image--secondary',
               widths: '360, 540, 720, 1000',
-              sizes: '(min-width: 990px) 28vw, 72vw',
+              sizes: '(min-width: 990px) 25vw, 50vw',
               loading: 'lazy',
               alt: secondary_image.alt
           }}
@@ -32,30 +32,15 @@
       {% endif %}
     </a>
 
-    <span class="product-card-index">0{{ index | default: 1 }}</span>
-
     {% if card_variant.compare_at_price > card_variant.price %}
-      {% assign savings = card_variant.compare_at_price | minus: card_variant.price | times: 100 | divided_by: card_variant.compare_at_price %}
-      <span class="product-badge">{{ savings }}% off</span>
+      <span class="product-badge">Sale</span>
     {% elsif product.available == false %}
       <span class="product-badge">Sold out</span>
-    {% endif %}
-
-    {% if product.available %}
-      {% form 'product', product, class: 'product-card-form' %}
-        <input type="hidden" name="id" value="{{ card_variant.id }}">
-        <input type="hidden" name="quantity" value="1">
-        <button class="product-card-action" type="submit" name="add">
-          <span>Quick add</span>
-          <span aria-hidden="true">+</span>
-        </button>
-      {% endform %}
     {% endif %}
   </div>
 
   <div class="product-card-details">
     <div>
-      <p class="product-card-kicker">{{ product.type | default: 'The Zero Credit Project' | escape }}</p>
       <h3><a href="{{ product.url }}">{{ product.title | escape }}</a></h3>
     </div>
     <div class="product-card-price">
@@ -65,4 +50,15 @@
       {% endif %}
     </div>
   </div>
+
+  {% if product.available %}
+    {% form 'product', product, class: 'product-card-form' %}
+      <input type="hidden" name="id" value="{{ card_variant.id }}">
+      <input type="hidden" name="quantity" value="1">
+      <button class="product-card-action" type="submit" name="add">
+        <span>Quick add</span>
+        <span aria-hidden="true">+</span>
+      </button>
+    {% endform %}
+  {% endif %}
 </article>

@@ -16,7 +16,7 @@
     </div>
 
     {% if featured_collection != blank %}
-      <div class="product-grid product-grid--rail" data-product-rail>
+      <div class="product-grid product-grid--featured">
         {% for product in featured_collection.products limit: section.settings.products_to_show %}
           {% render 'product-card', product: product, index: forloop.index %}
         {% endfor %}

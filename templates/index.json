@@ -3,22 +3,13 @@
     "hero": {
       "type": "hero-zero-credit",
       "settings": {
-        "background_text": "ZERO CREDIT",
         "eyebrow": "Independent streetwear / India",
-        "heading": "Built From Zero",
+        "heading": "The Zero Credit Project",
         "subheading": "No credit. No shortcuts. Just the project.",
         "primary_label": "Shop the Drop",
         "primary_link": "/collections/all",
         "secondary_label": "Explore Collections",
         "secondary_link": "/collections"
-      }
-    },
-    "marquee_top": {
-      "type": "marquee-zero-credit",
-      "settings": {
-        "text": "NO CREDIT / NO SHORTCUTS / JUST THE PROJECT",
-        "speed": 24,
-        "style": "light"
       }
     },
     "categories": {
@@ -83,7 +74,8 @@
       "type": "marquee-zero-credit",
       "settings": {
         "text": "LIMITED PIECES / MADE WITH INTENT / BUILT FROM ZERO",
-        "speed": 30,
+        "speed": 60,
+        "animate": false,
         "style": "dark"
       }
     },
@@ -97,7 +89,6 @@
   },
   "order": [
     "hero",
-    "marquee_top",
     "categories",
     "featured",
     "manifesto",

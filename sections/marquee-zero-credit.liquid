@@ -3,8 +3,12 @@
   style="--marquee-speed: {{ section.settings.speed }}s;"
   aria-label="{{ section.settings.text | escape }}"
 >
-  <div class="zc-marquee__track">
-    {% for repeat in (1..8) %}
+  <div class="zc-marquee__track{% if section.settings.animate %} is-animated{% endif %}">
+    {% assign repeat_count = 1 %}
+    {% if section.settings.animate %}
+      {% assign repeat_count = 8 %}
+    {% endif %}
+    {% for repeat in (1..repeat_count) %}
       <div class="zc-marquee__item" aria-hidden="{% if repeat == 1 %}false{% else %}true{% endif %}">
         <span>{{ section.settings.text | escape }}</span>
         <span class="zc-marquee__mark">
@@ -30,11 +34,17 @@
       "type": "range",
       "id": "speed",
       "label": "Speed",
-      "min": 12,
-      "max": 50,
-      "step": 2,
+      "min": 40,
+      "max": 80,
+      "step": 5,
       "unit": "s",
-      "default": 24
+      "default": 60
+    },
+    {
+      "type": "checkbox",
+      "id": "animate",
+      "label": "Animate statement",
+      "default": false
     },
     {
       "type": "select",

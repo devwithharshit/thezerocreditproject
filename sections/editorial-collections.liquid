@@ -19,7 +19,7 @@
           class="editorial-card editorial-card--{{ forloop.index }}"
           href="{{ card_collection.url | default: block.settings.link | default: '/collections' }}"
           data-reveal="clip"
-          data-delay="{{ forloop.index | times: 90 }}"
+          data-delay="{{ forloop.index | times: 50 }}"
           {{ block.shopify_attributes }}
         >
           <div class="editorial-card__media">
@@ -47,7 +47,6 @@
               {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg' }}
             {% endif %}
           </div>
-          <div class="editorial-card__number">0{{ forloop.index }}</div>
           <div class="editorial-card__caption">
             <p>{{ block.settings.kicker | escape }}</p>
             <h3>{{ block.settings.heading | default: card_collection.title | escape }}</h3>

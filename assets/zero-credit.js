@@ -78,7 +78,6 @@ document.querySelectorAll('[data-sort-select]').forEach((select) => {
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const revealItems = document.querySelectorAll('[data-reveal]');
-const parallaxItems = document.querySelectorAll('[data-parallax]');
 const siteHeader = document.querySelector('.site-header');
 
 revealItems.forEach((item) => {
@@ -106,16 +105,7 @@ if (!reduceMotion && 'IntersectionObserver' in window) {
 let ticking = false;
 
 function updateScrollEffects() {
-  const scrollY = window.scrollY;
-  siteHeader?.classList.toggle('is-scrolled', scrollY > 20);
-
-  if (!reduceMotion) {
-    parallaxItems.forEach((item) => {
-      const speed = Number(item.dataset.speed || 0);
-      item.style.transform = `translate3d(0, ${scrollY * speed}px, 0)`;
-    });
-  }
-
+  siteHeader?.classList.toggle('is-scrolled', window.scrollY > 20);
   ticking = false;
 }
 
