@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}" class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="{{ settings.color_background | default: '#FAFAFA' }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" 
+href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@500;600;700;800&display=swap">
+    <link rel="stylesheet" 
+href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@500;600;700;800&display=swap" media="print" 
+onload="this.media='all'">
+
+    {{ content_for_header }}
+    {{ 'zero-credit.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'zero-credit.js' | asset_url }}" defer></script>
+
+    <title>{{ page_title }}{% if page_title != shop.name %} — {{ shop.name }}{% endif %}</title>
+    <meta name="description" content="{{ page_description | escape }}">
+  </head>
+
+  <body class="gradient-bg" data-route="{{ request.page_type }}" data-template="{{ template.name }}" data-currency="{{ cart.currency.iso_code 
+}}">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    {% section 'announcement-bar' %}
+
+    <header class="site-header" id="site-header" role="banner">
+      {% section 'header' %}
+    </header>
+
+    {% section 'search-overlay' %}
+    {% section 'cart-drawer' %}
+    {% section 'mobile-menu' %}
+
+    <main id="main-content" role="main" class="main-content">
+      {{ content_for_layout }}
+    </main>
+
+    <footer class="site-footer" role="contentinfo">
+      {% section 'footer' %}
+    </footer>
+
+    <script>
+      window.ZCP = window.ZCP || {};
+      window.ZCP.routes = {
+        cart_add: '{{ routes.cart_add_url }}',
+        cart_change: '{{ routes.cart_change_url }}',
+        cart_get: '{{ routes.cart_url }}.js',
+        search: '{{ routes.search_url }}',
+        search_predictive: '{{ routes.search_predictive_url }}'
+      };
+      window.ZCP.currency = {
+        iso_code: '{{ cart.currency.iso_code }}',
+        format: '{{ shop.money_format | replace: '{{amount}}', '' | replace: '"', '' | strip }}'
+      };
+      window.ZCP.cartCount = {{ cart.item_count | default: 0 }};
+      window.ZCP.settings = {
+        enableAnimations: {{ settings.enable_animations | default: true | json }}
+      };
+    </script>
+  </body>
+</html>

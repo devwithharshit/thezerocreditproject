@@ -1,0 +1,23 @@
+{% comment %}
+Generic Page Section — used for Contact, Policy pages. Renders page.content with styled typography.
+{% endcomment %}
+<section class="page-content" data-page-content>
+  <div class="container container--narrow">
+    <header class="page-content__header reveal">
+      <h1 class="page-content__title">{{ page.title }}</h1>
+    </header>
+    <div class="page-content__body rte reveal">
+      {{ page.content }}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Page Content",
+  "tag": "section",
+  "class": "page-section",
+  "settings": [],
+  "presets": [{ "name": "Page Content" }]
+}
+{% endschema %}

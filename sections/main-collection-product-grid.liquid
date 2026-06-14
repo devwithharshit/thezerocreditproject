@@ -1,0 +1,108 @@
+{% comment %}
+Collection Page — product grid with sidebar filters (desktop) / drawer (mobile).
+Uses product-card snippet. Handles sort, pagination/infinite scroll.
+{% endcomment %}
+<section class="collection-page" data-collection-page>
+  <div class="container">
+    <div class="collection-page__layout">
+      {% comment %} Sidebar Filters {% endcomment %}
+      <aside class="collection-page__sidebar" id="collection-filters" aria-label="Filters">
+        <div class="filter-drawer__header flex items-center justify-between">
+          <h2 class="filter-drawer__title">Filters</h2>
+          <button class="filter-drawer__close btn btn--text" data-filter-drawer-close aria-label="Close filters">{% render 'icon-close' 
+%}</button>
+        </div>
+        <form class="filter-form" id="filter-form" action="{{ collection.url }}">
+          {% render 'collection-filters', collection: collection %}
+          <button type="submit" class="btn btn--primary w-100 mt-6">Apply</button>
+          <button type="button" class="btn btn--outline w-100 mt-3" data-filters-clear>Clear all</button>
+        </form>
+      </aside>
+
+      <div class="collection-page__main">
+        {% comment %} Header + Sort + Mobile Filter Trigger {% endcomment %}
+        <header class="collection-page__header flex flex-wrap items-center justify-between gap-4 mb-8">
+          <div>
+            <h1 class="collection-page__title">{{ collection.title }}</h1>
+            {% if collection.description != blank %}
+              <div class="collection-page__description rte">{{ collection.description }}</div>
+            {% endif %}
+          </div>
+          <div class="collection-page__toolbar flex items-center gap-4">
+            <button class="btn btn--outline collection-page__filter-btn" data-filter-drawer-open aria-expanded="false" 
+aria-controls="collection-filters">
+              {% render 'icon-filter' %} Filters
+            </button>
+            <div class="collection-page__sort">
+              <label for="sort-by" class="visually-hidden">Sort by</label>
+              <select id="sort-by" class="select" name="sort_by" aria-label="Sort products">
+                {% for option in collection.sort_options %}
+                  <option value="{{ option.value }}" {% if option.selected %}selected{% endif %}>{{ option.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </header>
+
+        {% comment %} Product Grid {% endcomment %}
+        <div class="product-grid product-grid--{{ section.settings.products_per_row }}cols" role="list" id="product-grid">
+          {% for product in collection.products %}
+            {% render 'product-card', product: product, show_vendor: false, show_badges: true, quick_add: section.settings.enable_quick_add %}
+          {% else %}
+            <p class="product-grid__empty">{{ 'collections.general.no_matches' | t }}</p>
+          {% endfor %}
+        </div>
+
+        {% comment %} Pagination / Load More {% endcomment %}
+        {% if paginate.pages > 1 %}
+          <div class="collection-page__pagination flex justify-center gap-3 mt-10">
+            {% if paginate.previous %}
+              <a href="{{ paginate.previous.url }}" class="btn btn--outline" rel="prev">Previous</a>
+            {% endif %}
+            <span class="pagination__info self-center" aria-current="page">Page {{ paginate.current_page }} of {{ paginate.pages }}</span>
+            {% if paginate.next %}
+              <a href="{{ paginate.next.url }}" class="btn btn--outline" rel="next">Next</a>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% comment %} Mobile Filter Drawer Overlay {% endcomment %}
+<div class="filter-drawer-overlay" id="filter-drawer-overlay" hidden data-filter-drawer-overlay></div>
+
+{% schema %}
+{
+  "name": "Collection Product Grid",
+  "tag": "section",
+  "class": "collection-grid-section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "products_per_row",
+      "label": "Products per row (desktop)",
+      "options": [
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" },
+        { "value": "5", "label": "5" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_quick_add",
+      "label": "Enable Quick Add",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_infinite_scroll",
+      "label": "Enable infinite scroll (requires JS)",
+      "default": false
+    }
+  ],
+  "presets": [{ "name": "Collection Product Grid" }]
+}
+{% endschema %}

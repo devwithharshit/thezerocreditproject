@@ -1,0 +1,33 @@
+{% comment %}
+Search Overlay — full-screen search with predictive results.
+{% endcomment %}
+<div class="search-overlay" id="search-overlay" role="dialog" aria-label="Search" aria-hidden="true" hidden data-search-overlay>
+  <div class="search-overlay__panel">
+    <header class="search-overlay__header flex items-center justify-between">
+      <h2 class="search-overlay__title">Search</h2>
+      <button class="search-overlay__close btn btn--text" aria-label="Close search" data-search-close>
+        {% render 'icon-close' %}
+      </button>
+    </header>
+
+    <form action="{{ routes.search_url }}" method="get" class="search-overlay__form" role="search">
+      <label for="search-input" class="visually-hidden">Search products</label>
+      <div class="search-overlay__input-wrapper">
+        {% render 'icon-search', class: 'search-overlay__icon' %}
+        <input type="search" id="search-input" name="q" class="search-overlay__input" placeholder="Search products..." autocomplete="off" 
+autocorrect="off" autocapitalize="off" spellcheck="false" aria-autocomplete="list" aria-controls="search-results">
+      </div>
+    </form>
+
+    <div class="search-overlay__results" id="search-results" role="listbox" hidden></div>
+
+    <div class="search-overlay__suggestions">
+      <h3 class="search-overlay__suggestions-title">Popular searches</h3>
+      <ul class="search-overlay__suggestions-list flex flex-wrap gap-2">
+        {% for term in search.terms %}
+          <li><a href="{{ routes.search_url }}?q={{ term | url_encode }}" class="search-overlay__suggestion">{{ term }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>

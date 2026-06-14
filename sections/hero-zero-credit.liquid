@@ -1,0 +1,108 @@
+{% comment %}
+Hero Section — full-screen brand statement with CTA buttons.
+Settings: heading, subheading, background image/video, CTA text/links, alignment.
+{% endcomment %}
+<section class="hero hero--{{ section.settings.alignment }}" data-hero aria-labelledby="hero-heading">
+  {% if section.settings.background_image != blank %}
+    <div class="hero__media" aria-hidden="true">
+      {{ section.settings.background_image | image_tag: width: 1920, height: 1080, class: 'hero__image', loading: 'eager', fetchpriority: 
+'high', sizes: '100vw', alt: '' }}
+    </div>
+  {% else %}
+    <div class="hero__placeholder" aria-hidden="true"></div>
+  {% endif %}
+
+  <div class="hero__overlay"></div>
+
+  <div class="hero__content container reveal">
+    <h1 id="hero-heading" class="hero__title">{{ section.settings.heading | escape }}</h1>
+    {% if section.settings.subheading != blank %}
+      <p class="hero__subtitle">{{ section.settings.subheading | escape }}</p>
+    {% endif %}
+
+    <div class="hero__actions flex flex-wrap gap-4 mt-8">
+      {% if section.settings.cta_primary_text != blank and section.settings.cta_primary_link != blank %}
+        <a href="{{ section.settings.cta_primary_link }}" class="btn btn--primary">{{ section.settings.cta_primary_text | escape }}</a>
+      {% endif %}
+      {% if section.settings.cta_secondary_text != blank and section.settings.cta_secondary_link != blank %}
+        <a href="{{ section.settings.cta_secondary_link }}" class="btn btn--outline">{{ section.settings.cta_secondary_text | escape }}</a>
+      {% endif %}
+    </div>
+
+    {% if section.settings.show_scroll_hint %}
+      <div class="hero__scroll-hint reveal" style="transition-delay: 400ms">
+        {% render 'icon-chevron-down', class: 'hero__scroll-icon' %}
+        <span>Scroll</span>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero - Zero Credit",
+  "tag": "section",
+  "class": "hero-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The Zero Credit Project"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "No credit. No shortcuts. Just the project."
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image (optional)"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Content alignment",
+      "options": [
+        { "value": "center", "label": "Center" },
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "text",
+      "id": "cta_primary_text",
+      "label": "Primary CTA text",
+      "default": "Shop the Drop"
+    },
+    {
+      "type": "url",
+      "id": "cta_primary_link",
+      "label": "Primary CTA link",
+      "default": "/collections/all"
+    },
+    {
+      "type": "text",
+      "id": "cta_secondary_text",
+      "label": "Secondary CTA text",
+      "default": "Explore the Project"
+    },
+    {
+      "type": "url",
+      "id": "cta_secondary_link",
+      "label": "Secondary CTA link",
+      "default": "/collections"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_scroll_hint",
+      "label": "Show scroll indicator",
+      "default": true
+    }
+  ],
+  "presets": [{ "name": "Hero - Zero Credit" }]
+}
+{% endschema %}

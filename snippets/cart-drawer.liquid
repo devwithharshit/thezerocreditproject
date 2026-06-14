@@ -1,0 +1,74 @@
+{% comment %}
+Cart Drawer — slide-out cart with items, quantity controls, checkout.
+{% endcomment %}
+<aside class="cart-drawer" id="cart-drawer" role="dialog" aria-label="Shopping cart" aria-hidden="true" data-cart-drawer>
+  <div class="cart-drawer__overlay" data-cart-close></div>
+  <div class="cart-drawer__panel">
+    <header class="cart-drawer__header flex items-center justify-between">
+      <h2 class="cart-drawer__title">Your Cart</h2>
+      <button class="cart-drawer__close btn btn--text" aria-label="Close cart" data-cart-close>
+        {% render 'icon-close' %}
+      </button>
+    </header>
+
+    <div class="cart-drawer__items" id="cart-drawer-items" role="list" aria-label="Cart items">
+      {% if cart.item_count == 0 %}
+        <div class="cart-drawer__empty">
+          <p>Your cart is empty.</p>
+          <a href="{{ routes.all_products_collection_url }}" class="btn btn--outline mt-4">Continue Shopping</a>
+        </div>
+      {% else %}
+        {% for item in cart.items %}
+          <article class="cart-drawer__item flex gap-4" role="listitem" data-line-item="{{ forloop.index }}">
+            <a href="{{ item.url }}" class="cart-drawer__item-image" aria-label="{{ item.title | escape }}">
+              {{ item.featured_media | image_tag: width: 80, height: 80, class: 'cart-drawer__item-img', alt: item.featured_media.alt | 
+default: item.title | escape }}
+            </a>
+            <div class="cart-drawer__item-details flex-1">
+              <h3 class="cart-drawer__item-title">
+                <a href="{{ item.url }}">{{ item.title | escape }}</a>
+              </h3>
+              {% if item.variant.title != 'Default Title' %}
+                <p class="cart-drawer__item-variant">{{ item.variant.title | escape }}</p>
+              {% endif %}
+              <div class="cart-drawer__item-price">{{ item.final_price | money }}</div>
+
+              <div class="cart-drawer__item-controls flex items-center gap-3 mt-3">
+                <form action="{{ routes.cart_change_url }}" method="post" class="quantity-form flex items-center gap-2" data-quantity-form>
+                  <input type="hidden" name="line" value="{{ forloop.index }}">
+                  <button type="button" class="quantity-form__btn" data-qty-decrement aria-label="Decrease quantity">{% render 'icon-minus' 
+%}</button>
+                  <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="99" class="quantity-form__input" 
+aria-label="Quantity" data-qty-input>
+                  <button type="button" class="quantity-form__btn" data-qty-increment aria-label="Increase quantity">{% render 'icon-plus' 
+%}</button>
+                </form>
+
+                <button type="button" class="cart-drawer__remove btn btn--text" data-line-remove="{{ forloop.index }}" aria-label="Remove {{ 
+item.title | escape }}">
+                  Remove
+                </button>
+              </div>
+            </div>
+          </article>
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    {% if cart.item_count > 0 %}
+      <div class="cart-drawer__footer">
+        <p class="cart-drawer__note">Made to order — ships in 1–5 business days.</p>
+        <div class="cart-drawer__subtotal flex justify-between">
+          <span>Subtotal</span>
+          <span class="cart-drawer__subtotal-value" id="cart-subtotal">{{ cart.total_price | money }}</span>
+        </div>
+        <button type="button" class="btn btn--primary w-100 cart-drawer__checkout" data-cart-checkout>
+          Checkout
+        </button>
+        <button type="button" class="btn btn--outline w-100 mt-3" data-cart-close>
+          Continue Shopping
+        </button>
+      </div>
+    {% endif %}
+  </div>
+</aside>

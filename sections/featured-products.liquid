@@ -1,0 +1,97 @@
+{% comment %}
+Featured Products Grid — pulls from a collection, renders product-card snippet.
+Settings: collection, title, subtitle, products per row, show view all.
+{% endcomment %}
+{% assign collection = collections[section.settings.collection] %}
+{% if collection == blank %}{% return %}{% endif %}
+
+<section class="featured-products" data-featured-products aria-labelledby="featured-heading">
+  <div class="container">
+    <header class="section-header reveal">
+      <h2 id="featured-heading" class="section-header__title">{{ section.settings.title | escape }}</h2>
+      {% if section.settings.subtitle != blank %}
+        <p class="section-header__subtitle">{{ section.settings.subtitle | escape }}</p>
+      {% endif %}
+      {% if section.settings.show_view_all and collection.url != blank %}
+        <a href="{{ collection.url }}" class="section-header__view-all" aria-label="View all {{ collection.title }}">{{ 
+'sections.featured_products.view_all' | t }} →</a>
+      {% endif %}
+    </header>
+
+    <div class="product-grid product-grid--{{ section.settings.products_per_row }}cols" role="list">
+      {% for product in collection.products limit: section.settings.limit %}
+        {% render 'product-card', product: product, show_vendor: false, show_badges: section.settings.show_badges, quick_add: 
+section.settings.enable_quick_add %}
+      {% else %}
+        <p class="product-grid__empty">{{ 'sections.featured_products.no_products' | t }}</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured Products",
+  "tag": "section",
+  "class": "featured-products-section",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title",
+      "default": "Current Drop"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Essentials for the self-made."
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Products to show",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "select",
+      "id": "products_per_row",
+      "label": "Products per row (desktop)",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" },
+        { "value": "5", "label": "5" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badges",
+      "label": "Show 'Made to order' / 'New' badges",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_quick_add",
+      "label": "Enable Quick Add to cart",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View all' link",
+      "default": true
+    }
+  ],
+  "presets": [{ "name": "Featured Products" }]
+}
+{% endschema %}

@@ -1,0 +1,70 @@
+{% comment %}
+Contact Page Section — branded contact form + info.
+{% endcomment %}
+<section class="page-content contact-page" data-page-content>
+  <div class="container container--narrow">
+    <header class="page-content__header reveal">
+      <h1 class="page-content__title">{{ page.title }}</h1>
+    </header>
+
+    <div class="contact-page__grid">
+      <div class="contact-page__info reveal">
+        <div class="contact-page__body rte">
+          {{ page.content }}
+        </div>
+        <address class="contact-page__address">
+          <p><strong>{{ shop.name }}</strong></p>
+          <p>India</p>
+          <p><a href="mailto:{{ shop.email }}">{{ shop.email }}</a></p>
+          <p><a href="tel:+919411323055">+91 9411323055</a></p>
+          <p>Thursday – Sunday, 10:00 AM – 6:00 PM IST</p>
+          <p style="margin-top: 1rem;"><strong>Customer Support:</strong> <a 
+href="mailto:thezerocreditproject@gmail.com">thezerocreditproject@gmail.com</a></p>
+          <p>We aim to respond to all inquiries within 24–72 business hours.</p>
+        </address>
+      </div>
+
+      <div class="contact-page__form reveal">
+        {% form 'contact', id: 'contact-form', class: 'contact-form' %}
+          {% if form.posted_successfully? %}
+            <p class="form-status form-status--success" role="status">Thanks for reaching out. We'll get back to you soon.</p>
+          {% elsif form.errors %}
+            <p class="form-status form-status--error" role="alert">Please fix the errors below.</p>
+          {% endif %}
+
+          <div class="form-field">
+            <label for="contact-name" class="form-label">Name</label>
+            <input type="text" id="contact-name" name="contact[name]" class="form-input" required autocomplete="name">
+          </div>
+
+          <div class="form-field">
+            <label for="contact-email" class="form-label">Email</label>
+            <input type="email" id="contact-email" name="contact[email]" class="form-input" required autocomplete="email">
+          </div>
+
+          <div class="form-field">
+            <label for="contact-phone" class="form-label">Phone (optional)</label>
+            <input type="tel" id="contact-phone" name="contact[phone]" class="form-input" autocomplete="tel">
+          </div>
+
+          <div class="form-field">
+            <label for="contact-body" class="form-label">Message</label>
+            <textarea id="contact-body" name="contact[body]" class="form-textarea" rows="5" required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn--primary w-100">Send Message</button>
+        {% endform %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Contact Page",
+  "tag": "section",
+  "class": "contact-page-section",
+  "settings": [],
+  "presets": [{ "name": "Contact Page" }]
+}
+{% endschema %}
