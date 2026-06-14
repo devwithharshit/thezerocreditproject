@@ -2,13 +2,22 @@
   <aside
     class="announcement-bar"
     aria-label="Announcement"
-    style="--announcement-background: {{ section.settings.background }}; --announcement-text: {{ section.settings.text_color }};"
+    style="--announcement-background: {{ section.settings.background }}; --announcement-text: {{ section.settings.text_color }}; --announcement-duration: {{ section.settings.speed }}s;"
   >
-    {% if section.settings.link != blank %}
-      <a href="{{ section.settings.link }}">{{ section.settings.text | escape }}</a>
-    {% else %}
-      <p>{{ section.settings.text | escape }}</p>
-    {% endif %}
+    <div class="announcement-bar__viewport">
+      <div class="announcement-bar__track{% if section.settings.animate %} is-animated{% endif %}">
+        {% for repeat in (1..6) %}
+          <div class="announcement-bar__item" aria-hidden="{% if repeat == 1 %}false{% else %}true{% endif %}">
+            {% if section.settings.link != blank %}
+              <a href="{{ section.settings.link }}">{{ section.settings.text | escape }}</a>
+            {% else %}
+              <span>{{ section.settings.text | escape }}</span>
+            {% endif %}
+            <span class="announcement-bar__dot" aria-hidden="true"></span>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
   </aside>
 {% endif %}
 
@@ -32,6 +41,22 @@
       "type": "url",
       "id": "link",
       "label": "Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "animate",
+      "label": "Animate announcement",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Animation speed",
+      "min": 20,
+      "max": 60,
+      "step": 5,
+      "unit": "s",
+      "default": 40
     },
     {
       "type": "color",

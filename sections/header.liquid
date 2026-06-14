@@ -25,13 +25,17 @@
         }}
       {% else %}
         <img
-          class="brand-logo"
+          class="brand-logo brand-logo--default"
           src="{{ 'zero-credit-logo-black.png' | asset_url }}"
           width="{{ section.settings.logo_width }}"
           height="{{ section.settings.logo_width }}"
           alt="{{ shop.name | escape }}"
           loading="eager"
         >
+      {% endif %}
+      {% if section.settings.show_brand_name %}
+        <span class="brand-name brand-name--desktop">{{ section.settings.brand_name | escape }}</span>
+        <span class="brand-name brand-name--mobile">{{ section.settings.compact_brand_name | escape }}</span>
       {% endif %}
     </a>
 
@@ -61,14 +65,26 @@
     </div>
   </div>
 
-  <nav id="MobileMenu" class="mobile-menu" aria-label="Mobile navigation" hidden data-mobile-menu>
-    <ul>
-      {% for link in section.settings.menu.links %}
-        <li>
-          <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
-        </li>
-      {% endfor %}
-    </ul>
+  <div class="menu-backdrop" aria-hidden="true" data-menu-backdrop></div>
+  <nav id="MobileMenu" class="mobile-menu" aria-label="Mobile navigation" aria-hidden="true" data-mobile-menu>
+    <div class="mobile-menu-header">
+      <span>{{ section.settings.compact_brand_name | escape }}</span>
+      <button class="icon-button" type="button" aria-label="Close menu" data-menu-close>
+        {% render 'icon-close' %}
+      </button>
+    </div>
+    <div class="mobile-menu-body">
+      <ul>
+        {% for link in section.settings.menu.links %}
+          <li>
+            <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>
+              <span>0{{ forloop.index }}</span>
+              {{ link.title | escape }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
   </nav>
 </header>
 
@@ -84,12 +100,30 @@
     {
       "type": "range",
       "id": "logo_width",
-      "label": "Logo width",
-      "min": 56,
-      "max": 160,
+      "label": "Logo mark width",
+      "min": 40,
+      "max": 96,
       "step": 4,
       "unit": "px",
-      "default": 88
+      "default": 56
+    },
+    {
+      "type": "checkbox",
+      "id": "show_brand_name",
+      "label": "Show brand name beside logo",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "brand_name",
+      "label": "Desktop brand name",
+      "default": "The Zero Credit Project"
+    },
+    {
+      "type": "text",
+      "id": "compact_brand_name",
+      "label": "Mobile compact brand name",
+      "default": "TZCP"
     },
     {
       "type": "link_list",
