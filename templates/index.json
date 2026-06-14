@@ -57,10 +57,11 @@
     "featured": {
       "type": "featured-products",
       "settings": {
-        "eyebrow": "Explore / Collection",
-        "heading": "Current Drop",
-        "subheading": "Built for people starting from zero.",
-        "products_to_show": 8
+        "eyebrow": "Curated / Premium",
+        "heading": "Signature Pieces",
+        "subheading": "A focused selection from the top of the collection.",
+        "sort_high_to_low": true,
+        "products_to_show": 4
       }
     },
     "manifesto": {

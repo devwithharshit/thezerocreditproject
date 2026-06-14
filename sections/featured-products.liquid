@@ -1,4 +1,8 @@
-{% assign featured_collection = section.settings.collection %}
+{% assign featured_collection = section.settings.collection | default: collections['all'] %}
+{% assign featured_products = featured_collection.products %}
+{% if section.settings.sort_high_to_low %}
+  {% assign featured_products = featured_products | sort: 'price' | reverse %}
+{% endif %}
 
 <section class="section-spacing featured-rail">
   <div class="container">
@@ -15,9 +19,9 @@
       {% endif %}
     </div>
 
-    {% if featured_collection != blank %}
+    {% if featured_products != blank %}
       <div class="product-grid product-grid--featured">
-        {% for product in featured_collection.products limit: section.settings.products_to_show %}
+        {% for product in featured_products limit: section.settings.products_to_show %}
           {% render 'product-card', product: product, index: forloop.index %}
         {% endfor %}
       </div>
@@ -53,7 +57,14 @@
     {
       "type": "collection",
       "id": "collection",
-      "label": "Collection"
+      "label": "Collection",
+      "info": "Uses All products when no collection is selected."
+    },
+    {
+      "type": "checkbox",
+      "id": "sort_high_to_low",
+      "label": "Show highest-priced products first",
+      "default": true
     },
     {
       "type": "range",
