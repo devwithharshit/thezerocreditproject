@@ -1,0 +1,17 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "contact_eyebrow": "Customer care / Contact",
+        "contact_text": "Questions about a product, order, sizing, or collaboration? Send us a note and we will help.",
+        "contact_email": "thezerocreditproject@gmail.com",
+        "contact_phone": "+91 9411323055",
+        "response_note": "We usually respond within 1-2 business days."
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

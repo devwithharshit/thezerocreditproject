@@ -1,14 +1,109 @@
-<section class="section-spacing">
-  <div class="container narrow">
-    <h1>{{ page.title | escape }}</h1>
-    <div class="rte page-content">{{ page.content }}</div>
-  </div>
-</section>
+{% if page.handle == 'contact' %}
+  {% assign contact_email = section.settings.contact_email | default: shop.email %}
+  {% assign contact_phone = section.settings.contact_phone | default: shop.phone %}
+  <section class="contact-page section-spacing">
+    <div class="container contact-layout">
+      <div class="contact-intro">
+        <p class="eyebrow">{{ section.settings.contact_eyebrow | escape }}</p>
+        <h1>{{ page.title | escape }}</h1>
+        <p>{{ section.settings.contact_text | escape }}</p>
+
+        <div class="contact-details">
+          {% if contact_email != blank %}
+            <a href="mailto:{{ contact_email }}">{{ contact_email }}</a>
+          {% endif %}
+          {% if contact_phone != blank %}
+            <a href="tel:{{ contact_phone | replace: ' ', '' }}">{{ contact_phone }}</a>
+          {% endif %}
+          <span>{{ section.settings.response_note | escape }}</span>
+        </div>
+      </div>
+
+      <div class="contact-form-wrap">
+        {% form 'contact', id: 'ContactForm', class: 'contact-form' %}
+          {% if form.posted_successfully? %}
+            <p class="contact-form__message" tabindex="-1">Thanks. We will get back to you soon.</p>
+          {% endif %}
+
+          {% if form.errors %}
+            <div class="contact-form__message contact-form__message--error" role="alert">
+              {{ form.errors | default_errors }}
+            </div>
+          {% endif %}
+
+          <div class="contact-form__row">
+            <div class="contact-field">
+              <label for="ContactName">Name</label>
+              <input id="ContactName" type="text" name="contact[name]" value="{{ form.name | escape }}" autocomplete="name" required>
+            </div>
+            <div class="contact-field">
+              <label for="ContactEmail">Email</label>
+              <input id="ContactEmail" type="email" name="contact[email]" value="{{ form.email | escape }}" autocomplete="email" required>
+            </div>
+          </div>
+
+          <div class="contact-field">
+            <label for="ContactPhone">Phone <span>Optional</span></label>
+            <input id="ContactPhone" type="tel" name="contact[phone]" value="{{ form.phone | escape }}" autocomplete="tel">
+          </div>
+
+          <div class="contact-field">
+            <label for="ContactMessage">How can we help?</label>
+            <textarea id="ContactMessage" name="contact[body]" rows="7" required>{{ form.body }}</textarea>
+          </div>
+
+          <button class="button button-dark contact-submit" type="submit">
+            <span>Send message</span>
+            <span aria-hidden="true">↗</span>
+          </button>
+        {% endform %}
+      </div>
+    </div>
+  </section>
+{% else %}
+  <section class="section-spacing">
+    <div class="container narrow">
+      <h1>{{ page.title | escape }}</h1>
+      <div class="rte page-content">{{ page.content }}</div>
+    </div>
+  </section>
+{% endif %}
 
 {% schema %}
 {
   "name": "Main page",
   "tag": "section",
-  "settings": []
+  "settings": [
+    {
+      "type": "text",
+      "id": "contact_eyebrow",
+      "label": "Contact eyebrow",
+      "default": "Customer care / Contact"
+    },
+    {
+      "type": "textarea",
+      "id": "contact_text",
+      "label": "Contact introduction",
+      "default": "Questions about a product, order, sizing, or collaboration? Send us a note and we will help."
+    },
+    {
+      "type": "text",
+      "id": "contact_email",
+      "label": "Contact email",
+      "default": "thezerocreditproject@gmail.com"
+    },
+    {
+      "type": "text",
+      "id": "contact_phone",
+      "label": "Contact phone",
+      "default": "+91 9411323055"
+    },
+    {
+      "type": "text",
+      "id": "response_note",
+      "label": "Response note",
+      "default": "We usually respond within 1-2 business days."
+    }
+  ]
 }
 {% endschema %}

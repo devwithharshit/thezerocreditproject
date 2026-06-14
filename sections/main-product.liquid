@@ -1,25 +1,46 @@
 {% assign current_variant = product.selected_or_first_available_variant %}
 {% assign product_form_id = 'ProductForm-' | append: section.id %}
 
-<section class="section-spacing product-page">
+<section class="section-spacing product-page" data-product-root>
   <div class="container product-layout">
-    <div class="product-gallery">
-      {% if product.media.size > 0 %}
-        {% for media in product.media %}
-          <div class="product-media">
-            {{
-              media.preview_image
-              | image_url: width: 1400
-              | image_tag:
-                widths: '500, 750, 1000, 1400',
-                sizes: '(min-width: 900px) 58vw, 100vw',
-                loading: 'lazy',
-                alt: media.alt
-            }}
+    <div class="product-gallery-wrap">
+      <div class="product-gallery" data-product-gallery>
+        {% if product.media.size > 0 %}
+          {% for media in product.media %}
+            <div class="product-media" data-gallery-slide>
+              {{
+                media.preview_image
+                | image_url: width: 1400
+                | image_tag:
+                  widths: '500, 750, 1000, 1400',
+                  sizes: '(min-width: 990px) 34vw, 100vw',
+                  loading: 'lazy',
+                  alt: media.alt
+              }}
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="product-media" data-gallery-slide>
+            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
           </div>
-        {% endfor %}
-      {% else %}
-        {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        {% endif %}
+      </div>
+
+      {% if product.media.size > 1 %}
+        <div class="product-gallery-controls" aria-label="Product image controls">
+          <button type="button" aria-label="Previous image" data-gallery-prev>←</button>
+          <div class="product-gallery-dots">
+            {% for media in product.media %}
+              <button
+                type="button"
+                aria-label="View image {{ forloop.index }}"
+                aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
+                data-gallery-dot="{{ forloop.index0 }}"
+              ></button>
+            {% endfor %}
+          </div>
+          <button type="button" aria-label="Next image" data-gallery-next>→</button>
+        </div>
       {% endif %}
     </div>
 
@@ -29,58 +50,121 @@
       {% endif %}
       <h1>{{ product.title | escape }}</h1>
 
-      <div class="product-price">
+      <div class="product-price" data-product-price>
         <span>{{ current_variant.price | money }}</span>
-        {% if current_variant.compare_at_price > current_variant.price %}
-          <s>{{ current_variant.compare_at_price | money }}</s>
-        {% endif %}
+        <s{% unless current_variant.compare_at_price > current_variant.price %} hidden{% endunless %}>
+          {% if current_variant.compare_at_price > current_variant.price %}
+            {{ current_variant.compare_at_price | money }}
+          {% endif %}
+        </s>
       </div>
 
-      {% form 'product', product, id: product_form_id, class: 'product-form' %}
+      {% form 'product', product, id: product_form_id, class: 'product-form', data-product-form: '' %}
+        <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id>
+
         {% unless product.has_only_default_variant %}
-          <label for="Variant-{{ section.id }}">Choose an option</label>
-          <select id="Variant-{{ section.id }}" name="id">
-            {% for variant in product.variants %}
-              <option
-                value="{{ variant.id }}"
-                {% if variant == current_variant %}selected="selected"{% endif %}
-                {% unless variant.available %}disabled="disabled"{% endunless %}
+          <div class="product-options">
+            {% for option in product.options_with_values %}
+              {% assign option_index = option.position | minus: 1 %}
+              {% assign option_name_downcase = option.name | downcase %}
+              <fieldset
+                class="product-option{% if option_name_downcase contains 'color' or option_name_downcase contains 'colour' %} product-option--color{% endif %}"
+                data-product-option="{{ option_index }}"
               >
-                {{ variant.title | escape }} - {{ variant.price | money }}
-                {% unless variant.available %} - Sold out{% endunless %}
-              </option>
+                <legend>
+                  {{ option.name | escape }}
+                  <span data-option-label="{{ option_index }}">{{ current_variant.options[option_index] | escape }}</span>
+                </legend>
+                <div class="product-option__values">
+                  {% for value in option.values %}
+                    {% assign option_id = section.id | append: '-' | append: option.position | append: '-' | append: forloop.index %}
+                    <input
+                      id="Option-{{ option_id }}"
+                      type="radio"
+                      name="options[{{ option.name | escape }}]"
+                      value="{{ value | escape }}"
+                      {% if current_variant.options[option_index] == value %}checked{% endif %}
+                    >
+                    <label for="Option-{{ option_id }}">{{ value | escape }}</label>
+                  {% endfor %}
+                </div>
+              </fieldset>
             {% endfor %}
-          </select>
-        {% else %}
-          <input type="hidden" name="id" value="{{ current_variant.id }}">
+          </div>
         {% endunless %}
 
-        <label for="Quantity-{{ section.id }}">Quantity</label>
-        <input id="Quantity-{{ section.id }}" class="quantity-input" type="number" name="quantity" value="1" min="1">
+        <div class="product-quantity">
+          <label for="Quantity-{{ section.id }}">Quantity</label>
+          <input id="Quantity-{{ section.id }}" class="quantity-input" type="number" name="quantity" value="1" min="1">
+        </div>
 
         <button
           class="button button-dark product-submit"
           type="submit"
           name="add"
+          data-add-to-cart
           {% unless current_variant.available %}disabled="disabled"{% endunless %}
         >
           {% if current_variant.available %}Add to cart{% else %}Sold out{% endif %}
         </button>
 
-        {% if section.settings.show_dynamic_checkout and current_variant.available %}
-          {{ form | payment_button }}
+        {% if section.settings.show_buy_now %}
+          <button
+            class="button button-outline-dark product-buy-now"
+            type="button"
+            data-buy-now
+            {% unless current_variant.available %}disabled="disabled"{% endunless %}
+          >
+            Buy Now
+          </button>
         {% endif %}
       {% endform %}
 
-      {% if section.settings.shipping_note != blank %}
-        <p class="product-note">{{ section.settings.shipping_note | escape }}</p>
-      {% endif %}
+      <div class="product-assurance">
+        <div class="product-policy-links">
+          {% if shop.refund_policy != blank %}
+            <a href="{{ shop.refund_policy.url }}">Refund policy <span aria-hidden="true">↗</span></a>
+          {% endif %}
+          {% if shop.shipping_policy != blank %}
+            <a href="{{ shop.shipping_policy.url }}">Shipping policy <span aria-hidden="true">↗</span></a>
+          {% endif %}
+        </div>
+
+        <div class="product-trust-grid">
+          <div class="product-trust-item">
+            <span class="product-trust-icon" aria-hidden="true">₹</span>
+            <span>{{ section.settings.trust_one | escape }}</span>
+          </div>
+          <div class="product-trust-item">
+            <span class="product-trust-icon" aria-hidden="true">→</span>
+            <span>{{ section.settings.trust_two | escape }}</span>
+          </div>
+          <div class="product-trust-item">
+            <span class="product-trust-icon" aria-hidden="true">✓</span>
+            <span>{{ section.settings.trust_three | escape }}</span>
+          </div>
+        </div>
+      </div>
 
       {% if product.description != blank %}
         <div class="rte product-description">{{ product.description }}</div>
       {% endif %}
     </div>
   </div>
+
+  <script type="application/json" data-product-variants>
+    [
+      {% for variant in product.variants %}
+        {
+          "id": {{ variant.id | json }},
+          "available": {{ variant.available | json }},
+          "options": {{ variant.options | json }},
+          "price": {{ variant.price | money | json }},
+          "compare_at_price": {% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money | json }}{% else %}null{% endif %}
+        }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ]
+  </script>
 </section>
 
 {% schema %}
@@ -90,15 +174,27 @@
   "settings": [
     {
       "type": "checkbox",
-      "id": "show_dynamic_checkout",
-      "label": "Show dynamic checkout",
+      "id": "show_buy_now",
+      "label": "Show Buy Now button",
       "default": true
     },
     {
       "type": "text",
-      "id": "shipping_note",
-      "label": "Shipping note",
-      "default": "Made to order. Processing typically takes 1-5 business days."
+      "id": "trust_one",
+      "label": "Trust message one",
+      "default": "Pay on Delivery Available"
+    },
+    {
+      "type": "text",
+      "id": "trust_two",
+      "label": "Trust message two",
+      "default": "Free Delivery Available"
+    },
+    {
+      "type": "text",
+      "id": "trust_three",
+      "label": "Trust message three",
+      "default": "Secure transaction"
     }
   ]
 }

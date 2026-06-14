@@ -8,7 +8,10 @@
   data-cart-drawer
 >
   <div class="cart-drawer-header">
-    <h2>{{ section.settings.heading | escape }} ({{ cart.item_count }})</h2>
+    <div>
+      <p class="eyebrow">Your selection</p>
+      <h2>{{ section.settings.heading | escape }} <span>({{ cart.item_count }})</span></h2>
+    </div>
     <button class="icon-button" type="button" aria-label="Close cart" data-cart-close>
       {% render 'icon-close' %}
     </button>
@@ -16,8 +19,13 @@
 
   {% if cart == empty %}
     <div class="cart-empty">
-      <p>Your cart is empty.</p>
-      <a class="button button-dark" href="{{ routes.all_products_collection_url }}">Shop all</a>
+      <div class="cart-empty__mark" aria-hidden="true">0</div>
+      <h3>Your cart is empty</h3>
+      <p>Start with the current drop or explore every piece in the project.</p>
+      <a class="button button-dark button-arrow" href="{{ routes.all_products_collection_url }}">
+        <span>Shop all</span>
+        <span aria-hidden="true">↗</span>
+      </a>
     </div>
   {% else %}
     <div class="cart-items">
@@ -32,18 +40,23 @@
               }}
             </a>
           {% endif %}
-          <div>
-            <a href="{{ item.url }}">{{ item.product.title | escape }}</a>
+          <div class="cart-item__details">
+            <a class="cart-item__title" href="{{ item.url }}">{{ item.product.title | escape }}</a>
             {% unless item.product.has_only_default_variant %}
-              <p>{{ item.variant.title | escape }}</p>
+              <p class="cart-item__variant">{{ item.variant.title | escape }}</p>
             {% endunless %}
-            <p>{{ item.quantity }} &times; {{ item.final_price | money }}</p>
+            <div class="cart-item__meta">
+              <span>Qty {{ item.quantity }}</span>
+              <strong>{{ item.final_line_price | money }}</strong>
+            </div>
+            <a class="cart-item__remove" href="{{ item.url_to_remove }}">Remove</a>
           </div>
         </div>
       {% endfor %}
     </div>
     <div class="cart-drawer-footer">
       <p><span>Subtotal</span><strong>{{ cart.total_price | money }}</strong></p>
+      <small>Shipping and taxes are calculated at checkout.</small>
       <a class="button button-outline-dark" href="{{ routes.cart_url }}">View cart</a>
       <form action="{{ routes.cart_url }}" method="post">
         <button class="button button-dark" type="submit" name="checkout">Checkout</button>

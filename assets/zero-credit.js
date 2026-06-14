@@ -76,6 +76,135 @@ document.querySelectorAll('[data-sort-select]').forEach((select) => {
   select.addEventListener('change', () => select.form?.submit());
 });
 
+document.querySelectorAll('[data-product-root]').forEach((productRoot) => {
+  const form = productRoot.querySelector('[data-product-form]');
+  const variantsData = productRoot.querySelector('[data-product-variants]');
+  const variantInput = productRoot.querySelector('[data-variant-id]');
+  const addButton = productRoot.querySelector('[data-add-to-cart]');
+  const buyNowButton = productRoot.querySelector('[data-buy-now]');
+  const price = productRoot.querySelector('[data-product-price] span');
+  const comparePrice = productRoot.querySelector('[data-product-price] s');
+
+  if (form && variantsData && variantInput) {
+    const variants = JSON.parse(variantsData.textContent);
+    const optionGroups = [...productRoot.querySelectorAll('[data-product-option]')];
+
+    function updateVariant() {
+      const selectedOptions = optionGroups.map((group) => {
+        const checked = group.querySelector('input:checked');
+        const optionIndex = group.dataset.productOption;
+        const optionLabel = productRoot.querySelector(`[data-option-label="${optionIndex}"]`);
+        if (optionLabel && checked) optionLabel.textContent = checked.value;
+        return checked?.value;
+      });
+
+      const variant = variants.find(
+        (candidate) =>
+          candidate.options.length === selectedOptions.length &&
+          candidate.options.every((option, index) => option === selectedOptions[index])
+      );
+
+      if (!variant) {
+        if (addButton) {
+          addButton.disabled = true;
+          addButton.textContent = 'Unavailable';
+        }
+        if (buyNowButton) buyNowButton.disabled = true;
+        return;
+      }
+
+      variantInput.value = variant.id;
+      if (price) price.textContent = variant.price;
+      if (comparePrice) {
+        comparePrice.hidden = !variant.compare_at_price;
+        comparePrice.textContent = variant.compare_at_price || '';
+      }
+      if (addButton) {
+        addButton.disabled = !variant.available;
+        addButton.textContent = variant.available ? 'Add to cart' : 'Sold out';
+      }
+      if (buyNowButton) buyNowButton.disabled = !variant.available;
+
+      const url = new URL(window.location.href);
+      url.searchParams.set('variant', variant.id);
+      window.history.replaceState({}, '', url);
+    }
+
+    optionGroups.forEach((group) => {
+      group.addEventListener('change', updateVariant);
+    });
+
+    buyNowButton?.addEventListener('click', async (event) => {
+      event.preventDefault();
+      if (buyNowButton.disabled) return;
+
+      const originalText = buyNowButton.textContent;
+      buyNowButton.disabled = true;
+      buyNowButton.textContent = 'Opening checkout...';
+
+      try {
+        const rootRoute = window.Shopify?.routes?.root || '/';
+        const response = await fetch(`${rootRoute}cart/add.js`, {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: new FormData(form)
+        });
+        if (!response.ok) throw new Error('Unable to add product');
+        window.location.assign(`${rootRoute}checkout`);
+      } catch (error) {
+        buyNowButton.disabled = false;
+        buyNowButton.textContent = originalText;
+      }
+    });
+  }
+
+  const gallery = productRoot.querySelector('[data-product-gallery]');
+  const slides = [...productRoot.querySelectorAll('[data-gallery-slide]')];
+  const dots = [...productRoot.querySelectorAll('[data-gallery-dot]')];
+
+  if (gallery && slides.length > 1) {
+    let galleryTicking = false;
+
+    function setActiveSlide(index) {
+      dots.forEach((dot, dotIndex) => {
+        dot.setAttribute('aria-current', String(dotIndex === index));
+      });
+    }
+
+    function scrollToSlide(index) {
+      slides[Math.max(0, Math.min(index, slides.length - 1))]?.scrollIntoView({
+        behavior: reduceMotion ? 'auto' : 'smooth',
+        block: 'nearest',
+        inline: 'start'
+      });
+    }
+
+    gallery.addEventListener(
+      'scroll',
+      () => {
+        if (galleryTicking) return;
+        galleryTicking = true;
+        window.requestAnimationFrame(() => {
+          const index = Math.round(gallery.scrollLeft / Math.max(gallery.clientWidth, 1));
+          setActiveSlide(index);
+          galleryTicking = false;
+        });
+      },
+      { passive: true }
+    );
+
+    dots.forEach((dot, index) => dot.addEventListener('click', () => scrollToSlide(index)));
+    productRoot.querySelector('[data-gallery-prev]')?.addEventListener('click', () => {
+      const index = Math.round(gallery.scrollLeft / Math.max(gallery.clientWidth, 1));
+      scrollToSlide(index - 1);
+    });
+    productRoot.querySelector('[data-gallery-next]')?.addEventListener('click', () => {
+      const index = Math.round(gallery.scrollLeft / Math.max(gallery.clientWidth, 1));
+      scrollToSlide(index + 1);
+    });
+  }
+});
+
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const revealItems = document.querySelectorAll('[data-reveal]');
 const siteHeader = document.querySelector('.site-header');
