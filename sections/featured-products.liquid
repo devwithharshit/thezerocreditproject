@@ -5,8 +5,12 @@
 {% endif %}
 {% assign current_product_id = product.id %}
 {% assign exclusion_terms = section.settings.excluded_keywords | downcase | split: ',' %}
+{% assign include_female_focused = section.settings.include_one_female_focused %}
+{% if request.page_type == 'product' and section.settings.exclude_female_focused %}
+  {% assign include_female_focused = true %}
+{% endif %}
 {% assign regular_products_limit = section.settings.products_to_show %}
-{% if section.settings.exclude_female_focused and section.settings.include_one_female_focused %}
+{% if section.settings.exclude_female_focused and include_female_focused %}
   {% assign regular_products_limit = regular_products_limit | minus: 1 %}
 {% endif %}
 
@@ -56,7 +60,7 @@
           {% endif %}
         {% endfor %}
 
-        {% if section.settings.exclude_female_focused and section.settings.include_one_female_focused %}
+        {% if section.settings.exclude_female_focused and include_female_focused %}
           {% for card_product in featured_products %}
             {% if request.page_type == 'product' and card_product.id == current_product_id %}
               {% continue %}
