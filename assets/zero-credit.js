@@ -12,6 +12,9 @@ function setElementInert(element, inert) {
   element.toggleAttribute('inert', inert);
 }
 
+setElementInert(mobileMenu, true);
+setElementInert(document.querySelector('[data-cart-drawer]'), true);
+
 function updatePageLock() {
   const menuOpen = mobileMenu?.getAttribute('aria-hidden') === 'false';
   const cartOpen = document.querySelector('[data-cart-drawer]')?.getAttribute('aria-hidden') === 'false';
