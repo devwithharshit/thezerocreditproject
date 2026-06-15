@@ -1,17 +1,24 @@
 {% if section.settings.show_announcement and section.settings.text != blank %}
+  {% assign secondary_text = section.settings.secondary_text | default: 'PAN INDIA SHIPPING | GET 10% OFF: CODE ZCPOFF10' %}
   <aside
     class="announcement-bar"
-    aria-label="Announcement"
+    aria-label="{{ section.settings.text | append: '. ' | append: secondary_text | escape }}"
     style="--announcement-background: {{ section.settings.background }}; --announcement-text: {{ section.settings.text_color }}; --announcement-duration: {{ section.settings.speed }}s;"
   >
     <div class="announcement-bar__viewport">
       <div class="announcement-bar__track{% if section.settings.animate %} is-animated{% endif %}">
-        {% for repeat in (1..6) %}
-          <div class="announcement-bar__item" aria-hidden="{% if repeat == 1 %}false{% else %}true{% endif %}">
+        {% for repeat in (1..8) %}
+          {% assign alternating_message = repeat | modulo: 2 %}
+          {% if alternating_message == 0 %}
+            {% assign announcement_text = secondary_text %}
+          {% else %}
+            {% assign announcement_text = section.settings.text %}
+          {% endif %}
+          <div class="announcement-bar__item" aria-hidden="true">
             {% if section.settings.link != blank %}
-              <a href="{{ section.settings.link }}">{{ section.settings.text | escape }}</a>
+              <a href="{{ section.settings.link }}">{{ announcement_text | escape }}</a>
             {% else %}
-              <span>{{ section.settings.text | escape }}</span>
+              <span>{{ announcement_text | escape }}</span>
             {% endif %}
             <span class="announcement-bar__dot" aria-hidden="true"></span>
           </div>
@@ -36,6 +43,12 @@
       "id": "text",
       "label": "Text",
       "default": "Made to order. Built from zero."
+    },
+    {
+      "type": "text",
+      "id": "secondary_text",
+      "label": "Alternate text",
+      "default": "PAN INDIA SHIPPING | GET 10% OFF: CODE ZCPOFF10"
     },
     {
       "type": "url",

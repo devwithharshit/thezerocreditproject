@@ -1987,7 +1987,7 @@ h2 {
 
 @keyframes announcement-scroll {
   to {
-    transform: translate3d(-16.6667%, 0, 0);
+    transform: translate3d(-25%, 0, 0);
   }
 }
 
