@@ -6,37 +6,54 @@ const menuBackdrop = document.querySelector('[data-menu-backdrop]');
 const menuCloseButton = document.querySelector('[data-menu-close]');
 let lastFocusedElement = null;
 
+function setElementInert(element, inert) {
+  if (!element) return;
+  element.inert = inert;
+  element.toggleAttribute('inert', inert);
+}
+
 function updatePageLock() {
   const menuOpen = mobileMenu?.getAttribute('aria-hidden') === 'false';
   const cartOpen = document.querySelector('[data-cart-drawer]')?.getAttribute('aria-hidden') === 'false';
   document.body.classList.toggle('drawer-open', menuOpen || cartOpen);
 }
 
-function setMenu(open) {
+function setMenu(open, restoreFocus = true) {
   if (!menuButton || !mobileMenu) return;
   const wasOpen = mobileMenu.getAttribute('aria-hidden') === 'false';
-  if (open) lastFocusedElement = document.activeElement;
+  if (open) {
+    setCart(false, false);
+    lastFocusedElement = document.activeElement;
+  }
   menuButton.setAttribute('aria-expanded', String(open));
   mobileMenu.setAttribute('aria-hidden', String(!open));
+  setElementInert(mobileMenu, !open);
   menuBackdrop?.classList.toggle('is-visible', open);
   menuBackdrop?.setAttribute('aria-hidden', String(!open));
   updatePageLock();
   if (open) menuCloseButton?.focus();
-  if (!open && wasOpen && lastFocusedElement instanceof HTMLElement) lastFocusedElement.focus();
+  if (!open && wasOpen && restoreFocus && lastFocusedElement instanceof HTMLElement) lastFocusedElement.focus();
 }
 
-function setCart(open) {
+function setCart(open, restoreFocus = true) {
   const cartDrawer = document.querySelector('[data-cart-drawer]');
   const cartBackdrop = document.querySelector('[data-cart-backdrop]');
   if (!cartDrawer || !cartBackdrop) return;
   const wasOpen = cartDrawer.getAttribute('aria-hidden') === 'false';
-  if (open) lastFocusedElement = document.activeElement;
+  if (open) {
+    setMenu(false, false);
+    lastFocusedElement = document.activeElement;
+  }
   cartDrawer.setAttribute('aria-hidden', String(!open));
+  setElementInert(cartDrawer, !open);
   cartBackdrop.classList.toggle('is-visible', open);
   cartBackdrop.setAttribute('aria-hidden', String(!open));
+  document.querySelectorAll('[data-cart-open]').forEach((button) => {
+    button.setAttribute('aria-expanded', String(open));
+  });
   updatePageLock();
   if (open) cartDrawer.focus();
-  if (!open && wasOpen && lastFocusedElement instanceof HTMLElement) lastFocusedElement.focus();
+  if (!open && wasOpen && restoreFocus && lastFocusedElement instanceof HTMLElement) lastFocusedElement.focus();
 }
 
 menuButton?.addEventListener('click', () => {
@@ -70,6 +87,38 @@ document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') {
     setMenu(false);
     setCart(false);
+    return;
+  }
+
+  if (event.key !== 'Tab') return;
+
+  const openOverlay =
+    document.querySelector('[data-cart-drawer][aria-hidden="false"]') ||
+    document.querySelector('[data-mobile-menu][aria-hidden="false"]');
+
+  if (!openOverlay) return;
+
+  const focusableElements = [
+    ...openOverlay.querySelectorAll(
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )
+  ].filter((element) => element.getClientRects().length > 0);
+
+  if (!focusableElements.length) {
+    event.preventDefault();
+    openOverlay.focus();
+    return;
+  }
+
+  const firstElement = focusableElements[0];
+  const lastElement = focusableElements[focusableElements.length - 1];
+
+  if (event.shiftKey && (document.activeElement === firstElement || document.activeElement === openOverlay)) {
+    event.preventDefault();
+    lastElement.focus();
+  } else if (!event.shiftKey && document.activeElement === lastElement) {
+    event.preventDefault();
+    firstElement.focus();
   }
 });
 
@@ -91,7 +140,8 @@ function replaceCartDrawer(html) {
   const currentSection = document.querySelector('#shopify-section-cart-drawer');
 
   if (!updatedSection || !currentSection) return false;
-  currentSection.innerHTML = updatedSection.innerHTML;
+  const updatedNodes = [...updatedSection.childNodes].map((node) => document.importNode(node, true));
+  currentSection.replaceChildren(...updatedNodes);
   return true;
 }
 
@@ -180,7 +230,15 @@ document.querySelectorAll('[data-product-root]').forEach((productRoot) => {
   const comparePrice = productRoot.querySelector('[data-product-price] s');
 
   if (form && variantsData && variantInput) {
-    const variants = JSON.parse(variantsData.textContent);
+    let variants;
+
+    try {
+      variants = JSON.parse(variantsData.textContent);
+    } catch (error) {
+      console.error('Unable to read product variants', error);
+      return;
+    }
+
     const optionGroups = [...productRoot.querySelectorAll('[data-product-option]')];
 
     function setAddButtonLabel(text) {

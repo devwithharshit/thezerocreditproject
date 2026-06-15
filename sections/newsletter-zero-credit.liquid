@@ -14,11 +14,12 @@
           id="NewsletterEmail-{{ section.id }}"
           type="email"
           name="contact[email]"
-          value="{{ form.email }}"
+          value="{{ form.email | escape }}"
           placeholder="Email address"
           autocorrect="off"
           autocapitalize="off"
           autocomplete="email"
+          maxlength="254"
           required
         >
         <button class="button button-light" type="submit">Join</button>
@@ -27,7 +28,7 @@
         <p class="form-message" tabindex="-1">Thanks for joining the project.</p>
       {% endif %}
       {% if form.errors %}
-        <div class="form-message">{{ form.errors | default_errors }}</div>
+        <div class="form-message" role="alert">{{ form.errors | default_errors }}</div>
       {% endif %}
     {% endform %}
   </div>

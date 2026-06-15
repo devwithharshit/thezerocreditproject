@@ -58,7 +58,14 @@
           {% render 'icon-account' %}
         </a>
       {% endif %}
-      <a class="icon-button cart-button" href="{{ routes.cart_url }}" aria-label="Open cart" data-cart-open>
+      <a
+        class="icon-button cart-button"
+        href="{{ routes.cart_url }}"
+        aria-label="Open cart"
+        aria-controls="CartDrawer"
+        aria-expanded="false"
+        data-cart-open
+      >
         {% render 'icon-cart' %}
         <span class="cart-count">{{ cart.item_count }}</span>
       </a>
@@ -66,14 +73,23 @@
   </div>
 
   <div class="menu-backdrop" aria-hidden="true" data-menu-backdrop></div>
-  <nav id="MobileMenu" class="mobile-menu" aria-label="Mobile navigation" aria-hidden="true" data-mobile-menu>
+  <div
+    id="MobileMenu"
+    class="mobile-menu"
+    aria-label="Navigation menu"
+    aria-hidden="true"
+    aria-modal="true"
+    role="dialog"
+    inert
+    data-mobile-menu
+  >
     <div class="mobile-menu-header">
       <span>{{ section.settings.compact_brand_name | escape }}</span>
       <button class="icon-button" type="button" aria-label="Close menu" data-menu-close>
         {% render 'icon-close' %}
       </button>
     </div>
-    <div class="mobile-menu-body">
+    <nav class="mobile-menu-body" aria-label="Mobile navigation">
       <ul>
         {% for link in section.settings.menu.links %}
           <li>
@@ -84,8 +100,8 @@
           </li>
         {% endfor %}
       </ul>
-    </div>
-  </nav>
+    </nav>
+  </div>
 </header>
 
 {% schema %}
