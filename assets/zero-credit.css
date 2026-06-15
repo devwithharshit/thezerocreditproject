@@ -3466,3 +3466,47 @@ h2 {
     border-left: 0;
   }
 }
+
+/* Mobile navigation viewport fix */
+
+@media (max-width: 1180px) {
+  .site-header {
+    backdrop-filter: none;
+  }
+
+  .mobile-menu {
+    z-index: 100;
+    inset: 0;
+    width: 100vw;
+    max-width: none;
+    height: 100dvh;
+    min-height: 100dvh;
+    padding:
+      max(18px, env(safe-area-inset-top))
+      max(var(--page-gutter), env(safe-area-inset-right))
+      max(18px, env(safe-area-inset-bottom))
+      max(var(--page-gutter), env(safe-area-inset-left));
+    overflow-y: auto;
+    background: #0a0a0a;
+    overscroll-behavior: contain;
+  }
+
+  .menu-backdrop {
+    z-index: 90;
+  }
+
+  .mobile-menu-header {
+    flex: 0 0 auto;
+  }
+
+  .mobile-menu-body {
+    min-height: 0;
+    padding-block: clamp(28px, 8vh, 72px);
+    align-items: flex-start;
+  }
+
+  .mobile-menu a {
+    min-height: clamp(64px, 11vh, 86px);
+    font-size: clamp(1.55rem, 8vw, 2.5rem);
+  }
+}
