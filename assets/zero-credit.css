@@ -166,7 +166,7 @@ h2 {
 
 .announcement-bar__track.is-animated {
   justify-content: flex-start;
-  animation: announcement-scroll var(--announcement-duration) linear infinite;
+  animation: announcement-scroll var(--ticker-duration, 20s) linear infinite;
   will-change: transform;
 }
 
@@ -1486,7 +1486,7 @@ h2 {
 .zc-marquee__track {
   display: flex;
   width: max-content;
-  animation: zc-marquee var(--marquee-speed) linear infinite;
+  animation: zc-marquee var(--ticker-duration, 20s) linear infinite;
 }
 
 .zc-marquee__item {
@@ -1810,7 +1810,7 @@ h2 {
 
 @keyframes zc-marquee {
   to {
-    transform: translateX(-50%);
+    transform: translate3d(var(--ticker-translate, -50%), 0, 0);
   }
 }
 
@@ -1987,7 +1987,7 @@ h2 {
 
 @keyframes announcement-scroll {
   to {
-    transform: translate3d(-25%, 0, 0);
+    transform: translate3d(var(--ticker-translate, -25%), 0, 0);
   }
 }
 
@@ -2546,7 +2546,7 @@ h2 {
 
 .zc-marquee__track.is-animated {
   width: max-content;
-  animation: zc-marquee var(--marquee-speed) linear infinite;
+  animation: zc-marquee var(--ticker-duration, 20s) linear infinite;
 }
 
 .zc-marquee__item {

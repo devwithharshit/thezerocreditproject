@@ -1,9 +1,12 @@
 <section
   class="zc-marquee zc-marquee--{{ section.settings.style }}"
-  style="--marquee-speed: {{ section.settings.speed }}s;"
   aria-label="{{ section.settings.text | escape }}"
 >
-  <div class="zc-marquee__track{% if section.settings.animate %} is-animated{% endif %}">
+  <div
+    class="zc-marquee__track{% if section.settings.animate %} is-animated{% endif %}"
+    data-ticker-track
+    data-ticker-cycle="1"
+  >
     {% assign repeat_count = 1 %}
     {% if section.settings.animate %}
       {% assign repeat_count = 8 %}
@@ -29,16 +32,6 @@
       "id": "text",
       "label": "Text",
       "default": "NO CREDIT / NO SHORTCUTS / JUST THE PROJECT"
-    },
-    {
-      "type": "range",
-      "id": "speed",
-      "label": "Speed",
-      "min": 40,
-      "max": 80,
-      "step": 5,
-      "unit": "s",
-      "default": 60
     },
     {
       "type": "checkbox",

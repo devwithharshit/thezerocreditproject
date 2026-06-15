@@ -208,6 +208,29 @@ document.querySelectorAll('[data-product-root]').forEach((productRoot) => {
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const revealItems = document.querySelectorAll('[data-reveal]');
 const siteHeader = document.querySelector('.site-header');
+const tickerTracks = document.querySelectorAll('[data-ticker-track]');
+const tickerPixelsPerSecond = 50;
+
+function syncTickerSpeeds() {
+  if (reduceMotion) return;
+
+  tickerTracks.forEach((track) => {
+    if (!track.classList.contains('is-animated')) return;
+
+    const cycleLength = Math.max(1, Number(track.dataset.tickerCycle || 1));
+    const cycleItems = [...track.children].slice(0, cycleLength);
+    const distance = cycleItems.reduce((total, item) => total + item.getBoundingClientRect().width, 0);
+
+    if (!distance) return;
+
+    track.style.setProperty('--ticker-translate', `${-distance}px`);
+    track.style.setProperty('--ticker-duration', `${distance / tickerPixelsPerSecond}s`);
+  });
+}
+
+syncTickerSpeeds();
+document.fonts?.ready.then(syncTickerSpeeds);
+document.addEventListener('shopify:section:load', syncTickerSpeeds);
 
 revealItems.forEach((item) => {
   const delay = Number(item.dataset.delay || 0);
@@ -244,6 +267,19 @@ window.addEventListener(
     if (ticking) return;
     ticking = true;
     window.requestAnimationFrame(updateScrollEffects);
+  },
+  { passive: true }
+);
+
+let tickerResizeFrame = null;
+window.addEventListener(
+  'resize',
+  () => {
+    if (tickerResizeFrame) window.cancelAnimationFrame(tickerResizeFrame);
+    tickerResizeFrame = window.requestAnimationFrame(() => {
+      syncTickerSpeeds();
+      tickerResizeFrame = null;
+    });
   },
   { passive: true }
 );

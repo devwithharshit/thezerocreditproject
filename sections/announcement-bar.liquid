@@ -3,10 +3,14 @@
   <aside
     class="announcement-bar"
     aria-label="{{ section.settings.text | append: ' ' | append: secondary_text | escape }}"
-    style="--announcement-background: {{ section.settings.background }}; --announcement-text: {{ section.settings.text_color }}; --announcement-duration: {{ section.settings.speed }}s;"
+    style="--announcement-background: {{ section.settings.background }}; --announcement-text: {{ section.settings.text_color }};"
   >
     <div class="announcement-bar__viewport">
-      <div class="announcement-bar__track{% if section.settings.animate %} is-animated{% endif %}">
+      <div
+        class="announcement-bar__track{% if section.settings.animate %} is-animated{% endif %}"
+        data-ticker-track
+        data-ticker-cycle="2"
+      >
         {% for repeat in (1..8) %}
           {% assign alternating_message = repeat | modulo: 2 %}
           {% if alternating_message == 0 %}
@@ -60,16 +64,6 @@
       "id": "animate",
       "label": "Animate announcement",
       "default": true
-    },
-    {
-      "type": "range",
-      "id": "speed",
-      "label": "Animation speed",
-      "min": 20,
-      "max": 120,
-      "step": 5,
-      "unit": "s",
-      "default": 45
     },
     {
       "type": "color",

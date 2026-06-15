@@ -70,7 +70,6 @@
       "type": "marquee-zero-credit",
       "settings": {
         "text": "LIMITED PIECES / MADE WITH INTENT / BUILT FROM ZERO",
-        "speed": 45,
         "animate": true,
         "style": "dark"
       }
