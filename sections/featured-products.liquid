@@ -6,7 +6,7 @@
 {% assign current_product_id = product.id %}
 {% assign exclusion_terms = section.settings.excluded_keywords | downcase | split: ',' %}
 {% assign is_product_signature = false %}
-{% if request.page_type == 'product' and section.settings.heading == 'Signature Pieces' %}
+{% if request.page_type == 'product' %}
   {% assign is_product_signature = true %}
 {% endif %}
 {% assign filter_female_focused = section.settings.exclude_female_focused %}
