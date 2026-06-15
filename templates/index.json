@@ -68,8 +68,8 @@
       "type": "marquee-zero-credit",
       "settings": {
         "text": "LIMITED PIECES / MADE WITH INTENT / BUILT FROM ZERO",
-        "speed": 60,
-        "animate": false,
+        "speed": 65,
+        "animate": true,
         "style": "dark"
       }
     },

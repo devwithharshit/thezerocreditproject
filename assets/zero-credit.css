@@ -3514,3 +3514,192 @@ h2 {
     font-size: clamp(1.55rem, 8vw, 2.5rem);
   }
 }
+
+/* Cinematic storefront motion */
+
+.announcement-bar__track.is-animated,
+.zc-marquee__track.is-animated {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+.zc-hero--type-only::before {
+  position: absolute;
+  z-index: 0;
+  inset: -18%;
+  background:
+    radial-gradient(circle at 28% 38%, rgba(255, 255, 255, 0.075), transparent 27%),
+    radial-gradient(circle at 72% 62%, rgba(255, 255, 255, 0.045), transparent 24%);
+  content: "";
+  pointer-events: none;
+  animation: zc-hero-light-drift 16s var(--ease-premium) infinite alternate;
+  will-change: transform, opacity;
+}
+
+.zc-hero__media > img {
+  animation: zc-hero-image-drift 18s var(--ease-premium) infinite alternate;
+  will-change: transform;
+}
+
+.editorial-card.is-visible .editorial-card__media img,
+.editorial-card.is-visible .editorial-card__media svg {
+  animation: zc-editorial-breathe 14s var(--ease-premium) infinite alternate;
+  will-change: transform;
+}
+
+.product-card-media::after {
+  position: absolute;
+  z-index: 2;
+  top: -20%;
+  bottom: -20%;
+  left: -55%;
+  width: 28%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(-180%, 0, 0) skewX(-12deg);
+}
+
+.product-card.is-visible .product-card-media::after {
+  animation: zc-product-sheen 1100ms var(--ease-premium) calc(var(--reveal-delay, 0ms) + 180ms) 1 both;
+}
+
+.manifesto-mark.is-visible strong {
+  animation: zc-manifesto-drift 9s var(--ease-premium) 700ms infinite alternate;
+  transform-origin: left center;
+  will-change: transform;
+}
+
+.newsletter-fields {
+  position: relative;
+}
+
+.newsletter-fields::after {
+  position: absolute;
+  right: 0;
+  bottom: -7px;
+  left: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.72);
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  transform: scaleX(0.2);
+  transform-origin: left;
+  transition:
+    opacity var(--transition-base) var(--ease-premium),
+    transform var(--transition-slow) var(--ease-premium);
+}
+
+.newsletter-fields:focus-within::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+@keyframes zc-hero-light-drift {
+  from {
+    opacity: 0.72;
+    transform: translate3d(-1.5%, 0, 0) scale(1);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(2%, -1%, 0) scale(1.04);
+  }
+}
+
+@keyframes zc-hero-image-drift {
+  from {
+    transform: translate3d(-0.35%, 0, 0) scale(1.015);
+  }
+
+  to {
+    transform: translate3d(0.7%, -0.45%, 0) scale(1.045);
+  }
+}
+
+@keyframes zc-editorial-breathe {
+  from {
+    transform: translate3d(-0.3%, 0, 0) scale(1.01);
+  }
+
+  to {
+    transform: translate3d(0.45%, -0.3%, 0) scale(1.035);
+  }
+}
+
+@keyframes zc-product-sheen {
+  0% {
+    opacity: 0;
+    transform: translate3d(-180%, 0, 0) skewX(-12deg);
+  }
+
+  28% {
+    opacity: 0.7;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(580%, 0, 0) skewX(-12deg);
+  }
+}
+
+@keyframes zc-manifesto-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(8px, 0, 0);
+  }
+}
+
+@media (hover: hover) {
+  .editorial-card:hover .editorial-card__media img,
+  .editorial-card:hover .editorial-card__media svg {
+    animation-play-state: paused;
+    transform: scale(1.045);
+  }
+}
+
+@media (max-width: 700px) {
+  .zc-hero--type-only::before {
+    inset: -8% -35%;
+    animation-duration: 20s;
+  }
+
+  .editorial-card.is-visible .editorial-card__media img,
+  .editorial-card.is-visible .editorial-card__media svg {
+    animation-duration: 18s;
+  }
+
+  .manifesto-mark.is-visible strong {
+    animation-name: zc-manifesto-drift-mobile;
+  }
+}
+
+@keyframes zc-manifesto-drift-mobile {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .announcement-bar__track.is-animated,
+  .zc-marquee__track.is-animated,
+  .zc-hero--type-only::before,
+  .zc-hero__media > img,
+  .editorial-card.is-visible .editorial-card__media img,
+  .editorial-card.is-visible .editorial-card__media svg,
+  .product-card.is-visible .product-card-media::after,
+  .manifesto-mark.is-visible strong {
+    animation: none;
+    transform: none;
+    will-change: auto;
+  }
+}

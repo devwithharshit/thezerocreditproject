@@ -1,6 +1,6 @@
 <footer class="site-footer">
   <div class="container footer-grid">
-    <div class="footer-brand">
+    <div class="footer-brand" data-reveal>
       {% if section.settings.logo != blank %}
         {{
           section.settings.logo
@@ -21,7 +21,13 @@
     </div>
 
     {% for block in section.blocks %}
-      <nav class="footer-menu" aria-label="{{ block.settings.heading | escape }}" {{ block.shopify_attributes }}>
+      <nav
+        class="footer-menu"
+        aria-label="{{ block.settings.heading | escape }}"
+        data-reveal
+        data-delay="{{ forloop.index | times: 70 }}"
+        {{ block.shopify_attributes }}
+      >
         <h2>{{ block.settings.heading | escape }}</h2>
         <ul>
           {% for link in block.settings.menu.links %}
@@ -31,7 +37,7 @@
       </nav>
     {% endfor %}
 
-    <div class="footer-contact">
+    <div class="footer-contact" data-reveal data-delay="180">
       <h2>Contact</h2>
       <a href="mailto:{{ section.settings.email | escape }}">{{ section.settings.email | escape }}</a>
       <a href="tel:{{ section.settings.phone | replace: ' ', '' }}">{{ section.settings.phone | escape }}</a>
@@ -40,7 +46,7 @@
     </div>
   </div>
 
-  <div class="container footer-bottom">
+  <div class="container footer-bottom" data-reveal data-delay="230">
     <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name | escape }}</p>
     <div class="policy-links">
       {% for policy in shop.policies %}

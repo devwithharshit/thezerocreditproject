@@ -1,12 +1,12 @@
 <section class="newsletter-section">
   <div class="container newsletter-inner">
-    <div>
+    <div data-reveal>
       <p class="eyebrow">No spam. Just the project.</p>
       <h2>{{ section.settings.heading | escape }}</h2>
       <p>{{ section.settings.subheading | escape }}</p>
     </div>
 
-    {% form 'customer', class: 'newsletter-form' %}
+    {% form 'customer', class: 'newsletter-form', data-reveal: '', data-delay: '90' %}
       <input type="hidden" name="contact[tags]" value="newsletter">
       <label class="visually-hidden" for="NewsletterEmail-{{ section.id }}">Email address</label>
       <div class="newsletter-fields">
