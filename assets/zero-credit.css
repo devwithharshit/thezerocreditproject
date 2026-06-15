@@ -12,7 +12,7 @@
   --section-padding-mobile: clamp(56px, 16vw, 80px);
   --header-height: 82px;
   --header-height-mobile: 68px;
-  --announcement-height: 34px;
+  --announcement-height: 38px;
   --button-height: 52px;
   --radius: 0px;
   --grid-gap: clamp(12px, 1.5vw, 20px);
@@ -1043,6 +1043,81 @@ h2 {
   *::after {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* Store information and moving bar refinement */
+
+.announcement-bar {
+  min-height: var(--announcement-height);
+  font-size: clamp(0.72rem, 0.78vw, 0.8rem);
+  letter-spacing: 0.1em;
+}
+
+.announcement-bar__item {
+  min-height: var(--announcement-height);
+}
+
+.zc-marquee__item {
+  padding-block: 21px;
+  font-size: clamp(0.82rem, 1.15vw, 1.02rem);
+}
+
+.zc-marquee__mark {
+  width: 27px;
+}
+
+.manifesto-features {
+  display: grid;
+  max-width: 620px;
+  margin: 34px 0 0;
+  padding: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  list-style: none;
+}
+
+.manifesto-features li {
+  display: grid;
+  min-height: 62px;
+  grid-template-columns: 46px minmax(0, 1fr);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  align-items: center;
+}
+
+.manifesto-features span {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.manifesto-features strong {
+  font-size: clamp(0.9rem, 1.1vw, 1rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 700px) {
+  :root {
+    --announcement-height: 36px;
+  }
+
+  .announcement-bar {
+    min-height: var(--announcement-height);
+    font-size: 0.7rem;
+  }
+
+  .announcement-bar__item {
+    min-height: var(--announcement-height);
+  }
+
+  .zc-marquee__item {
+    padding-block: 18px;
+    font-size: 0.76rem;
+  }
+
+  .manifesto-features {
+    margin-top: 28px;
   }
 }
 

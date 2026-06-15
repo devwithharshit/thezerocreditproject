@@ -40,8 +40,7 @@
     <div class="footer-contact" data-reveal data-delay="180">
       <h2>Contact</h2>
       <a href="mailto:{{ section.settings.email | escape }}">{{ section.settings.email | escape }}</a>
-      <a href="tel:{{ section.settings.phone | replace: ' ', '' }}">{{ section.settings.phone | escape }}</a>
-      <p>{{ section.settings.country | escape }}</p>
+      <p>{{ section.settings.address | escape }}</p>
       <p>{{ section.settings.hours | escape }}</p>
     </div>
   </div>
@@ -81,15 +80,9 @@
     },
     {
       "type": "text",
-      "id": "phone",
-      "label": "Phone",
-      "default": "+91 9411323055"
-    },
-    {
-      "type": "text",
-      "id": "country",
-      "label": "Country",
-      "default": "India"
+      "id": "address",
+      "label": "Address",
+      "default": "Haldwani, Uttarakhand, India"
     },
     {
       "type": "text",

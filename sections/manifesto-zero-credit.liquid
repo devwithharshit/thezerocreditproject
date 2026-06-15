@@ -9,12 +9,24 @@
       <p class="eyebrow" data-reveal>{{ section.settings.eyebrow | escape }}</p>
       <h2 data-reveal data-delay="80">{{ section.settings.heading | escape }}</h2>
       <p data-reveal data-delay="160">{{ section.settings.text | escape }}</p>
-      {% if section.settings.button_label != blank %}
-        <a class="button button-light button-arrow" href="{{ section.settings.button_link | default: '/pages/about' }}" data-reveal data-delay="220">
-          <span>{{ section.settings.button_label | escape }}</span>
-          <span aria-hidden="true">↗</span>
-        </a>
-      {% endif %}
+      <ul class="manifesto-features" data-reveal data-delay="220">
+        {% for index in (1..3) %}
+          {% case index %}
+            {% when 1 %}
+              {% assign feature = section.settings.feature_one %}
+            {% when 2 %}
+              {% assign feature = section.settings.feature_two %}
+            {% when 3 %}
+              {% assign feature = section.settings.feature_three %}
+          {% endcase %}
+          {% if feature != blank %}
+            <li>
+              <span aria-hidden="true">—</span>
+              <strong>{{ feature | escape }}</strong>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
     </div>
   </div>
 </section>
@@ -28,30 +40,37 @@
       "type": "text",
       "id": "eyebrow",
       "label": "Eyebrow",
-      "default": "The project / 001"
+      "default": "Designed with intent"
     },
     {
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Nothing Was Handed To Us"
+      "default": "Built for the everyday project"
     },
     {
       "type": "textarea",
       "id": "text",
       "label": "Text",
-      "default": "The Zero Credit Project is for people building identity, momentum and culture from the ground up. Every piece starts with intent."
+      "default": "Focused streetwear with clean silhouettes, wearable details and a direct shopping experience."
     },
     {
       "type": "text",
-      "id": "button_label",
-      "label": "Button label",
-      "default": "Read our story"
+      "id": "feature_one",
+      "label": "Feature one",
+      "default": "Limited-run collections"
     },
     {
-      "type": "url",
-      "id": "button_link",
-      "label": "Button link"
+      "type": "text",
+      "id": "feature_two",
+      "label": "Feature two",
+      "default": "Made for everyday wear"
+    },
+    {
+      "type": "text",
+      "id": "feature_three",
+      "label": "Feature three",
+      "default": "Secure checkout"
     }
   ],
   "presets": [

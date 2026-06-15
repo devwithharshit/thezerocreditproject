@@ -58,17 +58,19 @@
     "manifesto": {
       "type": "manifesto-zero-credit",
       "settings": {
-        "eyebrow": "The project / 001",
-        "heading": "Nothing Was Handed To Us",
-        "text": "The Zero Credit Project is for people building identity, momentum and culture from the ground up. Every piece starts with intent.",
-        "button_label": "Read our story"
+        "eyebrow": "Designed with intent",
+        "heading": "Built for the everyday project",
+        "text": "Focused streetwear with clean silhouettes, wearable details and a direct shopping experience.",
+        "feature_one": "Limited-run collections",
+        "feature_two": "Made for everyday wear",
+        "feature_three": "Secure checkout"
       }
     },
     "marquee_bottom": {
       "type": "marquee-zero-credit",
       "settings": {
         "text": "LIMITED PIECES / MADE WITH INTENT / BUILT FROM ZERO",
-        "speed": 65,
+        "speed": 45,
         "animate": true,
         "style": "dark"
       }
