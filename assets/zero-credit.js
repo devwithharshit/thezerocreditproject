@@ -4,15 +4,11 @@ const menuButton = document.querySelector('[data-menu-toggle]');
 const mobileMenu = document.querySelector('[data-mobile-menu]');
 const menuBackdrop = document.querySelector('[data-menu-backdrop]');
 const menuCloseButton = document.querySelector('[data-menu-close]');
-const cartDrawer = document.querySelector('[data-cart-drawer]');
-const cartBackdrop = document.querySelector('[data-cart-backdrop]');
-const cartOpenButtons = document.querySelectorAll('[data-cart-open]');
-const cartCloseButton = document.querySelector('[data-cart-close]');
 let lastFocusedElement = null;
 
 function updatePageLock() {
   const menuOpen = mobileMenu?.getAttribute('aria-hidden') === 'false';
-  const cartOpen = cartDrawer?.getAttribute('aria-hidden') === 'false';
+  const cartOpen = document.querySelector('[data-cart-drawer]')?.getAttribute('aria-hidden') === 'false';
   document.body.classList.toggle('drawer-open', menuOpen || cartOpen);
 }
 
@@ -30,6 +26,8 @@ function setMenu(open) {
 }
 
 function setCart(open) {
+  const cartDrawer = document.querySelector('[data-cart-drawer]');
+  const cartBackdrop = document.querySelector('[data-cart-backdrop]');
   if (!cartDrawer || !cartBackdrop) return;
   const wasOpen = cartDrawer.getAttribute('aria-hidden') === 'false';
   if (open) lastFocusedElement = document.activeElement;
@@ -51,15 +49,18 @@ mobileMenu?.querySelectorAll('a').forEach((link) => {
   link.addEventListener('click', () => setMenu(false));
 });
 
-cartOpenButtons.forEach((button) => {
-  button.addEventListener('click', (event) => {
+document.addEventListener('click', (event) => {
+  const cartOpenButton = event.target.closest('[data-cart-open]');
+  if (cartOpenButton) {
     event.preventDefault();
     setCart(true);
-  });
-});
+    return;
+  }
 
-cartCloseButton?.addEventListener('click', () => setCart(false));
-cartBackdrop?.addEventListener('click', () => setCart(false));
+  if (event.target.closest('[data-cart-close]') || event.target.closest('[data-cart-backdrop]')) {
+    setCart(false);
+  }
+});
 
 window.addEventListener('resize', () => {
   if (window.innerWidth > 1180) setMenu(false);
@@ -76,6 +77,99 @@ document.querySelectorAll('[data-sort-select]').forEach((select) => {
   select.addEventListener('change', () => select.form?.submit());
 });
 
+function updateCartCount(count) {
+  document.querySelectorAll('.cart-count').forEach((element) => {
+    element.textContent = count;
+  });
+}
+
+function replaceCartDrawer(html) {
+  if (!html) return false;
+
+  const parsedDocument = new DOMParser().parseFromString(html, 'text/html');
+  const updatedSection = parsedDocument.querySelector('#shopify-section-cart-drawer');
+  const currentSection = document.querySelector('#shopify-section-cart-drawer');
+
+  if (!updatedSection || !currentSection) return false;
+  currentSection.innerHTML = updatedSection.innerHTML;
+  return true;
+}
+
+async function fetchCartDrawer(rootRoute) {
+  const response = await fetch(`${rootRoute}?sections=cart-drawer`, {
+    headers: { Accept: 'application/json' }
+  });
+  if (!response.ok) throw new Error('Unable to refresh cart');
+  const sections = await response.json();
+  return sections['cart-drawer'];
+}
+
+document.addEventListener('submit', async (event) => {
+  const form = event.target.closest('[data-ajax-cart-form]');
+  if (!form) return;
+
+  event.preventDefault();
+
+  const submitButton = event.submitter || form.querySelector('[type="submit"]');
+  const buttonLabel = submitButton?.querySelector('[data-cart-button-label]');
+  const originalLabel = buttonLabel?.textContent || submitButton?.textContent || '';
+  const rootRoute = window.Shopify?.routes?.root || '/';
+  const formData = new FormData(form);
+
+  formData.set('sections', 'cart-drawer');
+  formData.set('sections_url', window.location.pathname);
+
+  if (submitButton) {
+    submitButton.disabled = true;
+    submitButton.setAttribute('aria-busy', 'true');
+  }
+  if (buttonLabel) buttonLabel.textContent = 'Adding...';
+
+  try {
+    const addResponse = await fetch(`${rootRoute}cart/add.js`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      body: formData
+    });
+    const addResult = await addResponse.json();
+
+    if (!addResponse.ok) {
+      throw new Error(addResult.description || 'Unable to add this item');
+    }
+
+    const cartResponse = await fetch(`${rootRoute}cart.js`, {
+      headers: { Accept: 'application/json' }
+    });
+    if (!cartResponse.ok) throw new Error('Unable to load cart');
+    const cart = await cartResponse.json();
+
+    let drawerHtml = addResult.sections?.['cart-drawer'];
+    if (!drawerHtml) drawerHtml = await fetchCartDrawer(rootRoute);
+
+    replaceCartDrawer(drawerHtml);
+    updateCartCount(cart.item_count);
+    setCart(true);
+  } catch (error) {
+    if (buttonLabel) {
+      buttonLabel.textContent = error.message || 'Try again';
+      window.setTimeout(() => {
+        buttonLabel.textContent = originalLabel;
+      }, 2200);
+    }
+  } finally {
+    if (submitButton) {
+      submitButton.disabled = false;
+      submitButton.removeAttribute('aria-busy');
+    }
+    if (buttonLabel && buttonLabel.textContent === 'Adding...') {
+      buttonLabel.textContent = originalLabel;
+    }
+  }
+});
+
 document.querySelectorAll('[data-product-root]').forEach((productRoot) => {
   const form = productRoot.querySelector('[data-product-form]');
   const variantsData = productRoot.querySelector('[data-product-variants]');
@@ -88,6 +182,11 @@ document.querySelectorAll('[data-product-root]').forEach((productRoot) => {
   if (form && variantsData && variantInput) {
     const variants = JSON.parse(variantsData.textContent);
     const optionGroups = [...productRoot.querySelectorAll('[data-product-option]')];
+
+    function setAddButtonLabel(text) {
+      const addButtonLabel = addButton?.querySelector('[data-cart-button-label]');
+      if (addButtonLabel) addButtonLabel.textContent = text;
+    }
 
     function updateVariant() {
       const selectedOptions = optionGroups.map((group) => {
@@ -107,7 +206,7 @@ document.querySelectorAll('[data-product-root]').forEach((productRoot) => {
       if (!variant) {
         if (addButton) {
           addButton.disabled = true;
-          addButton.textContent = 'Unavailable';
+          setAddButtonLabel('Unavailable');
         }
         if (buyNowButton) buyNowButton.disabled = true;
         return;
@@ -121,7 +220,7 @@ document.querySelectorAll('[data-product-root]').forEach((productRoot) => {
       }
       if (addButton) {
         addButton.disabled = !variant.available;
-        addButton.textContent = variant.available ? 'Add to cart' : 'Sold out';
+        setAddButtonLabel(variant.available ? 'Add to cart' : 'Sold out');
       }
       if (buyNowButton) buyNowButton.disabled = !variant.available;
 

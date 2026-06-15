@@ -52,11 +52,11 @@
   </div>
 
   {% if product.available %}
-    {% form 'product', product, class: 'product-card-form' %}
+    {% form 'product', product, class: 'product-card-form', data-ajax-cart-form: '' %}
       <input type="hidden" name="id" value="{{ card_variant.id }}">
       <input type="hidden" name="quantity" value="1">
       <button class="product-card-action" type="submit" name="add">
-        <span>Quick add</span>
+        <span data-cart-button-label>Quick add</span>
         <span aria-hidden="true">+</span>
       </button>
     {% endform %}

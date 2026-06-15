@@ -55,11 +55,20 @@
       {% endfor %}
     </div>
     <div class="cart-drawer-footer">
+      <div class="cart-drawer-note" role="status">
+        <span aria-hidden="true">✓</span>
+        <p>Added to your selection. Keep exploring or review the full cart.</p>
+      </div>
       <p><span>Subtotal</span><strong>{{ cart.total_price | money }}</strong></p>
       <small>Shipping and taxes are calculated at checkout.</small>
-      <a class="button button-outline-dark" href="{{ routes.cart_url }}">View cart</a>
+      <div class="cart-drawer-actions">
+        <button class="button button-outline-dark" type="button" data-cart-close>Continue shopping</button>
+        <a class="button button-dark" href="{{ routes.cart_url }}">View full cart</a>
+      </div>
       <form action="{{ routes.cart_url }}" method="post">
-        <button class="button button-dark" type="submit" name="checkout">Checkout</button>
+        <button class="cart-drawer-checkout" type="submit" name="checkout">
+          Checkout now <span aria-hidden="true">↗</span>
+        </button>
       </form>
     </div>
   {% endif %}
