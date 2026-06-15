@@ -1,22 +1,7 @@
 <footer class="site-footer">
   <div class="container footer-grid">
     <div class="footer-brand" data-reveal>
-      {% if section.settings.logo != blank %}
-        {{
-          section.settings.logo
-          | image_url: width: 280
-          | image_tag: class: 'footer-logo', width: 180, loading: 'lazy', alt: shop.name
-        }}
-      {% else %}
-        <img
-          class="footer-logo footer-logo-default"
-          src="{{ 'zero-credit-logo-white.png' | asset_url }}"
-          width="180"
-          height="180"
-          alt="{{ shop.name | escape }}"
-          loading="lazy"
-        >
-      {% endif %}
+      <p class="footer-wordmark">{{ shop.name | escape }}</p>
       <p>{{ section.settings.tagline | escape }}</p>
     </div>
 
@@ -61,11 +46,6 @@
 {
   "name": "Footer",
   "settings": [
-    {
-      "type": "image_picker",
-      "id": "logo",
-      "label": "Logo"
-    },
     {
       "type": "text",
       "id": "tagline",

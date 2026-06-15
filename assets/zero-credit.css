@@ -193,7 +193,7 @@ h2 {
 }
 
 .announcement-header-gap {
-  height: clamp(9px, 0.85vw, 14px);
+  height: clamp(20px, 1.6vw, 26px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   background: #0a0a0a;
 }
@@ -232,6 +232,8 @@ h2 {
   max-width: clamp(40px, 4vw, 64px);
   max-height: calc(var(--header-height) - 22px);
   object-fit: contain;
+  transform: scale(1.26);
+  transform-origin: center;
 }
 
 .brand-name {
@@ -652,12 +654,15 @@ h2 {
   min-width: min(100%, 240px);
 }
 
-.footer-logo {
-  width: 180px;
-  height: auto;
-  margin-bottom: 20px;
-  mix-blend-mode: screen;
-  opacity: 0.96;
+.footer-wordmark {
+  max-width: 260px;
+  margin-bottom: 18px;
+  color: #fff;
+  font-size: clamp(1.45rem, 2.3vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+  text-transform: uppercase;
 }
 
 .footer-menu h2,
@@ -3807,7 +3812,7 @@ h2 {
 
 @media (max-width: 700px) {
   .announcement-header-gap {
-    height: 7px;
+    height: 16px;
   }
 
   .manifesto-inner {

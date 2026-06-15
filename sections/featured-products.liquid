@@ -5,12 +5,18 @@
 {% endif %}
 {% assign current_product_id = product.id %}
 {% assign exclusion_terms = section.settings.excluded_keywords | downcase | split: ',' %}
+{% assign is_product_signature = false %}
+{% if request.page_type == 'product' and section.settings.heading == 'Signature Pieces' %}
+  {% assign is_product_signature = true %}
+{% endif %}
+{% assign filter_female_focused = section.settings.exclude_female_focused %}
 {% assign include_female_focused = section.settings.include_one_female_focused %}
-{% if request.page_type == 'product' and section.settings.exclude_female_focused %}
+{% if is_product_signature %}
+  {% assign filter_female_focused = true %}
   {% assign include_female_focused = true %}
 {% endif %}
 {% assign regular_products_limit = section.settings.products_to_show %}
-{% if section.settings.exclude_female_focused and include_female_focused %}
+{% if filter_female_focused and include_female_focused %}
   {% assign regular_products_limit = regular_products_limit | minus: 1 %}
 {% endif %}
 
@@ -37,7 +43,7 @@
             {% continue %}
           {% endif %}
 
-          {% if section.settings.exclude_female_focused %}
+          {% if filter_female_focused %}
             {% assign card_product_tags = card_product.tags | join: ',' %}
             {% assign searchable_product_text = card_product.title | append: ',' | append: card_product_tags | downcase %}
             {% assign exclude_product = false %}
@@ -60,29 +66,45 @@
           {% endif %}
         {% endfor %}
 
-        {% if section.settings.exclude_female_focused and include_female_focused %}
-          {% for card_product in featured_products %}
-            {% if request.page_type == 'product' and card_product.id == current_product_id %}
-              {% continue %}
+        {% if filter_female_focused and include_female_focused %}
+          {% assign female_product = blank %}
+          {% if is_product_signature %}
+            {% assign female_product = all_products['still-awake-baby-tee-light-pack'] %}
+            {% if female_product == blank or female_product.id == current_product_id %}
+              {% assign female_product = all_products['tzcp-after-hours-baby-tee'] %}
             {% endif %}
+            {% if female_product == blank or female_product.id == current_product_id %}
+              {% assign female_product = all_products['tzcp-late-night-drive-crop-top'] %}
+            {% endif %}
+          {% endif %}
 
-            {% assign card_product_tags = card_product.tags | join: ',' %}
-            {% assign searchable_product_text = card_product.title | append: ',' | append: card_product_tags | downcase %}
-            {% assign female_focused_product = false %}
-            {% for exclusion_term in exclusion_terms %}
-              {% assign clean_exclusion_term = exclusion_term | strip %}
-              {% if clean_exclusion_term != blank and searchable_product_text contains clean_exclusion_term %}
-                {% assign female_focused_product = true %}
+          {% if female_product != blank and female_product.id != current_product_id %}
+            {% assign products_shown = products_shown | plus: 1 %}
+            {% render 'product-card', product: female_product, index: products_shown %}
+          {% else %}
+            {% for card_product in featured_products %}
+              {% if request.page_type == 'product' and card_product.id == current_product_id %}
+                {% continue %}
+              {% endif %}
+
+              {% assign card_product_tags = card_product.tags | join: ',' %}
+              {% assign searchable_product_text = card_product.title | append: ',' | append: card_product_tags | downcase %}
+              {% assign female_focused_product = false %}
+              {% for exclusion_term in exclusion_terms %}
+                {% assign clean_exclusion_term = exclusion_term | strip %}
+                {% if clean_exclusion_term != blank and searchable_product_text contains clean_exclusion_term %}
+                  {% assign female_focused_product = true %}
+                  {% break %}
+                {% endif %}
+              {% endfor %}
+
+              {% if female_focused_product %}
+                {% assign products_shown = products_shown | plus: 1 %}
+                {% render 'product-card', product: card_product, index: products_shown %}
                 {% break %}
               {% endif %}
             {% endfor %}
-
-            {% if female_focused_product %}
-              {% assign products_shown = products_shown | plus: 1 %}
-              {% render 'product-card', product: card_product, index: products_shown %}
-              {% break %}
-            {% endif %}
-          {% endfor %}
+          {% endif %}
         {% endif %}
       </div>
       {% if products_shown == 0 and request.design_mode %}
