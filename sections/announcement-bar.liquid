@@ -2,7 +2,7 @@
   {% assign secondary_text = section.settings.secondary_text | default: 'PAN INDIA SHIPPING | GET 10% OFF: CODE ZCPOFF10' %}
   <aside
     class="announcement-bar"
-    aria-label="{{ section.settings.text | append: '. ' | append: secondary_text | escape }}"
+    aria-label="{{ section.settings.text | append: ' ' | append: secondary_text | escape }}"
     style="--announcement-background: {{ section.settings.background }}; --announcement-text: {{ section.settings.text_color }}; --announcement-duration: {{ section.settings.speed }}s;"
   >
     <div class="announcement-bar__viewport">
