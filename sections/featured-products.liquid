@@ -3,8 +3,10 @@
 {% if section.settings.sort_high_to_low %}
   {% assign featured_products = featured_products | sort: 'price' | reverse %}
 {% endif %}
+{% assign current_product_id = product.id %}
+{% assign exclusion_terms = section.settings.excluded_keywords | downcase | split: ',' %}
 
-<section class="section-spacing featured-rail">
+<section class="section-spacing featured-rail{% if request.page_type == 'product' %} featured-rail--product{% endif %}">
   <div class="container">
     <div class="section-heading" data-reveal>
       <div>
@@ -21,10 +23,38 @@
 
     {% if featured_products != blank %}
       <div class="product-grid product-grid--featured">
-        {% for product in featured_products limit: section.settings.products_to_show %}
-          {% render 'product-card', product: product, index: forloop.index %}
+        {% assign products_shown = 0 %}
+        {% for card_product in featured_products %}
+          {% if request.page_type == 'product' and card_product.id == current_product_id %}
+            {% continue %}
+          {% endif %}
+
+          {% if section.settings.exclude_female_focused %}
+            {% assign card_product_tags = card_product.tags | join: ',' %}
+            {% assign searchable_product_text = card_product.title | append: ',' | append: card_product_tags | downcase %}
+            {% assign exclude_product = false %}
+            {% for exclusion_term in exclusion_terms %}
+              {% assign clean_exclusion_term = exclusion_term | strip %}
+              {% if clean_exclusion_term != blank and searchable_product_text contains clean_exclusion_term %}
+                {% assign exclude_product = true %}
+                {% break %}
+              {% endif %}
+            {% endfor %}
+            {% if exclude_product %}
+              {% continue %}
+            {% endif %}
+          {% endif %}
+
+          {% assign products_shown = products_shown | plus: 1 %}
+          {% render 'product-card', product: card_product, index: products_shown %}
+          {% if products_shown >= section.settings.products_to_show %}
+            {% break %}
+          {% endif %}
         {% endfor %}
       </div>
+      {% if products_shown == 0 and request.design_mode %}
+        <div class="editor-note">No products match this section's current filters.</div>
+      {% endif %}
     {% elsif request.design_mode %}
       <div class="editor-note">Choose a collection in this section's settings to show real products.</div>
     {% endif %}
@@ -74,6 +104,19 @@
       "max": 12,
       "step": 1,
       "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "exclude_female_focused",
+      "label": "Exclude female-focused products",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "excluded_keywords",
+      "label": "Excluded product keywords",
+      "info": "Comma-separated keywords checked against product titles and tags.",
+      "default": "women,female,baby tee,crop top,cropped,fitted"
     },
     {
       "type": "checkbox",

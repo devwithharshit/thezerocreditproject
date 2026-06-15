@@ -147,7 +147,15 @@
       </div>
 
       {% if product.description != blank %}
-        <div class="rte product-description">{{ product.description }}</div>
+        <details class="product-description-accordion">
+          <summary>
+            <span>Description</span>
+            <span class="product-description-accordion__icon" aria-hidden="true"></span>
+          </summary>
+          <div class="product-description-accordion__content">
+            <div class="rte product-description">{{ product.description }}</div>
+          </div>
+        </details>
       {% endif %}
     </div>
   </div>
