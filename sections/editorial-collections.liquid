@@ -12,47 +12,45 @@
       {% endif %}
     </header>
 
-    <div class="editorial-grid">
+    <div class="editorial-grid editorial-grid--{{ section.blocks.size }}">
       {% for block in section.blocks %}
         {% assign card_collection = block.settings.collection %}
-        <a
-          class="editorial-card editorial-card--{{ forloop.index }}"
-          href="{{ card_collection.url | default: block.settings.link | default: '/collections' }}"
-          data-reveal="clip"
-          data-delay="{{ forloop.index | times: 50 }}"
-          {{ block.shopify_attributes }}
-        >
-          <div class="editorial-card__media">
-            {% if block.settings.image != blank %}
-              {{
-                block.settings.image
-                | image_url: width: 1200
-                | image_tag:
-                  widths: '480, 720, 960, 1200',
-                  sizes: '(min-width: 990px) 33vw, 85vw',
-                  loading: 'lazy',
-                  alt: block.settings.image.alt
-              }}
-            {% elsif card_collection.featured_image != blank %}
-              {{
-                card_collection.featured_image
-                | image_url: width: 1200
-                | image_tag:
-                  widths: '480, 720, 960, 1200',
-                  sizes: '(min-width: 990px) 33vw, 85vw',
-                  loading: 'lazy',
-                  alt: card_collection.title
-              }}
-            {% else %}
-              {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg' }}
-            {% endif %}
-          </div>
-          <div class="editorial-card__caption">
-            <p>{{ block.settings.kicker | escape }}</p>
-            <h3>{{ block.settings.heading | default: card_collection.title | escape }}</h3>
-            <span>Discover <span aria-hidden="true">↗</span></span>
-          </div>
-        </a>
+        {% if card_collection != blank %}
+          {% assign card_image = block.settings.image | default: card_collection.image %}
+          {% if card_image == blank and card_collection.products.first.featured_image != blank %}
+            {% assign card_image = card_collection.products.first.featured_image %}
+          {% endif %}
+          <a
+            class="editorial-card editorial-card--{{ forloop.index }}"
+            href="{{ card_collection.url }}"
+            data-reveal="clip"
+            data-delay="{{ forloop.index | times: 50 }}"
+            {{ block.shopify_attributes }}
+          >
+            <div class="editorial-card__media">
+              {% if card_image != blank %}
+                {{
+                  card_image
+                  | image_url: width: 1400
+                  | image_tag:
+                    widths: '480, 720, 960, 1200, 1400',
+                    sizes: '(min-width: 990px) 50vw, 100vw',
+                    loading: 'lazy',
+                    alt: card_collection.title
+                }}
+              {% else %}
+                {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              {% endif %}
+            </div>
+            <div class="editorial-card__caption">
+              <p>{{ block.settings.kicker | escape }}</p>
+              <h3>{{ block.settings.heading | default: card_collection.title | escape }}</h3>
+              <span>Shop collection <span aria-hidden="true">↗</span></span>
+            </div>
+          </a>
+        {% elsif request.design_mode %}
+          <div class="editor-note" {{ block.shopify_attributes }}>Select a real collection for this card.</div>
+        {% endif %}
       {% endfor %}
     </div>
   </div>
@@ -112,13 +110,8 @@
         {
           "type": "text",
           "id": "heading",
-          "label": "Heading",
-          "default": "Street Essentials"
-        },
-        {
-          "type": "url",
-          "id": "link",
-          "label": "Fallback link"
+          "label": "Custom heading",
+          "info": "Leave blank to use the collection title."
         }
       ]
     }
@@ -127,9 +120,8 @@
     {
       "name": "Editorial collections",
       "blocks": [
-        { "type": "collection", "settings": { "heading": "Street Essentials", "kicker": "The uniform" } },
-        { "type": "collection", "settings": { "heading": "Heavyweight Layers", "kicker": "Built to last" } },
-        { "type": "collection", "settings": { "heading": "Limited Objects", "kicker": "Small batch" } }
+        { "type": "collection", "settings": { "kicker": "Current drop" } },
+        { "type": "collection", "settings": { "kicker": "The first chapter" } }
       ]
     }
   ]

@@ -20,36 +20,27 @@
         "category_one": {
           "type": "collection",
           "settings": {
-            "kicker": "The uniform",
-            "heading": "Street Essentials",
-            "link": "/collections/all"
+            "collection": "after-hours",
+            "kicker": "Drop 02",
+            "heading": ""
           }
         },
         "category_two": {
           "type": "collection",
           "settings": {
-            "kicker": "Built to last",
-            "heading": "Heavyweight Layers",
-            "link": "/collections/all"
-          }
-        },
-        "category_three": {
-          "type": "collection",
-          "settings": {
-            "kicker": "Small batch",
-            "heading": "Limited Objects",
-            "link": "/collections/all"
+            "collection": "no-credit-club",
+            "kicker": "Drop 01",
+            "heading": ""
           }
         }
       },
       "block_order": [
         "category_one",
-        "category_two",
-        "category_three"
+        "category_two"
       ],
       "settings": {
-        "eyebrow": "Explore / Category",
-        "heading": "Choose Your Uniform",
+        "eyebrow": "Explore / Drops",
+        "heading": "The Collections",
         "link_label": "View all",
         "link": "/collections"
       }
