@@ -1,6 +1,5 @@
 {% if page.handle == 'contact' %}
   {% assign contact_email = section.settings.contact_email | default: shop.email %}
-  {% assign contact_phone = section.settings.contact_phone | default: shop.phone %}
   <section class="contact-page section-spacing">
     <div class="container contact-layout">
       <div class="contact-intro">
@@ -11,9 +10,6 @@
         <div class="contact-details">
           {% if contact_email != blank %}
             <a href="mailto:{{ contact_email }}">{{ contact_email }}</a>
-          {% endif %}
-          {% if contact_phone != blank %}
-            <a href="tel:{{ contact_phone | replace: ' ', '' }}">{{ contact_phone }}</a>
           {% endif %}
           <span>{{ section.settings.response_note | escape }}</span>
         </div>
@@ -91,12 +87,6 @@
       "id": "contact_email",
       "label": "Contact email",
       "default": "thezerocreditproject@gmail.com"
-    },
-    {
-      "type": "text",
-      "id": "contact_phone",
-      "label": "Contact phone",
-      "default": "+91 9411323055"
     },
     {
       "type": "text",
