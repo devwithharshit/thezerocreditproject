@@ -8,15 +8,25 @@
         {% if product.media.size > 0 %}
           {% for media in product.media %}
             <div class="product-media" data-gallery-slide>
-              {{
-                media.preview_image
-                | image_url: width: 1400
-                | image_tag:
-                  widths: '500, 750, 1000, 1400',
-                  sizes: '(min-width: 990px) 34vw, 100vw',
-                  loading: 'lazy',
-                  alt: media.alt
-              }}
+              <button
+                class="product-media__zoom-trigger"
+                type="button"
+                aria-label="Zoom product image {{ forloop.index }}"
+                data-product-zoom
+                data-zoom-src="{{ media.preview_image | image_url: width: 2400 | escape }}"
+                data-zoom-alt="{{ media.alt | default: product.title | escape }}"
+              >
+                {{
+                  media.preview_image
+                  | image_url: width: 1400
+                  | image_tag:
+                    widths: '500, 750, 1000, 1400',
+                    sizes: '(min-width: 990px) 34vw, 100vw',
+                    loading: 'lazy',
+                    alt: media.alt
+                }}
+                <span class="product-media__zoom-label" aria-hidden="true">Zoom +</span>
+              </button>
             </div>
           {% endfor %}
         {% else %}
@@ -157,6 +167,33 @@
           </div>
         </details>
       {% endif %}
+    </div>
+  </div>
+
+  <div
+    class="product-zoom-dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Product image viewer"
+    aria-hidden="true"
+    tabindex="-1"
+    data-product-zoom-dialog
+  >
+    <div class="product-zoom-dialog__topbar">
+      <span>Product view</span>
+      <button type="button" aria-label="Close image viewer" data-product-zoom-close>
+        {% render 'icon-close' %}
+      </button>
+    </div>
+    <div class="product-zoom-stage" data-product-zoom-stage>
+      <img width="2400" height="2400" alt="" draggable="false" data-product-zoom-image>
+    </div>
+    <div class="product-zoom-controls" aria-label="Image zoom controls">
+      <button type="button" aria-label="Zoom out" data-product-zoom-out>−</button>
+      <button type="button" aria-label="Reset zoom" data-product-zoom-reset>
+        <span data-product-zoom-level>100%</span>
+      </button>
+      <button type="button" aria-label="Zoom in" data-product-zoom-in>+</button>
     </div>
   </div>
 

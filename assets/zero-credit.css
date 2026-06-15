@@ -192,6 +192,12 @@ h2 {
   opacity: 0.65;
 }
 
+.announcement-header-gap {
+  height: clamp(9px, 0.85vw, 14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: #0a0a0a;
+}
+
 .site-header {
   position: sticky;
   z-index: 20;
@@ -650,10 +656,8 @@ h2 {
   width: 180px;
   height: auto;
   margin-bottom: 20px;
-}
-
-.footer-logo-default {
   mix-blend-mode: screen;
+  opacity: 0.96;
 }
 
 .footer-menu h2,
@@ -3421,8 +3425,154 @@ h2 {
 }
 
 .product-media {
+  position: relative;
   overflow: hidden;
   aspect-ratio: 4 / 5;
+}
+
+.product-media__zoom-trigger {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+}
+
+.product-media__zoom-trigger:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: -4px;
+}
+
+.product-media__zoom-label {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: inline-flex;
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  background: rgba(10, 10, 10, 0.78);
+  color: #fff;
+  align-items: center;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition:
+    background var(--transition-fast) ease,
+    transform var(--transition-fast) var(--ease-premium);
+}
+
+.product-media__zoom-trigger:hover .product-media__zoom-label,
+.product-media__zoom-trigger:focus-visible .product-media__zoom-label {
+  background: #111;
+  transform: translateY(-2px);
+}
+
+.product-zoom-dialog {
+  position: fixed;
+  z-index: 120;
+  inset: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  padding:
+    max(16px, env(safe-area-inset-top))
+    max(16px, env(safe-area-inset-right))
+    max(16px, env(safe-area-inset-bottom))
+    max(16px, env(safe-area-inset-left));
+  background: rgba(7, 7, 7, 0.98);
+  color: #fff;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity var(--transition-base) ease,
+    visibility 0s linear var(--transition-base);
+  visibility: hidden;
+}
+
+.product-zoom-dialog[aria-hidden="false"] {
+  opacity: 1;
+  pointer-events: auto;
+  transition-delay: 0s;
+  visibility: visible;
+}
+
+.product-zoom-dialog__topbar {
+  display: flex;
+  min-height: 52px;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.product-zoom-dialog__topbar button,
+.product-zoom-controls button {
+  display: grid;
+  min-width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  place-items: center;
+}
+
+.product-zoom-dialog__topbar button svg {
+  width: 20px;
+}
+
+.product-zoom-stage {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.product-zoom-stage.is-dragging {
+  cursor: grabbing;
+}
+
+.product-zoom-stage img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  transform: translate3d(0, 0, 0) scale(1);
+  transform-origin: center;
+  transition: transform var(--transition-fast) var(--ease-premium);
+  will-change: transform;
+}
+
+.product-zoom-stage.is-dragging img {
+  transition: none;
+}
+
+.product-zoom-controls {
+  display: flex;
+  min-height: 62px;
+  gap: 8px;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.product-zoom-controls button {
+  min-width: 48px;
+}
+
+.product-zoom-controls [data-product-zoom-reset] {
+  min-width: 74px;
+  font-size: 0.7rem;
+  font-weight: 800;
 }
 
 .product-info h1 {
@@ -3656,6 +3806,10 @@ h2 {
 }
 
 @media (max-width: 700px) {
+  .announcement-header-gap {
+    height: 7px;
+  }
+
   .manifesto-inner {
     grid-template-columns: 1fr;
   }
@@ -3714,6 +3868,19 @@ h2 {
     min-width: 100%;
     scroll-snap-align: start;
     scroll-snap-stop: always;
+  }
+
+  .product-media__zoom-label {
+    right: 10px;
+    bottom: 10px;
+  }
+
+  .product-zoom-dialog {
+    padding:
+      max(10px, env(safe-area-inset-top))
+      max(10px, env(safe-area-inset-right))
+      max(10px, env(safe-area-inset-bottom))
+      max(10px, env(safe-area-inset-left));
   }
 
   .product-gallery-controls {
@@ -4018,6 +4185,12 @@ h2 {
 
   .product-description-accordion__content {
     animation: none;
+  }
+
+  .product-zoom-dialog,
+  .product-zoom-stage img,
+  .product-media__zoom-label {
+    transition: none;
   }
 
   .announcement-bar__track.is-animated,

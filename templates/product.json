@@ -12,6 +12,7 @@
         "sort_high_to_low": true,
         "products_to_show": 4,
         "exclude_female_focused": true,
+        "include_one_female_focused": true,
         "excluded_keywords": "women,female,baby tee,crop top,cropped,fitted",
         "show_view_all": false
       }

@@ -5,6 +5,10 @@
 {% endif %}
 {% assign current_product_id = product.id %}
 {% assign exclusion_terms = section.settings.excluded_keywords | downcase | split: ',' %}
+{% assign regular_products_limit = section.settings.products_to_show %}
+{% if section.settings.exclude_female_focused and section.settings.include_one_female_focused %}
+  {% assign regular_products_limit = regular_products_limit | minus: 1 %}
+{% endif %}
 
 <section class="section-spacing featured-rail{% if request.page_type == 'product' %} featured-rail--product{% endif %}">
   <div class="container">
@@ -47,10 +51,35 @@
 
           {% assign products_shown = products_shown | plus: 1 %}
           {% render 'product-card', product: card_product, index: products_shown %}
-          {% if products_shown >= section.settings.products_to_show %}
+          {% if products_shown >= regular_products_limit %}
             {% break %}
           {% endif %}
         {% endfor %}
+
+        {% if section.settings.exclude_female_focused and section.settings.include_one_female_focused %}
+          {% for card_product in featured_products %}
+            {% if request.page_type == 'product' and card_product.id == current_product_id %}
+              {% continue %}
+            {% endif %}
+
+            {% assign card_product_tags = card_product.tags | join: ',' %}
+            {% assign searchable_product_text = card_product.title | append: ',' | append: card_product_tags | downcase %}
+            {% assign female_focused_product = false %}
+            {% for exclusion_term in exclusion_terms %}
+              {% assign clean_exclusion_term = exclusion_term | strip %}
+              {% if clean_exclusion_term != blank and searchable_product_text contains clean_exclusion_term %}
+                {% assign female_focused_product = true %}
+                {% break %}
+              {% endif %}
+            {% endfor %}
+
+            {% if female_focused_product %}
+              {% assign products_shown = products_shown | plus: 1 %}
+              {% render 'product-card', product: card_product, index: products_shown %}
+              {% break %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
       </div>
       {% if products_shown == 0 and request.design_mode %}
         <div class="editor-note">No products match this section's current filters.</div>
@@ -109,6 +138,13 @@
       "type": "checkbox",
       "id": "exclude_female_focused",
       "label": "Exclude female-focused products",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "include_one_female_focused",
+      "label": "Include one female-focused product",
+      "info": "Adds one matching product after the regular filtered selection.",
       "default": false
     },
     {

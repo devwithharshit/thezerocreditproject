@@ -5,6 +5,7 @@ const mobileMenu = document.querySelector('[data-mobile-menu]');
 const menuBackdrop = document.querySelector('[data-menu-backdrop]');
 const menuCloseButton = document.querySelector('[data-menu-close]');
 let lastFocusedElement = null;
+let activeProductZoomClose = null;
 
 function setElementInert(element, inert) {
   if (!element) return;
@@ -18,7 +19,9 @@ setElementInert(document.querySelector('[data-cart-drawer]'), true);
 function updatePageLock() {
   const menuOpen = mobileMenu?.getAttribute('aria-hidden') === 'false';
   const cartOpen = document.querySelector('[data-cart-drawer]')?.getAttribute('aria-hidden') === 'false';
-  document.body.classList.toggle('drawer-open', menuOpen || cartOpen);
+  const productZoomOpen =
+    document.querySelector('[data-product-zoom-dialog]')?.getAttribute('aria-hidden') === 'false';
+  document.body.classList.toggle('drawer-open', menuOpen || cartOpen || productZoomOpen);
 }
 
 function setMenu(open, restoreFocus = true) {
@@ -88,6 +91,7 @@ window.addEventListener('resize', () => {
 
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') {
+    activeProductZoomClose?.();
     setMenu(false);
     setCart(false);
     return;
@@ -96,6 +100,7 @@ document.addEventListener('keydown', (event) => {
   if (event.key !== 'Tab') return;
 
   const openOverlay =
+    document.querySelector('[data-product-zoom-dialog][aria-hidden="false"]') ||
     document.querySelector('[data-cart-drawer][aria-hidden="false"]') ||
     document.querySelector('[data-mobile-menu][aria-hidden="false"]');
 
@@ -321,6 +326,137 @@ document.querySelectorAll('[data-product-root]').forEach((productRoot) => {
   const gallery = productRoot.querySelector('[data-product-gallery]');
   const slides = [...productRoot.querySelectorAll('[data-gallery-slide]')];
   const dots = [...productRoot.querySelectorAll('[data-gallery-dot]')];
+  const zoomDialog = productRoot.querySelector('[data-product-zoom-dialog]');
+  const zoomImage = productRoot.querySelector('[data-product-zoom-image]');
+  const zoomStage = productRoot.querySelector('[data-product-zoom-stage]');
+  const zoomLevel = productRoot.querySelector('[data-product-zoom-level]');
+
+  if (zoomDialog && zoomImage && zoomStage) {
+    const zoomTriggers = [...productRoot.querySelectorAll('[data-product-zoom]')];
+    let zoomTrigger = null;
+    let zoomScale = 1;
+    let zoomPanX = 0;
+    let zoomPanY = 0;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let dragOriginX = 0;
+    let dragOriginY = 0;
+
+    setElementInert(zoomDialog, true);
+
+    function clampZoomPan() {
+      if (zoomScale <= 1) {
+        zoomPanX = 0;
+        zoomPanY = 0;
+        return;
+      }
+
+      const maxX = (zoomStage.clientWidth * (zoomScale - 1)) / 2;
+      const maxY = (zoomStage.clientHeight * (zoomScale - 1)) / 2;
+      zoomPanX = Math.max(-maxX, Math.min(maxX, zoomPanX));
+      zoomPanY = Math.max(-maxY, Math.min(maxY, zoomPanY));
+    }
+
+    function renderProductZoom() {
+      clampZoomPan();
+      zoomImage.style.transform = `translate3d(${zoomPanX}px, ${zoomPanY}px, 0) scale(${zoomScale})`;
+      if (zoomLevel) zoomLevel.textContent = `${Math.round(zoomScale * 100)}%`;
+      zoomStage.classList.toggle('is-zoomed', zoomScale > 1);
+    }
+
+    function setProductZoomScale(nextScale) {
+      zoomScale = Math.max(1, Math.min(4, nextScale));
+      renderProductZoom();
+    }
+
+    function resetProductZoom() {
+      zoomScale = 1;
+      zoomPanX = 0;
+      zoomPanY = 0;
+      renderProductZoom();
+    }
+
+    function closeProductZoom() {
+      if (zoomDialog.getAttribute('aria-hidden') !== 'false') return;
+      zoomDialog.setAttribute('aria-hidden', 'true');
+      setElementInert(zoomDialog, true);
+      resetProductZoom();
+      updatePageLock();
+      activeProductZoomClose = null;
+      if (zoomTrigger instanceof HTMLElement) zoomTrigger.focus();
+    }
+
+    function openProductZoom(trigger) {
+      const source = trigger.dataset.zoomSrc;
+      if (!source) return;
+
+      setMenu(false, false);
+      setCart(false, false);
+      zoomTrigger = trigger;
+      zoomImage.src = source;
+      zoomImage.alt = trigger.dataset.zoomAlt || '';
+      resetProductZoom();
+      zoomDialog.setAttribute('aria-hidden', 'false');
+      setElementInert(zoomDialog, false);
+      updatePageLock();
+      activeProductZoomClose = closeProductZoom;
+      window.requestAnimationFrame(() => zoomDialog.querySelector('[data-product-zoom-close]')?.focus());
+    }
+
+    zoomTriggers.forEach((trigger) => {
+      trigger.addEventListener('click', () => openProductZoom(trigger));
+    });
+
+    zoomDialog.querySelector('[data-product-zoom-close]')?.addEventListener('click', closeProductZoom);
+    zoomDialog.querySelector('[data-product-zoom-in]')?.addEventListener('click', () => {
+      setProductZoomScale(zoomScale + 0.5);
+    });
+    zoomDialog.querySelector('[data-product-zoom-out]')?.addEventListener('click', () => {
+      setProductZoomScale(zoomScale - 0.5);
+    });
+    zoomDialog.querySelector('[data-product-zoom-reset]')?.addEventListener('click', resetProductZoom);
+
+    zoomStage.addEventListener('dblclick', () => {
+      setProductZoomScale(zoomScale > 1 ? 1 : 2.5);
+    });
+
+    zoomStage.addEventListener(
+      'wheel',
+      (event) => {
+        event.preventDefault();
+        setProductZoomScale(zoomScale + (event.deltaY < 0 ? 0.25 : -0.25));
+      },
+      { passive: false }
+    );
+
+    zoomStage.addEventListener('pointerdown', (event) => {
+      if (zoomScale <= 1) return;
+      dragStartX = event.clientX;
+      dragStartY = event.clientY;
+      dragOriginX = zoomPanX;
+      dragOriginY = zoomPanY;
+      zoomStage.classList.add('is-dragging');
+      zoomStage.setPointerCapture(event.pointerId);
+    });
+
+    zoomStage.addEventListener('pointermove', (event) => {
+      if (!zoomStage.hasPointerCapture(event.pointerId)) return;
+      zoomPanX = dragOriginX + event.clientX - dragStartX;
+      zoomPanY = dragOriginY + event.clientY - dragStartY;
+      renderProductZoom();
+    });
+
+    function stopProductZoomDrag(event) {
+      if (zoomStage.hasPointerCapture(event.pointerId)) {
+        zoomStage.releasePointerCapture(event.pointerId);
+      }
+      zoomStage.classList.remove('is-dragging');
+    }
+
+    zoomStage.addEventListener('pointerup', stopProductZoomDrag);
+    zoomStage.addEventListener('pointercancel', stopProductZoomDrag);
+    window.addEventListener('resize', renderProductZoom);
+  }
 
   if (gallery && slides.length > 1) {
     let galleryTicking = false;
