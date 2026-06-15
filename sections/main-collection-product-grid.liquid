@@ -1,14 +1,19 @@
 <section class="section-spacing">
   <div class="container">
     <header class="collection-header">
-      <p class="eyebrow">{{ collection.products_count }} products</p>
-      <h1>{{ collection.title | escape }}</h1>
+      <div class="collection-header__title" data-reveal>
+        <p class="eyebrow">{{ collection.products_count }} products</p>
+        <h1>{{ collection.title | escape }}</h1>
+      </div>
       {% if collection.description != blank %}
-        <div class="rte collection-description">{{ collection.description }}</div>
+        <div class="collection-header__notes" data-reveal data-delay="80">
+          <p class="collection-header__label">Collection notes</p>
+          <div class="rte collection-description">{{ collection.description }}</div>
+        </div>
       {% endif %}
     </header>
 
-    <form class="sort-form" method="get" action="{{ collection.url }}">
+    <form class="sort-form" method="get" action="{{ collection.url }}" data-reveal data-delay="120">
       <label for="SortBy-{{ section.id }}">Sort by</label>
       <select id="SortBy-{{ section.id }}" name="sort_by" data-sort-select>
         {% assign sort_by = collection.sort_by | default: collection.default_sort_by %}

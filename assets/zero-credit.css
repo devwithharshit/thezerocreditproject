@@ -1121,6 +1121,122 @@ h2 {
   }
 }
 
+/* Editorial collection introduction */
+
+.collection-header {
+  display: grid;
+  max-width: none;
+  grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.75fr);
+  gap: clamp(54px, 9vw, 150px);
+  margin-bottom: clamp(52px, 7vw, 92px);
+  align-items: end;
+}
+
+.collection-header__title {
+  min-width: 0;
+}
+
+.collection-header__title .eyebrow {
+  margin-bottom: 24px;
+}
+
+.collection-header__title h1 {
+  max-width: 900px;
+  margin: 0;
+  font-size: clamp(4rem, 7.4vw, 8.4rem);
+  letter-spacing: -0.07em;
+  line-height: 0.86;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.collection-header__notes {
+  max-width: 520px;
+  padding: 24px 0 4px 30px;
+  border-left: 1px solid rgba(17, 17, 17, 0.24);
+}
+
+.collection-header__label {
+  margin: 0 0 18px;
+  color: rgba(17, 17, 17, 0.5);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.collection-description,
+.collection-description * {
+  text-align: left !important;
+}
+
+.collection-description {
+  max-width: 46ch;
+  color: rgba(17, 17, 17, 0.72);
+  font-size: clamp(0.95rem, 1.05vw, 1.08rem);
+  line-height: 1.65;
+}
+
+.collection-description p {
+  margin: 0;
+}
+
+.collection-description p + p {
+  margin-top: 16px;
+}
+
+.collection-description strong {
+  color: #111;
+  font-weight: 750;
+}
+
+@media (max-width: 989px) {
+  .collection-header {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .collection-header__title h1 {
+    font-size: clamp(3.4rem, 12vw, 6.5rem);
+  }
+
+  .collection-header__notes {
+    max-width: 620px;
+    padding: 22px 0 0;
+    border-top: 1px solid rgba(17, 17, 17, 0.2);
+    border-left: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .collection-header {
+    gap: 28px;
+    margin-bottom: 42px;
+  }
+
+  .collection-header__title .eyebrow {
+    margin-bottom: 16px;
+  }
+
+  .collection-header__title h1 {
+    font-size: clamp(2.8rem, 15vw, 4.4rem);
+    line-height: 0.9;
+  }
+
+  .collection-header__notes {
+    padding-top: 18px;
+  }
+
+  .collection-header__label {
+    margin-bottom: 13px;
+  }
+
+  .collection-description {
+    font-size: 0.94rem;
+    line-height: 1.58;
+  }
+}
+
 /* Editorial storefront */
 
 .site-header {
