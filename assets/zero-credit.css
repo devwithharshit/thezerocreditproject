@@ -3036,8 +3036,36 @@ h2 {
 }
 
 @media (max-width: 430px) {
+  .zc-hero__copy {
+    width: 100%;
+    max-width: 430px;
+    padding-inline: max(18px, var(--page-gutter));
+  }
+
+  .zc-hero__copy h1 {
+    max-width: 100%;
+    font-size: clamp(2.45rem, 10.8vw, 3.35rem);
+    letter-spacing: -0.055em;
+    line-height: 0.98;
+  }
+
+  .zc-hero__description {
+    max-width: 100%;
+    font-size: 0.98rem;
+    line-height: 1.55;
+  }
+
   .zc-hero__copy .button-row {
-    gap: 8px;
+    width: 100%;
+    gap: 10px;
+    flex-direction: column;
+  }
+
+  .zc-hero__copy .button-row .button {
+    width: 100%;
+    min-height: 52px;
+    justify-content: space-between;
+    padding-inline: 18px;
   }
 
   .product-card-details {
