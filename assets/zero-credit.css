@@ -3036,13 +3036,15 @@ h2 {
 }
 
 @media (max-width: 430px) {
-  .zc-hero__copy {
+  .zc-hero__copy,
+  .zc-hero--type-only .zc-hero__copy {
     width: 100%;
     max-width: 430px;
     padding-inline: max(18px, var(--page-gutter));
   }
 
-  .zc-hero__copy h1 {
+  .zc-hero__copy h1,
+  .zc-hero--type-only .zc-hero__copy h1 {
     max-width: 100%;
     font-size: clamp(2.45rem, 10.8vw, 3.35rem);
     letter-spacing: -0.055em;
@@ -3965,11 +3967,13 @@ h2 {
   }
 
   .zc-hero--type-only .zc-hero__copy {
-    padding-inline: 2px;
+    padding-inline: max(18px, var(--page-gutter));
   }
 
   .zc-hero--type-only .zc-hero__copy h1 {
-    font-size: clamp(2.75rem, 13vw, 4.6rem);
+    font-size: clamp(2.25rem, 10.8vw, 3.35rem);
+    letter-spacing: -0.05em;
+    line-height: 1;
   }
 }
 
