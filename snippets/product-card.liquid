@@ -42,6 +42,11 @@
   <div class="product-card-details">
     <div>
       <h3><a href="{{ product.url }}">{{ product.title | escape }}</a></h3>
+      {% if product.metafields.judgeme.badge != blank %}
+        <div class="zc-review-badge product-card-rating">
+          {{ product.metafields.judgeme.badge }}
+        </div>
+      {% endif %}
     </div>
     <div class="product-card-price">
       <span>{{ card_variant.price | money }}</span>

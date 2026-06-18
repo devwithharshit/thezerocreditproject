@@ -60,6 +60,12 @@
       {% endif %}
       <h1>{{ product.title | escape }}</h1>
 
+      {% if product.metafields.judgeme.badge != blank %}
+        <div class="zc-review-badge product-review-badge">
+          {{ product.metafields.judgeme.badge }}
+        </div>
+      {% endif %}
+
       <div class="product-price" data-product-price>
         <span>{{ current_variant.price | money }}</span>
         <s{% unless current_variant.compare_at_price > current_variant.price %} hidden{% endunless %}>
