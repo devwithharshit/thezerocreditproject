@@ -20,8 +20,16 @@
     },
     "1781769946e9a34a8f": {
       "type": "apps",
+      "settings": {}
+    },
+    "17817699150cdeab5f": {
+      "type": "apps",
+      "settings": {}
+    },
+    "17817700262759172b": {
+      "type": "apps",
       "blocks": {
-        "judge_me_reviews_review_widget_6NpXb9": {
+        "judge_me_reviews_review_widget_kWcrLx": {
           "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
           "settings": {
             "review_data": "sample_data",
@@ -32,12 +40,8 @@
         }
       },
       "block_order": [
-        "judge_me_reviews_review_widget_6NpXb9"
+        "judge_me_reviews_review_widget_kWcrLx"
       ],
-      "settings": {}
-    },
-    "17817699150cdeab5f": {
-      "type": "apps",
       "settings": {}
     },
     "signature": {
@@ -60,6 +64,7 @@
     "main",
     "1781769946e9a34a8f",
     "17817699150cdeab5f",
+    "17817700262759172b",
     "signature"
   ]
 }
