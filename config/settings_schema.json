@@ -29,5 +29,16 @@
         "default": "#111111"
       }
     ]
+  },
+  {
+    "name": "Brand",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "Use a square PNG. Google works best with sizes that are multiples of 48px."
+      }
+    ]
   }
 ]
