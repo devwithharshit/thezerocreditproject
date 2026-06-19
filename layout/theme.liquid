@@ -5,13 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="{{ settings.color_background }}">
     <link rel="canonical" href="{{ canonical_url }}">
-    {% if settings.favicon != blank %}
-      <link rel="icon" type="image/png" sizes="96x96" href="{{ settings.favicon | image_url: width: 96, height: 96, crop: 'center' }}">
-      <link rel="apple-touch-icon" href="{{ settings.favicon | image_url: width: 180, height: 180, crop: 'center' }}">
-    {% else %}
-      <link rel="icon" type="image/png" sizes="192x192" href="{{ 'zero-credit-favicon.png' | asset_url }}">
-      <link rel="apple-touch-icon" href="{{ 'zero-credit-favicon.png' | asset_url }}">
-    {% endif %}
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ 'zero-credit-favicon.png' | asset_url }}">
+    <link rel="shortcut icon" type="image/png" href="{{ 'zero-credit-favicon.png' | asset_url }}">
+    <link rel="apple-touch-icon" sizes="192x192" href="{{ 'zero-credit-favicon.png' | asset_url }}">
 
     <title>
       {{ page_title }}
