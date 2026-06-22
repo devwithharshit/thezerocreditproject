@@ -72,6 +72,18 @@
         "female_product": "tzcp-after-hours-baby-tee"
       }
     },
+    "female_picks": {
+      "type": "female-favourite-picks",
+      "settings": {
+        "badge_text": "STYLED BEYOND GENDER",
+        "heading": "Female Favourite Picks",
+        "body_text": "Relaxed silhouettes, cropped fits, and statement oversized pieces — styled beyond gender.",
+        "collection": "female-favourite-picks",
+        "button_label": "Shop The Picks",
+        "button_link": "/collections/female-favourite-picks",
+        "product_limit": 8
+      }
+    },
     "manifesto": {
       "type": "manifesto-zero-credit",
       "settings": {
@@ -104,6 +116,7 @@
     "categories",
     "spotlight",
     "featured",
+    "female_picks",
     "manifesto",
     "marquee_bottom",
     "newsletter"

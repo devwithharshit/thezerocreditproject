@@ -1,0 +1,105 @@
+{% assign picks_collection = section.settings.collection | default: collections['female-favourite-picks'] %}
+{% assign button_link = section.settings.button_link %}
+{% if button_link == blank %}
+  {% if picks_collection != blank %}
+    {% assign button_link = picks_collection.url %}
+  {% else %}
+    {% assign button_link = '/collections/female-favourite-picks' %}
+  {% endif %}
+{% endif %}
+
+{% if picks_collection.products_count > 0 or request.design_mode %}
+  <section class="section-spacing female-picks">
+    <div class="container">
+      <header class="female-picks__header" data-reveal>
+        <div class="female-picks__copy">
+          {% if section.settings.badge_text != blank %}
+            <p class="female-picks__badge">{{ section.settings.badge_text | escape }}</p>
+          {% endif %}
+          <h2>{{ section.settings.heading | escape }}</h2>
+          {% if section.settings.body_text != blank %}
+            <p>{{ section.settings.body_text | escape }}</p>
+          {% endif %}
+        </div>
+
+        {% if section.settings.button_label != blank %}
+          <a class="button button-outline-light female-picks__button" href="{{ button_link }}">
+            {{ section.settings.button_label | escape }} <span aria-hidden="true">&#8599;</span>
+          </a>
+        {% endif %}
+      </header>
+
+      {% if picks_collection.products_count > 0 %}
+        <div class="female-picks__grid" role="list">
+          {% for card_product in picks_collection.products limit: section.settings.product_limit %}
+            <div class="female-picks__card" role="listitem">
+              {% render 'product-card', product: card_product, index: forloop.index %}
+            </div>
+          {% endfor %}
+        </div>
+      {% elsif request.design_mode %}
+        <div class="editor-note female-picks__note">
+          Create or select the Female Favourite Picks collection and add products to preview this section.
+        </div>
+      {% endif %}
+    </div>
+  </section>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Female Favourite Picks",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text",
+      "default": "STYLED BEYOND GENDER"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section heading",
+      "default": "Female Favourite Picks"
+    },
+    {
+      "type": "textarea",
+      "id": "body_text",
+      "label": "Body text",
+      "default": "Relaxed silhouettes, cropped fits, and statement oversized pieces — styled beyond gender."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "Defaults to the female-favourite-picks collection when no collection is selected."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop The Picks"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "range",
+      "id": "product_limit",
+      "label": "Product limit",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    }
+  ],
+  "presets": [
+    {
+      "name": "Female Favourite Picks"
+    }
+  ]
+}
+{% endschema %}
