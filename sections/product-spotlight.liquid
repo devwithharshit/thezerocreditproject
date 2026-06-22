@@ -1,0 +1,148 @@
+{% assign primary_product = section.settings.primary_product | default: all_products['tzcp-night-shift-oversized-tee'] %}
+{% assign secondary_product = section.settings.secondary_product | default: all_products['after-hours-oversized-tee-dark-pack'] %}
+
+{% if primary_product != blank or secondary_product != blank %}
+  <section class="section-spacing product-spotlight">
+    <div class="container">
+      <div class="section-heading product-spotlight__heading" data-reveal>
+        <div>
+          <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+          <h2>{{ section.settings.heading | escape }}</h2>
+          {% if section.settings.subheading != blank %}
+            <p>{{ section.settings.subheading | escape }}</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="product-spotlight__grid">
+        {% if primary_product != blank %}
+          <article class="product-spotlight__item" data-reveal>
+            <a class="product-spotlight__media" href="{{ primary_product.url }}" aria-label="Shop {{ primary_product.title | escape }}">
+              {% if primary_product.featured_image %}
+                {{
+                  primary_product.featured_image
+                  | image_url: width: 1600
+                  | image_tag:
+                    widths: '480, 720, 960, 1280, 1600',
+                    sizes: '(min-width: 750px) 50vw, 100vw',
+                    loading: 'lazy',
+                    alt: primary_product.featured_image.alt
+                }}
+              {% else %}
+                {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              {% endif %}
+            </a>
+            <div class="product-spotlight__details">
+              <div>
+                <p class="eyebrow">{{ section.settings.primary_label | escape }}</p>
+                <h3><a href="{{ primary_product.url }}">{{ primary_product.title | escape }}</a></h3>
+                <p>{{ section.settings.primary_copy | escape }}</p>
+              </div>
+              <div class="product-spotlight__action">
+                <span>{{ primary_product.price | money }}</span>
+                <a class="button button-dark" href="{{ primary_product.url }}">Shop now <span aria-hidden="true">&#8599;</span></a>
+              </div>
+            </div>
+          </article>
+        {% endif %}
+
+        {% if secondary_product != blank %}
+          <article class="product-spotlight__item" data-reveal data-delay="80">
+            <a class="product-spotlight__media" href="{{ secondary_product.url }}" aria-label="Shop {{ secondary_product.title | escape }}">
+              {% if secondary_product.featured_image %}
+                {{
+                  secondary_product.featured_image
+                  | image_url: width: 1600
+                  | image_tag:
+                    widths: '480, 720, 960, 1280, 1600',
+                    sizes: '(min-width: 750px) 50vw, 100vw',
+                    loading: 'lazy',
+                    alt: secondary_product.featured_image.alt
+                }}
+              {% else %}
+                {{ 'product-2' | placeholder_svg_tag: 'placeholder-svg' }}
+              {% endif %}
+            </a>
+            <div class="product-spotlight__details">
+              <div>
+                <p class="eyebrow">{{ section.settings.secondary_label | escape }}</p>
+                <h3><a href="{{ secondary_product.url }}">{{ secondary_product.title | escape }}</a></h3>
+                <p>{{ section.settings.secondary_copy | escape }}</p>
+              </div>
+              <div class="product-spotlight__action">
+                <span>{{ secondary_product.price | money }}</span>
+                <a class="button button-dark" href="{{ secondary_product.url }}">Shop now <span aria-hidden="true">&#8599;</span></a>
+              </div>
+            </div>
+          </article>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Product spotlight",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "The core edit"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Built after hours"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Two signature dark-pack tees, made to anchor the rotation."
+    },
+    {
+      "type": "product",
+      "id": "primary_product",
+      "label": "Primary product"
+    },
+    {
+      "type": "text",
+      "id": "primary_label",
+      "label": "Primary label",
+      "default": "Night Shift / Signature"
+    },
+    {
+      "type": "textarea",
+      "id": "primary_copy",
+      "label": "Primary copy",
+      "default": "An oversized essential built for late hours, clean layers and repeat wear."
+    },
+    {
+      "type": "product",
+      "id": "secondary_product",
+      "label": "Secondary product"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Secondary label",
+      "default": "After Hours / Dark Pack"
+    },
+    {
+      "type": "textarea",
+      "id": "secondary_copy",
+      "label": "Secondary copy",
+      "default": "The statement tee from the After Hours drop, finished in the brand's core palette."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product spotlight"
+    }
+  ]
+}
+{% endschema %}

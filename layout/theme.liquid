@@ -38,8 +38,15 @@
     {% section 'announcement-bar' %}
     {% section 'header' %}
 
+    {% assign rendered_content = content_for_layout %}
+    {% if request.page_type == 'policy' and request.path contains 'refund-policy' %}
+      {% assign rendered_content = rendered_content
+        | replace: 'Minor variations in print placement, color, or appearance', ''
+      %}
+    {% endif %}
+
     <main id="MainContent" class="main-content" role="main" tabindex="-1">
-      {{ content_for_layout }}
+      {{ rendered_content }}
     </main>
 
     {% section 'footer' %}

@@ -45,6 +45,20 @@
         "link": "/collections"
       }
     },
+    "spotlight": {
+      "type": "product-spotlight",
+      "settings": {
+        "eyebrow": "Core / Dark Pack",
+        "heading": "The tees defining the project",
+        "subheading": "Two signature oversized pieces. Built for late hours, clean layers and repeat wear.",
+        "primary_product": "tzcp-night-shift-oversized-tee",
+        "primary_label": "Night Shift / Signature",
+        "primary_copy": "A graphic oversized essential built around late hours, movement and everyday rotation.",
+        "secondary_product": "after-hours-oversized-tee-dark-pack",
+        "secondary_label": "After Hours / Dark Pack",
+        "secondary_copy": "The core After Hours statement tee, finished in the project's dark-pack palette."
+      }
+    },
     "featured": {
       "type": "featured-products",
       "settings": {
@@ -52,7 +66,10 @@
         "heading": "Signature Pieces",
         "subheading": "A focused selection from the top of the collection.",
         "sort_high_to_low": true,
-        "products_to_show": 4
+        "products_to_show": 4,
+        "exclude_female_focused": true,
+        "include_one_female_focused": true,
+        "female_product": "tzcp-late-night-drive-crop-top"
       }
     },
     "manifesto": {
@@ -85,6 +102,7 @@
   "order": [
     "hero",
     "categories",
+    "spotlight",
     "featured",
     "manifesto",
     "marquee_bottom",

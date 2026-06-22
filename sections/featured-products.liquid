@@ -67,9 +67,11 @@
         {% endfor %}
 
         {% if filter_female_focused and include_female_focused %}
-          {% assign female_product = blank %}
+          {% assign female_product = section.settings.female_product %}
           {% if is_product_signature %}
-            {% assign female_product = all_products['still-awake-baby-tee-light-pack'] %}
+            {% if female_product == blank %}
+              {% assign female_product = all_products['still-awake-baby-tee-light-pack'] %}
+            {% endif %}
             {% if female_product == blank or female_product.id == current_product_id %}
               {% assign female_product = all_products['tzcp-after-hours-baby-tee'] %}
             {% endif %}
@@ -172,6 +174,12 @@
       "label": "Include one female-focused product",
       "info": "Adds one matching product after the regular filtered selection.",
       "default": false
+    },
+    {
+      "type": "product",
+      "id": "female_product",
+      "label": "Female product to include",
+      "info": "Shown as the final Signature Pieces card when female product inclusion is enabled."
     },
     {
       "type": "text",
