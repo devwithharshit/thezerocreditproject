@@ -4425,7 +4425,7 @@ h2 {
 
 .female-picks__grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(34px, 4vw, 56px) var(--grid-gap);
 }
 
@@ -4464,7 +4464,7 @@ h2 {
 
 @media (max-width: 989px) and (min-width: 701px) {
   .female-picks__grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -4483,25 +4483,8 @@ h2 {
   }
 
   .female-picks__grid {
-    display: flex;
-    gap: 14px;
-    margin-inline: calc(var(--page-gutter) * -1);
-    padding-inline: var(--page-gutter);
-    padding-bottom: 8px;
-    overflow-x: auto;
-    overscroll-behavior-inline: contain;
-    scroll-padding-inline: var(--page-gutter);
-    scroll-snap-type: inline mandatory;
-    scrollbar-width: none;
-  }
-
-  .female-picks__grid::-webkit-scrollbar {
-    display: none;
-  }
-
-  .female-picks__card {
-    flex: 0 0 min(78vw, 310px);
-    scroll-snap-align: start;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 34px;
   }
 
   .female-picks .product-card-details {
