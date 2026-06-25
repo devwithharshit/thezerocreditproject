@@ -137,15 +137,6 @@
       {% endform %}
 
       <div class="product-assurance">
-        <div class="product-policy-links">
-          {% if shop.refund_policy != blank %}
-            <a href="{{ shop.refund_policy.url }}">Refund policy <span aria-hidden="true">↗</span></a>
-          {% endif %}
-          {% if shop.shipping_policy != blank %}
-            <a href="{{ shop.shipping_policy.url }}">Shipping policy <span aria-hidden="true">↗</span></a>
-          {% endif %}
-        </div>
-
         <div class="product-trust-grid">
           <div class="product-trust-item">
             <span class="product-trust-icon" aria-hidden="true">₹</span>

@@ -39,11 +39,17 @@
     {% section 'header' %}
 
     {% capture rendered_content %}{{ content_for_layout }}{% endcapture %}
-    {% if canonical_url contains '/policies/refund-policy' %}
-      {% capture excluded_refund_item %}<li>
-<p>Minor variations in print placement, color, or appearance</p>
-</li>{% endcapture %}
-      {% assign rendered_content = rendered_content | replace: excluded_refund_item, '' %}
+    {% if canonical_url contains '/policies/' %}
+      {% capture rendered_content %}
+        <section class="section-spacing not-found">
+          <div class="container narrow">
+            <p class="eyebrow">TZCP / Relaunch</p>
+            <h1>This page is hidden for now.</h1>
+            <p>The Zero Credit Project is rebuilding. Return to home for early access.</p>
+            <a class="button button-dark" href="{{ routes.root_url }}">Back to home</a>
+          </div>
+        </section>
+      {% endcapture %}
     {% endif %}
 
     <main id="MainContent" class="main-content" role="main" tabindex="-1">

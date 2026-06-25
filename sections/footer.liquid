@@ -16,7 +16,9 @@
         <h2>{{ block.settings.heading | escape }}</h2>
         <ul>
           {% for link in block.settings.menu.links %}
-            <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+            {% unless link.url contains '/policies/' %}
+              <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+            {% endunless %}
           {% endfor %}
         </ul>
       </nav>
@@ -25,20 +27,12 @@
     <div class="footer-contact" data-reveal data-delay="180">
       <h2>Contact</h2>
       <a href="mailto:{{ section.settings.email | escape }}">{{ section.settings.email | escape }}</a>
-      <p>{{ section.settings.address | escape }}</p>
-      <p>{{ section.settings.hours | escape }}</p>
+      <p>Bengaluru, Karnataka, India</p>
     </div>
   </div>
 
   <div class="container footer-bottom" data-reveal data-delay="230">
     <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name | escape }}</p>
-    <div class="policy-links">
-      {% for policy in shop.policies %}
-        {% if policy != blank %}
-          <a href="{{ policy.url }}">{{ policy.title | escape }}</a>
-        {% endif %}
-      {% endfor %}
-    </div>
   </div>
 </footer>
 
@@ -63,12 +57,6 @@
       "id": "address",
       "label": "Address",
       "default": "Bengaluru, Karnataka, India"
-    },
-    {
-      "type": "text",
-      "id": "hours",
-      "label": "Business hours",
-      "default": "Thursday - Sunday, 10:00 AM - 6:00 PM IST"
     }
   ],
   "blocks": [
