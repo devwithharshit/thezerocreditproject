@@ -1,124 +1,25 @@
 {
   "sections": {
-    "hero": {
-      "type": "hero-zero-credit",
+    "tzcp_coming_soon": {
+      "type": "tzcp-coming-soon",
       "settings": {
-        "show_background_motion": true,
-        "background_text": "ZERO CREDIT",
-        "eyebrow": "Independent streetwear / India",
-        "heading": "The Zero Credit Project",
-        "subheading": "No credit. No shortcuts. Just the project.",
-        "primary_label": "Shop the Drop",
-        "primary_link": "/collections/all",
-        "secondary_label": "Explore Collections",
-        "secondary_link": "/collections"
-      }
-    },
-    "categories": {
-      "type": "editorial-collections",
-      "blocks": {
-        "category_one": {
-          "type": "collection",
-          "settings": {
-            "collection": "after-hours",
-            "kicker": "Drop 02",
-            "heading": ""
-          }
-        },
-        "category_two": {
-          "type": "collection",
-          "settings": {
-            "collection": "no-credit-club",
-            "kicker": "Drop 01",
-            "heading": ""
-          }
-        }
-      },
-      "block_order": [
-        "category_one",
-        "category_two"
-      ],
-      "settings": {
-        "eyebrow": "Explore / Drops",
-        "heading": "The Collections",
-        "link_label": "View all",
-        "link": "/collections"
-      }
-    },
-    "spotlight": {
-      "type": "product-spotlight",
-      "settings": {
-        "eyebrow": "Core / Dark Pack",
-        "heading": "The tees defining the project",
-        "subheading": "Two signature oversized pieces. Built for late hours, clean layers and repeat wear.",
-        "primary_product": "tzcp-night-shift-oversized-tee",
-        "primary_label": "Night Shift / Signature",
-        "primary_copy": "A graphic oversized essential built around late hours, movement and everyday rotation.",
-        "secondary_product": "after-hours-oversized-tee-dark-pack",
-        "secondary_label": "After Hours / Dark Pack",
-        "secondary_copy": "The core After Hours statement tee, finished in the project's dark-pack palette."
-      }
-    },
-    "featured": {
-      "type": "featured-products",
-      "settings": {
-        "eyebrow": "Curated / Premium",
-        "heading": "Signature Pieces",
-        "subheading": "A focused selection from the top of the collection.",
-        "sort_high_to_low": true,
-        "products_to_show": 4,
-        "exclude_female_focused": true,
-        "include_one_female_focused": true,
-        "female_product": "tzcp-after-hours-baby-tee"
-      }
-    },
-    "female_picks": {
-      "type": "female-favourite-picks",
-      "settings": {
-        "badge_text": "STYLED BEYOND GENDER",
-        "heading": "Female Favourite Picks",
-        "body_text": "Relaxed silhouettes, cropped fits, and statement oversized pieces — styled beyond gender.",
-        "collection": "female-favourite-picks",
-        "button_label": "Shop The Picks",
-        "button_link": "/collections/female-favourite-picks",
-        "product_limit": 8
-      }
-    },
-    "manifesto": {
-      "type": "manifesto-zero-credit",
-      "settings": {
-        "eyebrow": "Designed with intent",
-        "heading": "Built for the everyday project",
-        "text": "Focused streetwear with clean silhouettes, wearable details and a direct shopping experience.",
-        "feature_one": "Limited-run collections",
-        "feature_two": "Made for everyday wear",
-        "feature_three": "Secure checkout"
-      }
-    },
-    "marquee_bottom": {
-      "type": "marquee-zero-credit",
-      "settings": {
-        "text": "LIMITED PIECES / MADE WITH INTENT / BUILT FROM ZERO",
-        "animate": true,
-        "style": "dark"
-      }
-    },
-    "newsletter": {
-      "type": "newsletter-zero-credit",
-      "settings": {
-        "heading": "Join The Zero Credit Project",
-        "subheading": "Be the first to know about new collections and special offers."
+        "eyebrow": "THE ZERO CREDIT PROJECT IS REBUILDING",
+        "main_headline": "FOR THE ONES BUILDING BEFORE ANYONE NOTICES.",
+        "subheadline": "Founder-centric unisex apparel for builders, entrepreneurs, and people creating something of their own.",
+        "secondary_line": "Not startup merch. Not corporate clothing. Apparel for the builder state of mind.",
+        "signup_heading": "GET 30% OFF AT LAUNCH",
+        "signup_text": "Join the early list and get access to the relaunch drop before everyone else.",
+        "email_placeholder": "Enter your email",
+        "button_text": "Join The Build List",
+        "form_disclaimer": "No spam. Just launch access, early drops, and builder updates.",
+        "footer_line": "TZCP is rebuilding. New identity. New products. Same zero-credit mindset.",
+        "background_color": "#050505",
+        "text_color": "#f4f0e8",
+        "enable_marquee": true
       }
     }
   },
   "order": [
-    "hero",
-    "categories",
-    "spotlight",
-    "featured",
-    "female_picks",
-    "manifesto",
-    "marquee_bottom",
-    "newsletter"
+    "tzcp_coming_soon"
   ]
 }

@@ -1,0 +1,346 @@
+.tzcp-coming-soon {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: calc(100svh - var(--announcement-height) - var(--header-height));
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px) 0 0 / 88px 88px,
+    linear-gradient(0deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px) 0 0 / 88px 88px,
+    radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.08), transparent 34%),
+    radial-gradient(circle at 86% 68%, rgba(255, 255, 255, 0.045), transparent 32%),
+    var(--tzcp-coming-bg, #050505);
+  color: var(--tzcp-coming-text, #f4f0e8);
+}
+
+.tzcp-coming-soon__grain {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+}
+
+.tzcp-coming-soon__grain::before,
+.tzcp-coming-soon__grain::after {
+  position: absolute;
+  inset: -20%;
+  content: "";
+}
+
+.tzcp-coming-soon__grain::before {
+  background-image:
+    repeating-radial-gradient(circle at 17% 21%, rgba(255, 255, 255, 0.075) 0 1px, transparent 1px 5px),
+    repeating-radial-gradient(circle at 77% 46%, rgba(255, 255, 255, 0.045) 0 1px, transparent 1px 7px);
+  opacity: 0.15;
+  transform: translate3d(0, 0, 0);
+  animation: tzcp-grain-shift 9s steps(8) infinite;
+}
+
+.tzcp-coming-soon__grain::after {
+  background: linear-gradient(120deg, transparent 0 42%, rgba(255, 255, 255, 0.07) 48%, transparent 54% 100%);
+  opacity: 0.38;
+  transform: translateX(-55%);
+  animation: tzcp-scan 7s var(--ease-premium, cubic-bezier(0.16, 1, 0.3, 1)) infinite;
+}
+
+.tzcp-coming-soon__shell {
+  width: min(calc(100% - (var(--page-gutter) * 2)), 1500px);
+  min-height: min(780px, calc(100svh - var(--announcement-height) - var(--header-height)));
+  padding-block: clamp(70px, 10vw, 150px);
+  margin-inline: auto;
+}
+
+.tzcp-coming-soon__meta,
+.tzcp-coming-soon__eyebrow,
+.tzcp-coming-soon__secondary,
+.tzcp-coming-soon__disclaimer,
+.tzcp-coming-soon__footer,
+.tzcp-coming-soon__marquee {
+  font-size: clamp(0.7rem, 0.78vw, 0.82rem);
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.tzcp-coming-soon__meta {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: clamp(30px, 4vw, 58px);
+  color: rgba(244, 240, 232, 0.52);
+}
+
+.tzcp-coming-soon__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.18fr) minmax(340px, 0.82fr);
+  gap: clamp(42px, 8vw, 130px);
+  align-items: end;
+}
+
+.tzcp-coming-soon__eyebrow {
+  margin-bottom: 24px;
+  color: rgba(244, 240, 232, 0.78);
+}
+
+.tzcp-coming-soon__headline {
+  position: relative;
+  max-width: 11.5ch;
+  margin-bottom: clamp(24px, 4vw, 40px);
+  color: var(--tzcp-coming-text, #f4f0e8);
+  font-size: clamp(3.5rem, 9.8vw, 10.6rem);
+  font-weight: 900;
+  letter-spacing: -0.085em;
+  line-height: 0.82;
+  text-transform: uppercase;
+}
+
+.tzcp-coming-soon__headline::after {
+  position: absolute;
+  z-index: -1;
+  top: -0.13em;
+  left: -0.06em;
+  width: 100%;
+  overflow: hidden;
+  color: transparent;
+  content: attr(data-text);
+  -webkit-text-stroke: 1px rgba(244, 240, 232, 0.1);
+  transform: translate3d(0.075em, 0, 0);
+}
+
+.tzcp-coming-soon__subheadline {
+  max-width: 680px;
+  margin-bottom: 18px;
+  color: rgba(244, 240, 232, 0.82);
+  font-size: clamp(1.05rem, 1.45vw, 1.45rem);
+  line-height: 1.45;
+}
+
+.tzcp-coming-soon__secondary {
+  max-width: 690px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(244, 240, 232, 0.16);
+  color: rgba(244, 240, 232, 0.66);
+  line-height: 1.55;
+}
+
+.tzcp-coming-soon__signup {
+  padding: clamp(22px, 3vw, 34px);
+  border: 1px solid rgba(244, 240, 232, 0.18);
+  background: rgba(5, 5, 5, 0.62);
+  box-shadow: 0 32px 90px rgba(0, 0, 0, 0.36);
+  backdrop-filter: blur(16px);
+}
+
+.tzcp-coming-soon__signup h2 {
+  max-width: 10ch;
+  margin-bottom: 18px;
+  font-size: clamp(2rem, 3.4vw, 4.25rem);
+  letter-spacing: -0.065em;
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+
+.tzcp-coming-soon__signup p {
+  color: rgba(244, 240, 232, 0.72);
+}
+
+.tzcp-coming-soon__form {
+  margin-top: 28px;
+}
+
+.tzcp-coming-soon__fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+}
+
+.tzcp-coming-soon__fields input,
+.tzcp-coming-soon__fields button {
+  min-height: 58px;
+  border-radius: 0;
+}
+
+.tzcp-coming-soon__fields input {
+  min-width: 0;
+  padding: 0 18px;
+  border: 1px solid rgba(244, 240, 232, 0.24);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--tzcp-coming-text, #f4f0e8);
+}
+
+.tzcp-coming-soon__fields input::placeholder {
+  color: rgba(244, 240, 232, 0.46);
+}
+
+.tzcp-coming-soon__fields button {
+  padding-inline: 22px;
+  border: 1px solid var(--tzcp-coming-text, #f4f0e8);
+  background: var(--tzcp-coming-text, #f4f0e8);
+  color: #070707;
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  transition:
+    background var(--transition-fast, 220ms) var(--ease-premium, ease),
+    color var(--transition-fast, 220ms) var(--ease-premium, ease),
+    transform var(--transition-fast, 220ms) var(--ease-premium, ease);
+}
+
+.tzcp-coming-soon__fields button:hover {
+  background: transparent;
+  color: var(--tzcp-coming-text, #f4f0e8);
+  transform: translateY(-1px);
+}
+
+.tzcp-coming-soon__message {
+  margin: 14px 0 0;
+  color: var(--tzcp-coming-text, #f4f0e8);
+  font-weight: 800;
+}
+
+.tzcp-coming-soon__disclaimer {
+  margin: 18px 0 0;
+  color: rgba(244, 240, 232, 0.5);
+  line-height: 1.5;
+}
+
+.tzcp-coming-soon__marquee {
+  overflow: hidden;
+  border-block: 1px solid rgba(244, 240, 232, 0.14);
+  background: rgba(255, 255, 255, 0.035);
+  color: rgba(244, 240, 232, 0.88);
+}
+
+.tzcp-coming-soon__marquee-track {
+  display: flex;
+  width: max-content;
+  animation: tzcp-coming-marquee 28s linear infinite;
+  will-change: transform;
+}
+
+.tzcp-coming-soon__marquee span {
+  display: inline-flex;
+  min-height: 54px;
+  padding-inline: clamp(22px, 3.6vw, 58px);
+  align-items: center;
+  white-space: nowrap;
+}
+
+.tzcp-coming-soon__marquee span::after {
+  width: 4px;
+  height: 4px;
+  margin-left: clamp(22px, 3.6vw, 58px);
+  border-radius: 50%;
+  background: currentColor;
+  content: "";
+  opacity: 0.55;
+}
+
+.tzcp-coming-soon__footer {
+  width: min(calc(100% - (var(--page-gutter) * 2)), 1500px);
+  padding-block: 24px;
+  margin-inline: auto;
+  color: rgba(244, 240, 232, 0.58);
+}
+
+.tzcp-coming-soon__footer p {
+  margin: 0;
+}
+
+@keyframes tzcp-coming-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-33.333%, 0, 0);
+  }
+}
+
+@keyframes tzcp-grain-shift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  25% {
+    transform: translate3d(-1.5%, 1%, 0);
+  }
+
+  50% {
+    transform: translate3d(1%, -1.5%, 0);
+  }
+
+  75% {
+    transform: translate3d(1.5%, 1%, 0);
+  }
+}
+
+@keyframes tzcp-scan {
+  0%,
+  42% {
+    transform: translateX(-70%);
+  }
+
+  100% {
+    transform: translateX(70%);
+  }
+}
+
+@media (max-width: 989px) {
+  .tzcp-coming-soon__hero {
+    grid-template-columns: 1fr;
+  }
+
+  .tzcp-coming-soon__signup {
+    max-width: 620px;
+  }
+}
+
+@media (max-width: 640px) {
+  .tzcp-coming-soon {
+    min-height: calc(100svh - var(--announcement-height) - var(--header-height-mobile));
+  }
+
+  .tzcp-coming-soon__shell {
+    min-height: calc(100svh - var(--announcement-height) - var(--header-height-mobile));
+    padding-block: clamp(46px, 14vw, 76px);
+  }
+
+  .tzcp-coming-soon__meta {
+    padding-bottom: 34px;
+  }
+
+  .tzcp-coming-soon__headline {
+    max-width: 8.8ch;
+    font-size: clamp(3rem, 16vw, 5rem);
+    line-height: 0.88;
+  }
+
+  .tzcp-coming-soon__subheadline {
+    font-size: 1rem;
+  }
+
+  .tzcp-coming-soon__fields {
+    grid-template-columns: 1fr;
+  }
+
+  .tzcp-coming-soon__fields button {
+    width: 100%;
+  }
+
+  .tzcp-coming-soon__marquee-track {
+    animation-duration: 24s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tzcp-coming-soon__grain::before,
+  .tzcp-coming-soon__grain::after,
+  .tzcp-coming-soon__marquee-track {
+    animation: none;
+  }
+
+  .tzcp-coming-soon__fields button {
+    transition: none;
+  }
+}

@@ -1,3 +1,8 @@
+{% assign use_relaunch_nav = false %}
+{% if request.page_type == 'index' %}
+  {% assign use_relaunch_nav = true %}
+{% endif %}
+
 <header class="site-header">
   <div class="container header-inner">
     <button
@@ -41,11 +46,16 @@
 
     <nav class="desktop-nav" aria-label="Primary navigation">
       <ul>
-        {% for link in section.settings.menu.links %}
-          <li>
-            <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
-          </li>
-        {% endfor %}
+        {% if use_relaunch_nav %}
+          <li><a href="{{ routes.root_url }}" aria-current="page">Home</a></li>
+          <li><a href="/pages/contact">Contact</a></li>
+        {% else %}
+          {% for link in section.settings.menu.links %}
+            <li>
+              <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+            </li>
+          {% endfor %}
+        {% endif %}
       </ul>
     </nav>
 
@@ -90,14 +100,23 @@
     </div>
     <nav class="mobile-menu-body" aria-label="Mobile navigation">
       <ul>
-        {% for link in section.settings.menu.links %}
+        {% if use_relaunch_nav %}
           <li>
-            <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>
-              <span>0{{ forloop.index }}</span>
-              {{ link.title | escape }}
-            </a>
+            <a href="{{ routes.root_url }}" aria-current="page"><span>01</span>Home</a>
           </li>
-        {% endfor %}
+          <li>
+            <a href="/pages/contact"><span>02</span>Contact</a>
+          </li>
+        {% else %}
+          {% for link in section.settings.menu.links %}
+            <li>
+              <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>
+                <span>0{{ forloop.index }}</span>
+                {{ link.title | escape }}
+              </a>
+            </li>
+          {% endfor %}
+        {% endif %}
       </ul>
     </nav>
   </div>

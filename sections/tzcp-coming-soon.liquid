@@ -1,0 +1,195 @@
+{{ 'tzcp-coming-soon.css' | asset_url | stylesheet_tag }}
+
+<section
+  class="tzcp-coming-soon"
+  style="
+    --tzcp-coming-bg: {{ section.settings.background_color }};
+    --tzcp-coming-text: {{ section.settings.text_color }};
+  "
+>
+  <div class="tzcp-coming-soon__grain" aria-hidden="true"></div>
+
+  <div class="tzcp-coming-soon__shell">
+    <div class="tzcp-coming-soon__meta" aria-hidden="true">
+      <span>TZCP / RELAUNCH</span>
+      <span>{{ 'now' | date: '%Y' }}</span>
+    </div>
+
+    <div class="tzcp-coming-soon__hero">
+      <div class="tzcp-coming-soon__copy">
+        {% if section.settings.eyebrow != blank %}
+          <p class="tzcp-coming-soon__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {% endif %}
+
+        {% if section.settings.main_headline != blank %}
+          <h1 class="tzcp-coming-soon__headline" data-text="{{ section.settings.main_headline | escape }}">
+            {{ section.settings.main_headline | escape }}
+          </h1>
+        {% endif %}
+
+        {% if section.settings.subheadline != blank %}
+          <p class="tzcp-coming-soon__subheadline">{{ section.settings.subheadline | escape }}</p>
+        {% endif %}
+
+        {% if section.settings.secondary_line != blank %}
+          <p class="tzcp-coming-soon__secondary">{{ section.settings.secondary_line | escape }}</p>
+        {% endif %}
+      </div>
+
+      <div class="tzcp-coming-soon__signup" aria-labelledby="TzcpComingSignupHeading-{{ section.id }}">
+        {% if section.settings.signup_heading != blank %}
+          <h2 id="TzcpComingSignupHeading-{{ section.id }}">{{ section.settings.signup_heading | escape }}</h2>
+        {% endif %}
+
+        {% if section.settings.signup_text != blank %}
+          <p>{{ section.settings.signup_text | escape }}</p>
+        {% endif %}
+
+        {% form 'customer', class: 'tzcp-coming-soon__form' %}
+          <input type="hidden" name="contact[tags]" value="launch-waitlist,relaunch,founder-apparel,launch-30">
+          <input type="hidden" name="contact[accepts_marketing]" value="true">
+          <label class="visually-hidden" for="TzcpComingEmail-{{ section.id }}">Email address</label>
+          <div class="tzcp-coming-soon__fields">
+            <input
+              id="TzcpComingEmail-{{ section.id }}"
+              type="email"
+              name="contact[email]"
+              value="{{ form.email | escape }}"
+              placeholder="{{ section.settings.email_placeholder | escape }}"
+              autocorrect="off"
+              autocapitalize="off"
+              autocomplete="email"
+              maxlength="254"
+              required
+            >
+            <button type="submit">{{ section.settings.button_text | escape }}</button>
+          </div>
+
+          {% if form.posted_successfully? %}
+            <p class="tzcp-coming-soon__message" tabindex="-1">You’re on the build list. Launch access is coming.</p>
+          {% endif %}
+
+          {% if form.errors %}
+            <div class="tzcp-coming-soon__message" role="alert">{{ form.errors | default_errors }}</div>
+          {% endif %}
+        {% endform %}
+
+        {% if section.settings.form_disclaimer != blank %}
+          <p class="tzcp-coming-soon__disclaimer">{{ section.settings.form_disclaimer | escape }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  {% if section.settings.enable_marquee %}
+    <div class="tzcp-coming-soon__marquee" aria-label="Relaunch phrases">
+      <div class="tzcp-coming-soon__marquee-track">
+        {% for repeat in (1..3) %}
+          <span>BUILDING BEFORE ANYONE NOTICES</span>
+          <span>ZERO CREDIT</span>
+          <span>NO APPLAUSE REQUIRED</span>
+          <span>FOUNDER-CENTRIC APPAREL</span>
+          <span>UNISEX BY DEFAULT</span>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+  {% if section.settings.footer_line != blank %}
+    <div class="tzcp-coming-soon__footer">
+      <p>{{ section.settings.footer_line | escape }}</p>
+    </div>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "TZCP coming soon",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "THE ZERO CREDIT PROJECT IS REBUILDING"
+    },
+    {
+      "type": "text",
+      "id": "main_headline",
+      "label": "Main headline",
+      "default": "FOR THE ONES BUILDING BEFORE ANYONE NOTICES."
+    },
+    {
+      "type": "textarea",
+      "id": "subheadline",
+      "label": "Subheadline",
+      "default": "Founder-centric unisex apparel for builders, entrepreneurs, and people creating something of their own."
+    },
+    {
+      "type": "textarea",
+      "id": "secondary_line",
+      "label": "Secondary line",
+      "default": "Not startup merch. Not corporate clothing. Apparel for the builder state of mind."
+    },
+    {
+      "type": "text",
+      "id": "signup_heading",
+      "label": "Email signup heading",
+      "default": "GET 30% OFF AT LAUNCH"
+    },
+    {
+      "type": "textarea",
+      "id": "signup_text",
+      "label": "Email signup text",
+      "default": "Join the early list and get access to the relaunch drop before everyone else."
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Email input placeholder",
+      "default": "Enter your email"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Join The Build List"
+    },
+    {
+      "type": "textarea",
+      "id": "form_disclaimer",
+      "label": "Small disclaimer under form",
+      "default": "No spam. Just launch access, early drops, and builder updates."
+    },
+    {
+      "type": "textarea",
+      "id": "footer_line",
+      "label": "Footer line",
+      "default": "TZCP is rebuilding. New identity. New products. Same zero-credit mindset."
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#050505"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#f4f0e8"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_marquee",
+      "label": "Enable marquee",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "TZCP coming soon"
+    }
+  ]
+}
+{% endschema %}
