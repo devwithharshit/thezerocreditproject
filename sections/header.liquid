@@ -1,7 +1,4 @@
-{% assign use_relaunch_nav = false %}
-{% if request.page_type == 'index' %}
-  {% assign use_relaunch_nav = true %}
-{% endif %}
+{% assign relaunch_mode = true %}
 
 <header class="site-header">
   <div class="container header-inner">
@@ -46,7 +43,7 @@
 
     <nav class="desktop-nav" aria-label="Primary navigation">
       <ul>
-        {% if use_relaunch_nav %}
+        {% if relaunch_mode %}
           <li><a href="{{ routes.root_url }}" aria-current="page">Home</a></li>
           <li><a href="/pages/contact">Contact</a></li>
         {% else %}
@@ -59,27 +56,29 @@
       </ul>
     </nav>
 
-    <div class="header-actions">
-      <a class="icon-button" href="{{ routes.search_url }}" aria-label="Search">
-        {% render 'icon-search' %}
-      </a>
-      {% if shop.customer_accounts_enabled %}
-        <a class="icon-button account-link" href="{{ routes.account_url }}" aria-label="Account">
-          {% render 'icon-account' %}
+    {% unless relaunch_mode %}
+      <div class="header-actions">
+        <a class="icon-button" href="{{ routes.search_url }}" aria-label="Search">
+          {% render 'icon-search' %}
         </a>
-      {% endif %}
-      <a
-        class="icon-button cart-button"
-        href="{{ routes.cart_url }}"
-        aria-label="Open cart"
-        aria-controls="CartDrawer"
-        aria-expanded="false"
-        data-cart-open
-      >
-        {% render 'icon-cart' %}
-        <span class="cart-count">{{ cart.item_count }}</span>
-      </a>
-    </div>
+        {% if shop.customer_accounts_enabled %}
+          <a class="icon-button account-link" href="{{ routes.account_url }}" aria-label="Account">
+            {% render 'icon-account' %}
+          </a>
+        {% endif %}
+        <a
+          class="icon-button cart-button"
+          href="{{ routes.cart_url }}"
+          aria-label="Open cart"
+          aria-controls="CartDrawer"
+          aria-expanded="false"
+          data-cart-open
+        >
+          {% render 'icon-cart' %}
+          <span class="cart-count">{{ cart.item_count }}</span>
+        </a>
+      </div>
+    {% endunless %}
   </div>
 
   <div class="menu-backdrop" aria-hidden="true" data-menu-backdrop></div>
@@ -100,7 +99,7 @@
     </div>
     <nav class="mobile-menu-body" aria-label="Mobile navigation">
       <ul>
-        {% if use_relaunch_nav %}
+        {% if relaunch_mode %}
           <li>
             <a href="{{ routes.root_url }}" aria-current="page"><span>01</span>Home</a>
           </li>

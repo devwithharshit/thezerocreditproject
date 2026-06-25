@@ -1,51 +1,12 @@
 <section class="section-spacing">
   <div class="container narrow">
+    <p class="eyebrow">TZCP / Relaunch</p>
     <h1>{{ section.settings.heading | escape }}</h1>
-
-    {% if cart == empty %}
-      <p>Your cart is empty.</p>
-      <a class="button button-dark" href="{{ routes.all_products_collection_url }}">Continue shopping</a>
-    {% else %}
-      <form action="{{ routes.cart_url }}" method="post">
-        <div class="main-cart-items">
-          {% for item in cart.items %}
-            <div class="main-cart-item">
-              {% if item.image %}
-                <a href="{{ item.url }}">
-                  {{
-                    item.image
-                    | image_url: width: 240
-                    | image_tag: width: 120, loading: 'lazy', alt: item.image.alt
-                  }}
-                </a>
-              {% endif %}
-              <div>
-                <h2><a href="{{ item.url }}">{{ item.product.title | escape }}</a></h2>
-                {% unless item.product.has_only_default_variant %}
-                  <p>{{ item.variant.title | escape }}</p>
-                {% endunless %}
-                <label for="CartQuantity-{{ forloop.index }}">Quantity</label>
-                <input
-                  id="CartQuantity-{{ forloop.index }}"
-                  class="quantity-input"
-                  type="number"
-                  name="updates[]"
-                  value="{{ item.quantity }}"
-                  min="0"
-                >
-                <p>{{ item.final_line_price | money }}</p>
-                <a href="{{ item.url_to_remove }}">Remove</a>
-              </div>
-            </div>
-          {% endfor %}
-        </div>
-        <div class="main-cart-summary">
-          <p><span>Subtotal</span><strong>{{ cart.total_price | money }}</strong></p>
-          <button class="button button-outline-dark" type="submit" name="update">Update cart</button>
-          <button class="button button-dark" type="submit" name="checkout">Checkout</button>
-        </div>
-      </form>
-    {% endif %}
+    <p>{{ section.settings.message | escape }}</p>
+    <div class="button-row">
+      <a class="button button-dark" href="{{ routes.root_url }}">Back to relaunch page</a>
+      <a class="button button-outline-dark" href="/pages/contact">Contact</a>
+    </div>
   </div>
 </section>
 
@@ -58,7 +19,13 @@
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Your cart"
+      "default": "Cart is closed for relaunch"
+    },
+    {
+      "type": "textarea",
+      "id": "message",
+      "label": "Message",
+      "default": "The Zero Credit Project is rebuilding. Shopping, cart, and checkout access will return with the relaunch."
     }
   ]
 }
