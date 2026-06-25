@@ -51,7 +51,6 @@
 
 .tzcp-coming-soon__meta,
 .tzcp-coming-soon__eyebrow,
-.tzcp-coming-soon__secondary,
 .tzcp-coming-soon__disclaimer,
 .tzcp-coming-soon__footer,
 .tzcp-coming-soon__marquee {
@@ -114,11 +113,14 @@
 }
 
 .tzcp-coming-soon__secondary {
-  max-width: 690px;
-  padding-top: 22px;
+  max-width: 640px;
+  padding-top: 20px;
   border-top: 1px solid rgba(244, 240, 232, 0.16);
-  color: rgba(244, 240, 232, 0.66);
-  line-height: 1.55;
+  color: rgba(244, 240, 232, 0.62);
+  font-size: clamp(0.95rem, 1.05vw, 1.12rem);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.6;
 }
 
 .tzcp-coming-soon__signup {
