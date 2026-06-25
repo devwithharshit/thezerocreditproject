@@ -212,6 +212,15 @@
   color: rgba(244, 240, 232, 0.88);
 }
 
+.tzcp-coming-soon__marquee--top {
+  position: relative;
+  z-index: 21;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.032) 1px, transparent 1px) 0 0 / 88px 88px,
+    linear-gradient(0deg, rgba(255, 255, 255, 0.024) 1px, transparent 1px) 0 0 / 88px 88px,
+    #070707;
+}
+
 .tzcp-coming-soon__marquee-track {
   display: flex;
   width: max-content;
