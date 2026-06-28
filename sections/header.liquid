@@ -14,27 +14,29 @@
     </button>
 
     <a class="brand" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }} home">
-      {% if section.settings.logo != blank %}
-        {{
-          section.settings.logo
-          | image_url: width: section.settings.logo_width
-          | image_tag:
-            class: 'brand-logo',
-            widths: '120, 180, 240, 320',
-            width: section.settings.logo_width,
-            loading: 'eager',
-            alt: shop.name
-        }}
-      {% else %}
-        <img
-          class="brand-logo brand-logo--default"
-          src="{{ 'zero-credit-logo-black.png' | asset_url }}"
-          width="{{ section.settings.logo_width }}"
-          height="{{ section.settings.logo_width }}"
-          alt="{{ shop.name | escape }}"
-          loading="eager"
-        >
-      {% endif %}
+      {% unless relaunch_mode %}
+        {% if section.settings.logo != blank %}
+          {{
+            section.settings.logo
+            | image_url: width: section.settings.logo_width
+            | image_tag:
+              class: 'brand-logo',
+              widths: '120, 180, 240, 320',
+              width: section.settings.logo_width,
+              loading: 'eager',
+              alt: shop.name
+          }}
+        {% else %}
+          <img
+            class="brand-logo brand-logo--default"
+            src="{{ 'zero-credit-logo-black.png' | asset_url }}"
+            width="{{ section.settings.logo_width }}"
+            height="{{ section.settings.logo_width }}"
+            alt="{{ shop.name | escape }}"
+            loading="eager"
+          >
+        {% endif %}
+      {% endunless %}
       {% if section.settings.show_brand_name %}
         <span class="brand-name brand-name--desktop">{{ section.settings.brand_name | escape }}</span>
         <span class="brand-name brand-name--mobile">{{ section.settings.compact_brand_name | escape }}</span>
