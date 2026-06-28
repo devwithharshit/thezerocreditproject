@@ -1,5 +1,12 @@
 document.documentElement.classList.add('js');
 
+if (window.location.search.includes('customer_posted=true') && window.location.hash === '#contact_form') {
+  window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
+  window.requestAnimationFrame(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  });
+}
+
 const menuButton = document.querySelector('[data-menu-toggle]');
 const mobileMenu = document.querySelector('[data-mobile-menu]');
 const menuBackdrop = document.querySelector('[data-menu-backdrop]');
