@@ -224,7 +224,7 @@
 .tzcp-coming-soon__marquee-track {
   display: flex;
   width: max-content;
-  animation: tzcp-coming-marquee 28s linear infinite;
+  animation: tzcp-coming-marquee 44s linear infinite;
   will-change: transform;
 }
 
@@ -340,7 +340,7 @@
   }
 
   .tzcp-coming-soon__marquee-track {
-    animation-duration: 24s;
+    animation-duration: 38s;
   }
 }
 

@@ -1,5 +1,5 @@
 {% if section.settings.show_announcement and section.settings.text != blank %}
-  {% assign secondary_text = section.settings.secondary_text | default: 'PAN INDIA SHIPPING | GET 10% OFF: CODE ZCPOFF10' %}
+  {% assign secondary_text = section.settings.secondary_text | default: 'PAN INDIA SHIPPING' %}
   <aside
     class="announcement-bar"
     aria-label="{{ section.settings.text | append: ' ' | append: secondary_text | escape }}"
@@ -53,7 +53,7 @@
       "type": "text",
       "id": "secondary_text",
       "label": "Alternate text",
-      "default": "PAN INDIA SHIPPING | GET 10% OFF: CODE ZCPOFF10"
+      "default": "PAN INDIA SHIPPING"
     },
     {
       "type": "url",
