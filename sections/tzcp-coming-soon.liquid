@@ -11,7 +11,7 @@
 
   <div class="tzcp-coming-soon__shell">
     <div class="tzcp-coming-soon__meta" aria-hidden="true">
-      <span>TZCP / RELAUNCH</span>
+      <span>TZCP / TRUNK</span>
     </div>
 
     <div class="tzcp-coming-soon__hero">
@@ -32,6 +32,10 @@
 
         {% if section.settings.secondary_line != blank %}
           <p class="tzcp-coming-soon__secondary">{{ section.settings.secondary_line | escape }}</p>
+        {% endif %}
+
+        {% if section.settings.mystery_line != blank %}
+          <p class="tzcp-coming-soon__mystery">{{ section.settings.mystery_line | escape }}</p>
         {% endif %}
       </div>
 
@@ -65,7 +69,7 @@
           </div>
 
           {% if form.posted_successfully? %}
-            <p class="tzcp-coming-soon__message" tabindex="-1">You’re on the list. We’ll show you first.</p>
+            <p class="tzcp-coming-soon__message" tabindex="-1">Tum list me ho. Pehle tumhe dikhayenge.</p>
           {% endif %}
 
           {% if form.errors %}
@@ -80,18 +84,35 @@
     </div>
   </div>
 
+  <div class="tzcp-coming-soon__story" aria-label="TZCP trunk story">
+    <div class="tzcp-coming-soon__story-inner">
+      {% if section.settings.story_line_1 != blank %}
+        <p>{{ section.settings.story_line_1 | escape }}</p>
+      {% endif %}
+      {% if section.settings.story_line_2 != blank %}
+        <p>{{ section.settings.story_line_2 | escape }}</p>
+      {% endif %}
+      {% if section.settings.story_line_3 != blank %}
+        <p>{{ section.settings.story_line_3 | escape }}</p>
+      {% endif %}
+      {% if section.settings.story_line_4 != blank %}
+        <p>{{ section.settings.story_line_4 | escape }}</p>
+      {% endif %}
+      {% if section.settings.story_line_5 != blank %}
+        <p>{{ section.settings.story_line_5 | escape }}</p>
+      {% endif %}
+    </div>
+  </div>
+
   {% if section.settings.enable_marquee %}
-    <div class="tzcp-coming-soon__marquee" aria-label="Relaunch phrases">
+    <div class="tzcp-coming-soon__marquee" aria-label="Trunk story phrases">
       <div class="tzcp-coming-soon__marquee-track">
         {% for repeat in (1..3) %}
-          <span>SOMETHING IS COMING</span>
+          <span>BUILDING IN SILENCE</span>
+          <span>NO APPLAUSE REQUIRED</span>
+          <span>ZERO CREDIT PHASE</span>
+          <span>SOMETHING IS BEING BUILT</span>
           <span>NOT MADE FOR EVERYONE</span>
-          <span>ZERO CREDIT</span>
-          <span>NO FULL REVEAL YET</span>
-          <span>ENTER BEFORE THE NOISE</span>
-          <span>THE NEXT VERSION IS LOADING</span>
-          <span>BUILT IN THE DARK</span>
-          <span>EARLY ACCESS ONLY</span>
         {% endfor %}
       </div>
     </div>
@@ -113,37 +134,73 @@
       "type": "text",
       "id": "eyebrow",
       "label": "Eyebrow text",
-      "default": "THE ZERO CREDIT PROJECT IS REBUILDING"
+      "default": "TZCP / TRUNK STORY"
     },
     {
       "type": "text",
       "id": "main_headline",
       "label": "Main headline",
-      "default": "COMING SOON."
+      "default": "Har cheez success se start nahi hoti."
     },
     {
       "type": "textarea",
       "id": "subheadline",
       "label": "Subheadline",
-      "default": "A new project is taking shape behind the scenes."
+      "default": "Kuch cheezein silently build hoti hain… bina kisi ko bataye."
     },
     {
       "type": "textarea",
       "id": "secondary_line",
       "label": "Secondary line",
-      "default": "No full reveal yet. Just the beginning."
+      "default": "TZCP ek brand nahi hai. Ye ek phase hai — jisme log kuch apna build kar rahe hote hain."
+    },
+    {
+      "type": "textarea",
+      "id": "mystery_line",
+      "label": "Mystery line",
+      "default": "Shayad tum bhi us phase me ho."
+    },
+    {
+      "type": "textarea",
+      "id": "story_line_1",
+      "label": "Story line 1",
+      "default": "Kabhi socha hai… sab kuch shuru kahan se hota hai?"
+    },
+    {
+      "type": "textarea",
+      "id": "story_line_2",
+      "label": "Story line 2",
+      "default": "Na hype hota hai, na applause."
+    },
+    {
+      "type": "textarea",
+      "id": "story_line_3",
+      "label": "Story line 3",
+      "default": "Bas kaam hota hai. Raat ke 2 baje bhi."
+    },
+    {
+      "type": "textarea",
+      "id": "story_line_4",
+      "label": "Story line 4",
+      "default": "Hum usi phase ke liye kuch bana rahe hain."
+    },
+    {
+      "type": "textarea",
+      "id": "story_line_5",
+      "label": "Story line 5",
+      "default": "Not for everyone."
     },
     {
       "type": "text",
       "id": "signup_heading",
       "label": "Email signup heading",
-      "default": "EARLY ACCESS"
+      "default": "Early access ke liye join karo"
     },
     {
       "type": "textarea",
       "id": "signup_text",
       "label": "Email signup text",
-      "default": "Join the early list before the first reveal."
+      "default": "Jo samajh gaya, woh pehle aayega."
     },
     {
       "type": "text",
@@ -161,13 +218,13 @@
       "type": "textarea",
       "id": "form_disclaimer",
       "label": "Small disclaimer under form",
-      "default": "No spam. Early access only."
+      "default": "No spam. Bas pehle signal."
     },
     {
       "type": "textarea",
       "id": "footer_line",
       "label": "Footer line",
-      "default": "TZCP is rebuilding. The next version is not for everyone."
+      "default": "Story abhi shuru nahi hui. Bas signal diya hai."
     },
     {
       "type": "color",

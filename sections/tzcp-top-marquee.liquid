@@ -1,16 +1,13 @@
 {{ 'tzcp-coming-soon.css' | asset_url | stylesheet_tag }}
 
-<aside class="tzcp-coming-soon__marquee tzcp-coming-soon__marquee--top" aria-label="Relaunch phrases">
+<aside class="tzcp-coming-soon__marquee tzcp-coming-soon__marquee--top" aria-label="Trunk story phrases">
   <div class="tzcp-coming-soon__marquee-track">
     {% for repeat in (1..3) %}
-      <span>SOMETHING IS COMING</span>
+      <span>BUILDING IN SILENCE</span>
+      <span>NO APPLAUSE REQUIRED</span>
+      <span>ZERO CREDIT PHASE</span>
+      <span>SOMETHING IS BEING BUILT</span>
       <span>NOT MADE FOR EVERYONE</span>
-      <span>ZERO CREDIT</span>
-      <span>NO FULL REVEAL YET</span>
-      <span>ENTER BEFORE THE NOISE</span>
-      <span>THE NEXT VERSION IS LOADING</span>
-      <span>BUILT IN THE DARK</span>
-      <span>EARLY ACCESS ONLY</span>
     {% endfor %}
   </div>
 </aside>
