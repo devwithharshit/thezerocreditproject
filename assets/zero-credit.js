@@ -513,6 +513,30 @@ const revealItems = document.querySelectorAll('[data-reveal]');
 const siteHeader = document.querySelector('.site-header');
 const tickerTracks = document.querySelectorAll('[data-ticker-track]');
 const tickerPixelsPerSecond = 50;
+const comingSoonAtmosphere = document.querySelector('[data-coming-soon-atmosphere]');
+
+if (comingSoonAtmosphere && !reduceMotion) {
+  let spotlightFrame = null;
+  let spotlightEvent = null;
+
+  comingSoonAtmosphere.addEventListener(
+    'pointermove',
+    (event) => {
+      spotlightEvent = event;
+      if (spotlightFrame) return;
+
+      spotlightFrame = window.requestAnimationFrame(() => {
+        const rect = comingSoonAtmosphere.getBoundingClientRect();
+        const x = ((spotlightEvent.clientX - rect.left) / Math.max(rect.width, 1)) * 100;
+        const y = ((spotlightEvent.clientY - rect.top) / Math.max(rect.height, 1)) * 100;
+        comingSoonAtmosphere.style.setProperty('--spotlight-x', `${Math.min(100, Math.max(0, x))}%`);
+        comingSoonAtmosphere.style.setProperty('--spotlight-y', `${Math.min(100, Math.max(0, y))}%`);
+        spotlightFrame = null;
+      });
+    },
+    { passive: true }
+  );
+}
 
 function syncTickerSpeeds() {
   if (reduceMotion) return;

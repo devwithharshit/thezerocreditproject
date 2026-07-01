@@ -2,16 +2,18 @@
 
 <header class="site-header">
   <div class="container header-inner">
-    <button
-      class="icon-button mobile-menu-button"
-      type="button"
-      aria-label="Open menu"
-      aria-expanded="false"
-      aria-controls="MobileMenu"
-      data-menu-toggle
-    >
-      {% render 'icon-menu' %}
-    </button>
+    {% unless relaunch_mode %}
+      <button
+        class="icon-button mobile-menu-button"
+        type="button"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="MobileMenu"
+        data-menu-toggle
+      >
+        {% render 'icon-menu' %}
+      </button>
+    {% endunless %}
 
     <a class="brand" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }} home">
       {% unless relaunch_mode %}
@@ -43,20 +45,17 @@
       {% endif %}
     </a>
 
-    <nav class="desktop-nav" aria-label="Primary navigation">
-      <ul>
-        {% if relaunch_mode %}
-          <li><a href="{{ routes.root_url }}" aria-current="page">Home</a></li>
-          <li><a href="/pages/contact">Contact</a></li>
-        {% else %}
+    {% unless relaunch_mode %}
+      <nav class="desktop-nav" aria-label="Primary navigation">
+        <ul>
           {% for link in section.settings.menu.links %}
             <li>
               <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
             </li>
           {% endfor %}
-        {% endif %}
-      </ul>
-    </nav>
+        </ul>
+      </nav>
+    {% endunless %}
 
     {% unless relaunch_mode %}
       <div class="header-actions">
@@ -83,32 +82,25 @@
     {% endunless %}
   </div>
 
-  <div class="menu-backdrop" aria-hidden="true" data-menu-backdrop></div>
-  <div
-    id="MobileMenu"
-    class="mobile-menu"
-    aria-label="Navigation menu"
-    aria-hidden="true"
-    aria-modal="true"
-    role="dialog"
-    data-mobile-menu
-  >
-    <div class="mobile-menu-header">
-      <span>{{ section.settings.compact_brand_name | escape }}</span>
-      <button class="icon-button" type="button" aria-label="Close menu" data-menu-close>
-        {% render 'icon-close' %}
-      </button>
-    </div>
-    <nav class="mobile-menu-body" aria-label="Mobile navigation">
-      <ul>
-        {% if relaunch_mode %}
-          <li>
-            <a href="{{ routes.root_url }}" aria-current="page"><span>01</span>Home</a>
-          </li>
-          <li>
-            <a href="/pages/contact"><span>02</span>Contact</a>
-          </li>
-        {% else %}
+  {% unless relaunch_mode %}
+    <div class="menu-backdrop" aria-hidden="true" data-menu-backdrop></div>
+    <div
+      id="MobileMenu"
+      class="mobile-menu"
+      aria-label="Navigation menu"
+      aria-hidden="true"
+      aria-modal="true"
+      role="dialog"
+      data-mobile-menu
+    >
+      <div class="mobile-menu-header">
+        <span>{{ section.settings.compact_brand_name | escape }}</span>
+        <button class="icon-button" type="button" aria-label="Close menu" data-menu-close>
+          {% render 'icon-close' %}
+        </button>
+      </div>
+      <nav class="mobile-menu-body" aria-label="Mobile navigation">
+        <ul>
           {% for link in section.settings.menu.links %}
             <li>
               <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>
@@ -117,10 +109,10 @@
               </a>
             </li>
           {% endfor %}
-        {% endif %}
-      </ul>
-    </nav>
-  </div>
+        </ul>
+      </nav>
+    </div>
+  {% endunless %}
 </header>
 
 {% schema %}

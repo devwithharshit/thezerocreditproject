@@ -2,6 +2,7 @@
 
 <section
   class="tzcp-coming-soon"
+  data-coming-soon-atmosphere
   style="
     --tzcp-coming-bg: {{ section.settings.background_color }};
     --tzcp-coming-text: {{ section.settings.text_color }};
@@ -10,16 +11,8 @@
   <div class="tzcp-coming-soon__grain" aria-hidden="true"></div>
 
   <div class="tzcp-coming-soon__shell">
-    <div class="tzcp-coming-soon__meta" aria-hidden="true">
-      <span>TZCP / TRUNK</span>
-    </div>
-
     <div class="tzcp-coming-soon__hero">
       <div class="tzcp-coming-soon__copy">
-        {% if section.settings.eyebrow != blank %}
-          <p class="tzcp-coming-soon__eyebrow">{{ section.settings.eyebrow | escape }}</p>
-        {% endif %}
-
         {% if section.settings.main_headline != blank %}
           <h1 class="tzcp-coming-soon__headline" data-text="{{ section.settings.main_headline | escape }}">
             {{ section.settings.main_headline | escape }}
@@ -29,23 +22,15 @@
         {% if section.settings.subheadline != blank %}
           <p class="tzcp-coming-soon__subheadline">{{ section.settings.subheadline | escape }}</p>
         {% endif %}
+      </div>
 
-        {% if section.settings.secondary_line != blank %}
-          <p class="tzcp-coming-soon__secondary">{{ section.settings.secondary_line | escape }}</p>
-        {% endif %}
-
-        {% if section.settings.mystery_line != blank %}
-          <p class="tzcp-coming-soon__mystery">{{ section.settings.mystery_line | escape }}</p>
-        {% endif %}
+      <div class="tzcp-coming-soon__progress" aria-hidden="true">
+        <span></span>
       </div>
 
       <div class="tzcp-coming-soon__signup" aria-labelledby="TzcpComingSignupHeading-{{ section.id }}">
         {% if section.settings.signup_heading != blank %}
           <h2 id="TzcpComingSignupHeading-{{ section.id }}">{{ section.settings.signup_heading | escape }}</h2>
-        {% endif %}
-
-        {% if section.settings.signup_text != blank %}
-          <p>{{ section.settings.signup_text | escape }}</p>
         {% endif %}
 
         {% form 'customer', class: 'tzcp-coming-soon__form' %}
@@ -69,60 +54,17 @@
           </div>
 
           {% if form.posted_successfully? %}
-            <p class="tzcp-coming-soon__message" tabindex="-1">Tum list me ho. Pehle tumhe dikhayenge.</p>
+            <p class="tzcp-coming-soon__message" tabindex="-1">You’re on the list.</p>
           {% endif %}
 
           {% if form.errors %}
             <div class="tzcp-coming-soon__message" role="alert">{{ form.errors | default_errors }}</div>
           {% endif %}
         {% endform %}
-
-        {% if section.settings.form_disclaimer != blank %}
-          <p class="tzcp-coming-soon__disclaimer">{{ section.settings.form_disclaimer | escape }}</p>
-        {% endif %}
       </div>
     </div>
   </div>
 
-  <div class="tzcp-coming-soon__story" aria-label="TZCP trunk story">
-    <div class="tzcp-coming-soon__story-inner">
-      {% if section.settings.story_line_1 != blank %}
-        <p>{{ section.settings.story_line_1 | escape }}</p>
-      {% endif %}
-      {% if section.settings.story_line_2 != blank %}
-        <p>{{ section.settings.story_line_2 | escape }}</p>
-      {% endif %}
-      {% if section.settings.story_line_3 != blank %}
-        <p>{{ section.settings.story_line_3 | escape }}</p>
-      {% endif %}
-      {% if section.settings.story_line_4 != blank %}
-        <p>{{ section.settings.story_line_4 | escape }}</p>
-      {% endif %}
-      {% if section.settings.story_line_5 != blank %}
-        <p>{{ section.settings.story_line_5 | escape }}</p>
-      {% endif %}
-    </div>
-  </div>
-
-  {% if section.settings.enable_marquee %}
-    <div class="tzcp-coming-soon__marquee" aria-label="Trunk story phrases">
-      <div class="tzcp-coming-soon__marquee-track">
-        {% for repeat in (1..3) %}
-          <span>BUILDING IN SILENCE</span>
-          <span>NO APPLAUSE REQUIRED</span>
-          <span>ZERO CREDIT PHASE</span>
-          <span>SOMETHING IS BEING BUILT</span>
-          <span>NOT MADE FOR EVERYONE</span>
-        {% endfor %}
-      </div>
-    </div>
-  {% endif %}
-
-  {% if section.settings.footer_line != blank %}
-    <div class="tzcp-coming-soon__footer">
-      <p>{{ section.settings.footer_line | escape }}</p>
-    </div>
-  {% endif %}
 </section>
 
 {% schema %}
@@ -132,75 +74,21 @@
   "settings": [
     {
       "type": "text",
-      "id": "eyebrow",
-      "label": "Eyebrow text",
-      "default": "TZCP / TRUNK STORY"
-    },
-    {
-      "type": "text",
       "id": "main_headline",
       "label": "Main headline",
-      "default": "Har cheez success se start nahi hoti."
+      "default": "Something is coming."
     },
     {
       "type": "textarea",
       "id": "subheadline",
       "label": "Subheadline",
-      "default": "Kuch cheezein silently build hoti hain… bina kisi ko bataye."
-    },
-    {
-      "type": "textarea",
-      "id": "secondary_line",
-      "label": "Secondary line",
-      "default": "TZCP ek brand nahi hai. Ye ek phase hai — jisme log kuch apna build kar rahe hote hain."
-    },
-    {
-      "type": "textarea",
-      "id": "mystery_line",
-      "label": "Mystery line",
-      "default": "Shayad tum bhi us phase me ho."
-    },
-    {
-      "type": "textarea",
-      "id": "story_line_1",
-      "label": "Story line 1",
-      "default": "Kabhi socha hai… sab kuch shuru kahan se hota hai?"
-    },
-    {
-      "type": "textarea",
-      "id": "story_line_2",
-      "label": "Story line 2",
-      "default": "Na hype hota hai, na applause."
-    },
-    {
-      "type": "textarea",
-      "id": "story_line_3",
-      "label": "Story line 3",
-      "default": "Bas kaam hota hai. Raat ke 2 baje bhi."
-    },
-    {
-      "type": "textarea",
-      "id": "story_line_4",
-      "label": "Story line 4",
-      "default": "Hum usi phase ke liye kuch bana rahe hain."
-    },
-    {
-      "type": "textarea",
-      "id": "story_line_5",
-      "label": "Story line 5",
-      "default": "Not for everyone."
+      "default": "You don't need to understand it yet."
     },
     {
       "type": "text",
       "id": "signup_heading",
       "label": "Email signup heading",
-      "default": "Early access ke liye join karo"
-    },
-    {
-      "type": "textarea",
-      "id": "signup_text",
-      "label": "Email signup text",
-      "default": "Jo samajh gaya, woh pehle aayega."
+      "default": "Get Early Access"
     },
     {
       "type": "text",
@@ -215,18 +103,6 @@
       "default": "Join The List"
     },
     {
-      "type": "textarea",
-      "id": "form_disclaimer",
-      "label": "Small disclaimer under form",
-      "default": "No spam. Bas pehle signal."
-    },
-    {
-      "type": "textarea",
-      "id": "footer_line",
-      "label": "Footer line",
-      "default": "Story abhi shuru nahi hui. Bas signal diya hai."
-    },
-    {
       "type": "color",
       "id": "background_color",
       "label": "Background color",
@@ -237,12 +113,6 @@
       "id": "text_color",
       "label": "Text color",
       "default": "#f4f0e8"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_marquee",
-      "label": "Enable marquee",
-      "default": true
     }
   ],
   "presets": [
