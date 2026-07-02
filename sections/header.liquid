@@ -1,6 +1,6 @@
 {% assign relaunch_mode = true %}
 
-<header class="site-header">
+<header class="site-header{% if relaunch_mode %} site-header--relaunch{% endif %}">
   <div class="container header-inner">
     {% unless relaunch_mode %}
       <button
@@ -150,7 +150,7 @@
       "type": "text",
       "id": "compact_brand_name",
       "label": "Mobile compact brand name",
-      "default": "TZCP"
+      "default": "The Zero Credit Project"
     },
     {
       "type": "link_list",

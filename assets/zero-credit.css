@@ -2376,6 +2376,16 @@ h2 {
   letter-spacing: 0.1em;
 }
 
+.site-header--relaunch .brand {
+  max-width: min(calc(100vw - 48px), 520px);
+}
+
+.site-header--relaunch .brand-name {
+  max-width: 100%;
+  font-size: clamp(0.64rem, 1.7vw, 0.78rem);
+  letter-spacing: 0.08em;
+}
+
 .desktop-nav a,
 .mobile-menu a {
   letter-spacing: 0.07em;
