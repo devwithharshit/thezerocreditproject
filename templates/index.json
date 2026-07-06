@@ -3,10 +3,10 @@
     "tzcp_coming_soon": {
       "type": "tzcp-coming-soon",
       "settings": {
-        "main_headline": "Something is coming.",
-        "subheadline": "You don't need to understand it yet.",
+        "main_headline": "Worth waiting for.",
+        "subheadline": "We'll let you know when it's ready.",
         "signup_heading": "Get Early Access",
-        "email_placeholder": "Enter your email",
+        "email_placeholder": "Email address",
         "button_text": "Join The List",
         "background_color": "#050505",
         "text_color": "#f4f0e8"
